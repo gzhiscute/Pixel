@@ -4,6 +4,8 @@
 
 	void yyerror (const char *msg);
 //	extern int yylex();
+	
+	class {
 %}
 
 %token str name number cname INT BOOL point circle rect color text IF ELSE WHILE CONTINUE BREAK draw delete backgroud func TRUE FALSE relop call
