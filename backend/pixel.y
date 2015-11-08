@@ -1,12 +1,48 @@
 %{
 	#include <stdio.h>
 	#include <string.h>
+	#include <vector>
 
 	void yyerror (const char *msg);
+	void CreatePOINT ();
+
 //	extern int yylex();
 	
-	class 
-	iii{
+	class BaseType{
+		public:
+			char *type;
+			int x, y, x1, y1, r;
+			char *color;
+
+			BaseType(char *_type, char *_color=NULL, int _x=0, int _y=0, int _x1=0, int _y1=0, int _r=0) {
+				type = _type;
+				color = _color;
+				x = _x;
+				y = _y;
+				x1 = _x1;
+				y1 = _y1;
+				r = _r;
+			};
+			~BaseType() {};
+
+			virtual void draw(BaseType *p) {};
+	};
+
+	class POINT : public BaseType {
+		public:
+			void draw(BaseType *p) {
+				
+			}
+	};
+
+	class LINE : public BaseType {
+		public:
+			void draw(BaseType *p) {
+			}
+	};
+
+	vector<BaseType *> vars;
+
 %}
 
 %token str name number cname INT BOOL point circle rect color text IF ELSE WHILE CONTINUE BREAK draw delete backgroud func TRUE FALSE relop call
@@ -24,7 +60,7 @@ lines : line lines
 line	: '\n'
 		| INT name { printf("define an int variable %s\n", $2); }
 		| BOOL name { printf("define a bool variable %s\n", $2); }
-		| point name '=' point '( ' number ',' number ',' cname ')' { printf("define a point variable %s: loc=(%d, %d), color=%s\n", $2, $6, $8, $10); } 
+		| point name '=' point '(' number ',' number ',' cname ')' { CreatePOINT($2, $6, $8, $10); printf("define a point variable %s: loc=(%d, %d), color=%s\n", $2, $6, $8, $10); } 
 		| line name '=' line '(' number ',' number ',' number ',' number ',' cname ')' { printf("define a line variable %s: loc=(%d, %d), (%d, %d), color=%s\n", $2, $6, $8, $10, $12, $14); }
 		| circle name '=' circle '(' number ',' number ',' number ',' cname ')' { printf("define a circle variable %s: loc=(%d, %d), r=%d, color=%s\n", $2, $6, $8, $10, $12); }
 		| rect name '=' rect '(' number ',' number ',' number ',' number ',' color ')' { printf("define a rect variable %s: loc=(%d, %d), (%d, %d), color=%s\n", $2, $6, $8, $10, $12); }
@@ -81,6 +117,11 @@ boolexpr_term	: name
 
 %%
 #include "lex.yy.c"
+
+void CreatePOINT()
+{
+
+}
 
 void yyerror (const char *msg)
 { printf("%s\n", msg);}
