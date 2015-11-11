@@ -1,9 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Pixel</title>
-<script src="./js/jquery-1.11.3.min.js"></script>
+	<title>Pixel</title>
+	<link href="css/index.css" rel="stylesheet" type="text/css"/>
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/ace/ace.js"></script>
+	<script src="js/index.js"></script>
 </head>
 <body>
-</body>
+	<div id="editor"></div>
+	<div id="image">
+		<button id="run" type="button">Run!</button>
+		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="160">
+			<!--<circle cx="150" cy="80" r="50" stroke="black" stroke-width="2" fill="gray"/>-->
+		</svg>
+	</div>
+	<script>
+		var editor = ace.edit("editor");
+		editor.setTheme("ace/theme/monokai");
+		// editor.getSession().setMode("ace/mode/javascript");
+	</script>
+	</body>
 </html>
