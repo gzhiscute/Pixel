@@ -24,7 +24,7 @@ function () {
 		function () {
 			$.ajax({
 				type: "POST",
-				url: "/run",
+				url: "http://127.0.0.1:8123/",
 				data: {'code': editor.getValue()},
 				cache: false,
 				success: function (data) {showSvg(data);},
