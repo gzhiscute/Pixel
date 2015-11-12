@@ -1274,6 +1274,7 @@ yydestruct (yymsg, yytype, yyvaluep)
     }
 }
 
+#define YYPARSE_PARAM parm
 /* Prevent warnings from -Wmissing-prototypes.  */
 #ifdef YYPARSE_PARAM
 #if defined __STDC__ || defined __cplusplus
