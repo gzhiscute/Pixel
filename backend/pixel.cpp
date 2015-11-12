@@ -77,6 +77,11 @@
 	#include <string>
 	#include <map>
 	#include "lex.yy.c"
+
+   struct retans{
+   		char *src;
+   		char *ans;
+   };
 	
 	char* ToLower(char* color);
 	//yy_switch_to_buffer(yy_scan_string(YYPARSE_PARAM));
@@ -139,7 +144,7 @@
 				y = _y; 
 			}
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, x, y, BaseType::r, BaseType::g, BaseType::b);	
+				printf("<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>\n", x, y, x, y, BaseType::r, BaseType::g, BaseType::b);	
 			}
 	};
 
@@ -157,7 +162,7 @@
 			}
 
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>\n</svg>\n", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
+				printf("<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>\n", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
 			}
 	};
 
@@ -174,7 +179,7 @@
 			}
 			
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
+				printf("<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
 			}
 	};
 			
@@ -192,7 +197,7 @@
 			}
 			
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", 512-x/2, 384-y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
+				printf("<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n", 512-x/2, 384-y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
 			}
 	};
 

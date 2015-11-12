@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include <string.h>
+#include "parse.h"
 
 SOCKET soc;
 SOCKET init_soc(int port) {
@@ -62,6 +63,7 @@ int main() {
 		if (s >= 0 && s + 9 - buf < len) {
 			s += 9;
 			// code is stored in the string s
+			yyparse(s);
 			send(clientfd, s, len - (s - buf), 0);
 		}
 		closesocket(clientfd);
