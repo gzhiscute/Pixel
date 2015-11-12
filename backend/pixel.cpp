@@ -1,20 +1,20 @@
 /* A Bison parser, made by GNU Bison 2.4.1.  */
 
 /* Skeleton implementation for Bison's Yacc-like parsers in C
-   
+
       Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
    Free Software Foundation, Inc.
-   
+
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-   
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
@@ -27,7 +27,7 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-   
+
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
@@ -62,7 +62,7 @@
 /* Using locations.  */
 #define YYLSP_NEEDED 0
 
-
+#define YYPARSE_PARAM parm
 
 /* Copy the first part of user declarations.  */
 
@@ -103,7 +103,7 @@
 			virtual void draw() {}
 	};
 	std::map<std::string, BaseType *> vars;
-	
+
 	class iINT : public BaseType {
 		public:
 			void draw() {
@@ -127,12 +127,12 @@
 				BaseType::type = _type;
 				BaseType::color = _color;
 				x = _x;
-				y = _y; 
+				y = _y;
 			}
 			void draw() {
-				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"httbp://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, x, y, BaseType::r, BaseType::g, BaseType::b);	
-				sprintf(ans, "<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, BaseType::r, BaseType::g, BaseType::b);	
-				
+				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"httbp://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, x, y, BaseType::r, BaseType::g, BaseType::b);
+				sprintf(ans, "<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, BaseType::r, BaseType::g, BaseType::b);
+
 			}
 	};
 
@@ -166,13 +166,13 @@
 				y = _y;
 				r = _r;
 			}
-			
+
 			void draw() {
 				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
 				sprintf(ans, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
 			}
 	};
-			
+
 	class iRECT : public BaseType {
 		protected:
 			int x, y, w, h;
@@ -185,7 +185,7 @@
 				w = _w;
 				h = _h;
 			}
-			
+
 			void draw() {
 				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", 512-x/2, 384-y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
 				sprintf(ans, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", 512-x/2, 384-y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
@@ -1620,7 +1620,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 159 "pixel.y"
-    { //printf("define a if statement, the value of expr is %d\n", $3); 
+    { //printf("define a if statement, the value of expr is %d\n", $3);
 	;}
     break;
 
@@ -1628,7 +1628,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 161 "pixel.y"
-    { //printf("define a while statement, the value of expr is %d\n", $3); 
+    { //printf("define a while statement, the value of expr is %d\n", $3);
 	;}
     break;
 
@@ -1636,7 +1636,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 163 "pixel.y"
-    { //printf("define a continue\n"); 
+    { //printf("define a continue\n");
 	;}
     break;
 
@@ -1651,7 +1651,7 @@ yyreduce:
 
 /* Line 1455 of yacc.c  */
 #line 166 "pixel.y"
-    { //printf("define a function call"); 
+    { //printf("define a function call");
 	;}
     break;
 
@@ -1877,7 +1877,7 @@ bool MultipleDef(char *name) {
 	if (p != vars.end()) {
 		//printf("Can't create variable %s: Multiple definition.\n", name);
 		return 1;
-	} else 
+	} else
 		return 0;
 }
 
@@ -1974,5 +1974,5 @@ void yyerror (const char *msg)
 }
 
 // int main()
-// { 
+// {
 // return yyparse(); }
