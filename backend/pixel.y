@@ -311,8 +311,8 @@ void Draw(char *name) {
 	var->second->draw();
 }
 
-void yyerror (const char *msg)
-{ printf("%s\n", msg);}
+//void yyerror (const char *msg)
+//{ printf("%s\n", msg);}
 
 int main()
 { return yyparse(); }

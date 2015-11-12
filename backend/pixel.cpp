@@ -205,7 +205,7 @@
 	void CreateRECT(char *name, int x, int y, int w, int h, char *color);
 	void CreateCOLOR(char *name, int r, int g, int b);
 	void Draw(char *name);
-	void yyerror (const char *msg);
+	//void yyerror (const char *msg);
 //	extern int yylex();
 
 
@@ -1698,7 +1698,7 @@ yyerrlab:
     {
       ++yynerrs;
 #if ! YYERROR_VERBOSE
-      yyerror (YY_("syntax error"));
+      //yyerror (YY_("syntax error"));
 #else
       {
 	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
@@ -1841,7 +1841,7 @@ yyabortlab:
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (YY_("memory exhausted"));
+  //yyerror (YY_("memory exhausted"));
   yyresult = 2;
   /* Fall through.  */
 #endif
@@ -1977,7 +1977,7 @@ void Draw(char *name) {
 void yyerror (const char *msg)
 { printf("%s\n", msg);}
 
-int main()
-{ return yyparse(); }
+//int main()
+//{ return yyparse(); }
 
 
