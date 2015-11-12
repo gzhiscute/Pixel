@@ -35,6 +35,7 @@ continue	{return CONTINUE;}
 break	{return BREAK;}
 true	{return TRUE;}
 false	{return FALSE;}
+line	{return LINE;}
 point	{return POINT;}
 circle	{return circle;}
 rect	{return rect;}
