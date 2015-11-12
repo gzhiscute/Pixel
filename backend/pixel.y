@@ -1,30 +1,50 @@
 %{
 	#include <cstdio>
 	#include <cstring>
+	#include <iostream>
 	#include <string>
 	#include <map>
 	#include "lex.yy.c"
 	
+	char* ToLower(char* color);
+
 	class BaseType{
 		protected:
 			std::string type;
-			char *color;
 		public:
+			std::string color;
+			int r, g, b;
+			void SetColorName(char *_color) {
+				color = _color;
+//				for (int i = 0; _color[i] ; ++i);
+//				color = calloc(i+3, sizeof(char));
+//				for (int i = 0; _color[i]; ++i)
+//					color[i] = _color[i];
+			}
+			void SetColor(int _r, int _g, int _b) {
+				r = _r;
+				g = _g;
+				b = _b;
+			}
 			virtual void Init(const std::string& _type, char *_color) {
 				type = _type;
-				color = _color;
+				SetColorName(_color);
 			}
-			virtual void Init(const std::string& _type, int _r, int _g, int _b) {}
+			virtual void Init(const std::string& _type, int _r, int _g, int _b) {
+				type = _type;
+				SetColor(_r, _g, _b);
+			}
 			virtual void Init(const std::string& _type, int _x, int _y, char *_color) {}
 			virtual void Init(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color) {}
 			virtual void Init(const std::string& _type, int _x, int _y, int _r, char *color) {}
 			virtual void draw() {}
 	};
-
+	std::map<std::string, BaseType *> vars;
+	
 	class iINT : public BaseType {
 		public:
 			void draw() {
-				printf("ERROR: can't draw a INT.\n");
+				//printf("ERROR: can't draw a INT.\n");
 			}
 	};
 
@@ -32,7 +52,7 @@
 	class iBOOL : public BaseType {
 		public:
 			void draw() {
-				printf("ERROR: can't draw a BOOL.\n");
+				//printf("ERROR: can't draw a BOOL.\n");
 			}
 	};
 
@@ -47,7 +67,7 @@
 				y = _y; 
 			}
 			void draw() {
-					
+				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, x, y, BaseType::r, BaseType::g, BaseType::b);	
 			}
 	};
 
@@ -65,6 +85,7 @@
 			}
 
 			void draw() {
+				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>\n</svg>\n", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
 			}
 	};
 
@@ -81,6 +102,7 @@
 			}
 			
 			void draw() {
+				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
 			}
 	};
 			
@@ -98,24 +120,10 @@
 			}
 			
 			void draw() {
-
+				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", 512-x/2, 384-y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
 			}
 	};
 
-	class iCOLOR : public BaseType {
-		protected:
-			int r, g, b;
-		public:
-			void Init(const std::string& _type, int _r, int _g, int _b) {
-				BaseType::type = _type;
-				r = _r;
-				g = _g;
-				b = _b;
-			}
-	};
-
-	std::map<std::string, BaseType *> vars;
-	
 	bool MultipleDef(char *name, BaseType *base_type);
 	char* GetName(char *name);
 	void CreateINT(char *name);
@@ -125,13 +133,14 @@
 	void CreateCIRCLE(char *name, int x, int y, int r, char *color);
 	void CreateRECT(char *name, int x, int y, int w, int h, char *color);
 	void CreateCOLOR(char *name, int r, int g, int b);
+	void Draw(char *name);
 	void yyerror (const char *msg);
 //	extern int yylex();
 
 >>>>>>> master
 %}
 
-%token str name number INT BOOL POINT circle rect color text IF ELSE WHILE CONTINUE BREAK draw DELETE backgroud func TRUE FALSE relop call EQU leftsma rightsma leftbig rightbig newline OR AND comma
+%token str name number INT BOOL POINT LINE circle rect color text IF ELSE WHILE CONTINUE BREAK draw DELETE backgroud func TRUE FALSE relop call EQU leftsma rightsma leftbig rightbig newline OR AND comma
 %%
 
 input	: lines
@@ -146,15 +155,19 @@ line	: newline
 	| INT name { CreateINT((char *)$2); }
 	| BOOL name { CreateBOOL((char *)$2); }
 	| POINT name EQU POINT leftsma number comma number comma name rightsma { CreatePOINT(GetName((char *)$2), $6, $8, GetName((char *)$10)); }
-	| line name EQU line leftsma number comma number comma number comma number comma name rightsma { CreateLINE(GetName((char *)$2), $6, $8, $10, $12, GetName((char *)$14)); }
+	| LINE name EQU LINE leftsma number comma number comma number comma number comma name rightsma { CreateLINE(GetName((char *)$2), $6, $8, $10, $12, GetName((char *)$14)); }
 	| circle name EQU circle leftsma number comma number comma number comma name rightsma { CreateCIRCLE(GetName((char *)$2),$6, $8, $10, GetName((char *)$12)); }
-	| rect name EQU rect leftsma number comma number comma number comma number comma color rightsma { CreateRECT(GetName((char *)$2), $6, $8, $10, $12, GetName((char *)$14)); }
+	| rect name EQU rect leftsma number comma number comma number comma number comma name rightsma { CreateRECT(GetName((char *)$2), $6, $8, $10, $12, GetName((char *)$14)); }
 	| color name EQU color leftsma number comma number comma number rightsma { CreateCOLOR(GetName((char *)$2), $6, $8, $10); }
-	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { printf("define a if statement, the value of expr is %d\n", $3); }
-	| WHILE leftsma expr rightsma leftbig lines rightbig { printf("define a while statement, the value of expr is %d\n", $3); }
-	| CONTINUE { printf("define a continue\n"); }
-	| draw name { printf("define a draw statement"); }
-	| call name leftsma callargs rightsma { printf("define a function call"); }
+	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { //printf("define a if statement, the value of expr is %d\n", $3); 
+	}
+	| WHILE leftsma expr rightsma leftbig lines rightbig { //printf("define a while statement, the value of expr is %d\n", $3); 
+	}
+	| CONTINUE { //printf("define a continue\n"); 
+	}
+	| draw name { Draw(GetName((char *)$2)); }
+	| call name leftsma callargs rightsma { //printf("define a function call"); 
+	}
 	;
 
 defargs	: name comma defargs
@@ -202,10 +215,9 @@ boolexpr_term	: name
 
 %%
 bool MultipleDef(char *name) {
-	printf("~~%s~~\n", name);
 	std::map<std::string, BaseType *>::iterator p = vars.find(name);
 	if (p != vars.end()) {
-		printf("Can't create variable %s: Multiple definition.\n", name);
+		//printf("Can't create variable %s: Multiple definition.\n", name);
 		return 1;
 	} else 
 		return 0;
@@ -222,7 +234,6 @@ char *GetName(char *name) {
 			break;
 		}
 	}
-
 	return name;
 }
 
@@ -231,7 +242,7 @@ void CreateINT(char *name) {
 	base_type->Init("INT", NULL);
 	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
-	printf("INT variable %s is created.\n", name);
+	//printf("INT variable %s is created.\n", name);
 }
 
 void CreateBOOL(char *name) {
@@ -239,7 +250,7 @@ void CreateBOOL(char *name) {
 	base_type->Init("BOOL", NULL);
 	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
-	printf("BOOL variable %s is created.\n", name);
+	//printf("BOOL variable %s is created.\n", name);
 }
 
 void CreatePOINT(char *name, int x, int y, char *color) {
@@ -247,7 +258,7 @@ void CreatePOINT(char *name, int x, int y, char *color) {
 	base_type->Init("POINT", x, y, color);
 	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
-	printf("POINT variable %s is created. Location is (%d, %d). Color is %s.\n", name, x, y, color);
+	//printf("POINT variable %s is created. Location is (%d, %d). Color is %s.\n", name, x, y, color);
 }
 
 void CreateLINE(char *name, int x, int y, int x1, int y1, char *color) {
@@ -255,7 +266,7 @@ void CreateLINE(char *name, int x, int y, int x1, int y1, char *color) {
 	base_type->Init("LINE", x, y, x1, y1, color);
 	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
-	printf("LINE variable %s is created. Location is (%d, %d), (%d, %d). Color is %s.\n", name, x, y, x1, y1, color);
+	//printf("LINE variable %s is created. Location is (%d, %d), (%d, %d). Color is %s.\n", name, x, y, x1, y1, color);
 }
 
 void CreateCIRCLE(char *name, int x, int y, int r, char *color) {
@@ -263,7 +274,7 @@ void CreateCIRCLE(char *name, int x, int y, int r, char *color) {
 	base_type->Init("CIRCLE", x, y, r, color);
 	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
-	printf("CIRCLE variable %s is created. Location is (%d, %d). Radius is %d. Color is %s.\n", name, x, y, r, color);
+	//printf("CIRCLE variable %s is created. Location is (%d, %d). Radius is %d. Color is %s.\n", name, x, y, r, color);
 }
 
 void CreateRECT(char *name, int x, int y, int w, int h, char *color) {
@@ -271,22 +282,34 @@ void CreateRECT(char *name, int x, int y, int w, int h, char *color) {
 	base_type->Init("RECT", x, y, w, h, color);
 	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
-	printf("RECT variable %s is created. Left_upper corner is (%d, %d). Width is %d. Length is %d. Color is %s.\n", name, x, y, w, h, color);
+	//printf("RECT variable %s is created. Left_upper corner is (%d, %d). Width is %d. Length is %d. Color is %s.\n", name, x, y, w, h, color);
 }
 
 void CreateCOLOR(char *name, int r, int g, int b) {
-	BaseType *base_type = new iCOLOR();
+	BaseType *base_type = new BaseType();
 	base_type->Init("COLOR", r, g, b);
 	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
-	printf("COLOR variable %s=(%d, %d, %d) is created.\n", name, r, g, b);
+	//printf("COLOR variable %s=(%d, %d, %d) is created.\n", name, r, g, b);
 }
 
-//void Draw(YYSTYPE name) {
-//	std::map<std::string, BaseType *>::iterator var;
-//	var = map.find(name);
-//	var->second->draw();
-//}
+void Draw(char *name) {
+	std::map<std::string, BaseType *>::iterator var;
+	var = vars.find(name);
+	if (var == vars.end()) {
+		//printf("Can't draw %s: variable doesn't exist.\n", name);
+		return;
+	}
+
+	std::map<std::string, BaseType *>::iterator p;
+	p = vars.find(var->second->color);
+	if (p == vars.end()) {
+		//std::cout << "Can't find color variable " << var->second->color << "." << std::endl;
+		return;
+	}
+	var->second->SetColor(p->second->r, p->second->g, p->second->b);
+	var->second->draw();
+}
 
 void yyerror (const char *msg)
 { printf("%s\n", msg);}
