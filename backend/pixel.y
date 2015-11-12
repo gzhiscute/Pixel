@@ -1,3 +1,7 @@
+/*
+	memset(vars);
+	memset(ans);
+*/
 %{
 	#include <cstdio>
 	#include <cstring>
@@ -5,8 +9,8 @@
 	#include <string>
 	#include <map>
 	#include "lex.yy.c"
-	
-	char* ToLower(char* color);
+
+	std::string ans;
 
 	class BaseType{
 		protected:
@@ -14,13 +18,6 @@
 		public:
 			std::string color;
 			int r, g, b;
-			void SetColorName(char *_color) {
-				color = _color;
-//				for (int i = 0; _color[i] ; ++i);
-//				color = calloc(i+3, sizeof(char));
-//				for (int i = 0; _color[i]; ++i)
-//					color[i] = _color[i];
-			}
 			void SetColor(int _r, int _g, int _b) {
 				r = _r;
 				g = _g;
@@ -28,6 +25,7 @@
 			}
 			virtual void Init(const std::string& _type, char *_color) {
 				type = _type;
+				color = _color;
 				SetColorName(_color);
 			}
 			virtual void Init(const std::string& _type, int _r, int _g, int _b) {
@@ -67,7 +65,12 @@
 				y = _y; 
 			}
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, x, y, BaseType::r, BaseType::g, BaseType::b);	
+				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, x, y, BaseType::r, BaseType::g, BaseType::b);
+				char *tmp;
+				tmp = calloc(256, sizeof(char));
+				sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, BaseType::r, BaseType::g, BaseType::b);	
+				ans += tmp;
+				free(tmp);
 			}
 	};
 
@@ -85,7 +88,12 @@
 			}
 
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>\n</svg>\n", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
+				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>\n</svg>\n", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
+				char *tmp;
+				tmp = calloc(256, sizeof(char));
+				sprintf(tmp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
+				ans += tmp;
+				free(tmp);
 			}
 	};
 
@@ -102,7 +110,12 @@
 			}
 			
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
+				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
+				char *tmp;
+				tmp = calloc(256, sizeof(char));
+				sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, r, BaseType::r, BaseType::g, BaseType::b);
+				ans += tmp;
+				free(tmp);
 			}
 	};
 			
@@ -120,7 +133,12 @@
 			}
 			
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", 512-x/2, 384-y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
+				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x/2, y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
+				char *tmp;
+				tmp = calloc(256, sizeof(char));
+				sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x/2, y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
+				ans += tmp;
+				free(tmp);
 			}
 	};
 
