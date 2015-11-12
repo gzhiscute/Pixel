@@ -64,6 +64,8 @@ int main() {
 			s += 9;
 			// code is stored in the string s
 			yyparse(s);
+			len = strlen(ans);
+			memcpy(s, ans, len);
 			send(clientfd, s, len - (s - buf), 0);
 		}
 		closesocket(clientfd);

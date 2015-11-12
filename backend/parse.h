@@ -2,3 +2,4 @@
 #include <stdlib.h>
 
 extern int yyparse(void *);
+extern char *ans;
