@@ -76,8 +76,8 @@
 	#include <string>
 	#include <map>
 	#include "lex.yy.c"
-	
-	char* ToLower(char* color);
+
+	char *ans;
 
 	class BaseType{
 		protected:
@@ -85,13 +85,6 @@
 		public:
 			std::string color;
 			int r, g, b;
-			void SetColorName(char *_color) {
-				color = _color;
-//				for (int i = 0; _color[i] ; ++i);
-//				color = calloc(i+3, sizeof(char));
-//				for (int i = 0; _color[i]; ++i)
-//					color[i] = _color[i];
-			}
 			void SetColor(int _r, int _g, int _b) {
 				r = _r;
 				g = _g;
@@ -99,7 +92,7 @@
 			}
 			virtual void Init(const std::string& _type, char *_color) {
 				type = _type;
-				SetColorName(_color);
+				color = _color;
 			}
 			virtual void Init(const std::string& _type, int _r, int _g, int _b) {
 				type = _type;
@@ -138,7 +131,9 @@
 				y = _y; 
 			}
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, x, y, BaseType::r, BaseType::g, BaseType::b);	
+				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"httbp://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, x, y, BaseType::r, BaseType::g, BaseType::b);	
+				sprintf(ans, "<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, BaseType::r, BaseType::g, BaseType::b);	
+				
 			}
 	};
 
@@ -156,7 +151,8 @@
 			}
 
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>\n</svg>\n", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
+				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>\n</svg>\n", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
+				sprintf(ans, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
 			}
 	};
 
@@ -173,7 +169,8 @@
 			}
 			
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
+				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
+				sprintf(ans, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
 			}
 	};
 			
@@ -191,7 +188,8 @@
 			}
 			
 			void draw() {
-				printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", 512-x/2, 384-y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
+				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", 512-x/2, 384-y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
+				sprintf(ans, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", 512-x/2, 384-y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
 			}
 	};
 
@@ -211,7 +209,7 @@
 
 
 /* Line 189 of yacc.c  */
-#line 215 "pixel.cpp"
+#line 213 "pixel.cpp"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -288,7 +286,7 @@ typedef int YYSTYPE;
 
 
 /* Line 264 of yacc.c  */
-#line 292 "pixel.cpp"
+#line 290 "pixel.cpp"
 
 #ifdef short
 # undef short
@@ -593,10 +591,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,   145,   145,   146,   149,   150,   153,   154,   155,   156,
-     157,   158,   159,   160,   161,   163,   165,   167,   168,   172,
-     173,   176,   177,   178,   181,   182,   185,   188,   189,   192,
-     193,   194,   197,   198,   199,   200
+       0,   143,   143,   144,   147,   148,   151,   152,   153,   154,
+     155,   156,   157,   158,   159,   161,   163,   165,   166,   170,
+     171,   174,   175,   176,   179,   180,   183,   186,   187,   190,
+     191,   192,   195,   196,   197,   198
 };
 #endif
 
@@ -1575,56 +1573,56 @@ yyreduce:
         case 7:
 
 /* Line 1455 of yacc.c  */
-#line 154 "pixel.y"
+#line 152 "pixel.y"
     { CreateINT((char *)(yyvsp[(2) - (2)])); ;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 155 "pixel.y"
+#line 153 "pixel.y"
     { CreateBOOL((char *)(yyvsp[(2) - (2)])); ;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 156 "pixel.y"
+#line 154 "pixel.y"
     { CreatePOINT(GetName((char *)(yyvsp[(2) - (11)])), (yyvsp[(6) - (11)]), (yyvsp[(8) - (11)]), GetName((char *)(yyvsp[(10) - (11)]))); ;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 157 "pixel.y"
+#line 155 "pixel.y"
     { CreateLINE(GetName((char *)(yyvsp[(2) - (15)])), (yyvsp[(6) - (15)]), (yyvsp[(8) - (15)]), (yyvsp[(10) - (15)]), (yyvsp[(12) - (15)]), GetName((char *)(yyvsp[(14) - (15)]))); ;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 158 "pixel.y"
+#line 156 "pixel.y"
     { CreateCIRCLE(GetName((char *)(yyvsp[(2) - (13)])),(yyvsp[(6) - (13)]), (yyvsp[(8) - (13)]), (yyvsp[(10) - (13)]), GetName((char *)(yyvsp[(12) - (13)]))); ;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 159 "pixel.y"
+#line 157 "pixel.y"
     { CreateRECT(GetName((char *)(yyvsp[(2) - (15)])), (yyvsp[(6) - (15)]), (yyvsp[(8) - (15)]), (yyvsp[(10) - (15)]), (yyvsp[(12) - (15)]), GetName((char *)(yyvsp[(14) - (15)]))); ;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 160 "pixel.y"
+#line 158 "pixel.y"
     { CreateCOLOR(GetName((char *)(yyvsp[(2) - (11)])), (yyvsp[(6) - (11)]), (yyvsp[(8) - (11)]), (yyvsp[(10) - (11)])); ;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 161 "pixel.y"
+#line 159 "pixel.y"
     { //printf("define a if statement, the value of expr is %d\n", $3); 
 	;}
     break;
@@ -1632,7 +1630,7 @@ yyreduce:
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 163 "pixel.y"
+#line 161 "pixel.y"
     { //printf("define a while statement, the value of expr is %d\n", $3); 
 	;}
     break;
@@ -1640,7 +1638,7 @@ yyreduce:
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 165 "pixel.y"
+#line 163 "pixel.y"
     { //printf("define a continue\n"); 
 	;}
     break;
@@ -1648,14 +1646,14 @@ yyreduce:
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 167 "pixel.y"
+#line 165 "pixel.y"
     { Draw(GetName((char *)(yyvsp[(2) - (2)]))); ;}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 168 "pixel.y"
+#line 166 "pixel.y"
     { //printf("define a function call"); 
 	;}
     break;
@@ -1663,7 +1661,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 1667 "pixel.cpp"
+#line 1665 "pixel.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1875,7 +1873,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 215 "pixel.y"
+#line 213 "pixel.y"
 
 bool MultipleDef(char *name) {
 	std::map<std::string, BaseType *>::iterator p = vars.find(name);
@@ -1905,7 +1903,7 @@ void CreateINT(char *name) {
 	base_type->Init("INT", NULL);
 	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
-	//printf("INT variable %s is created.\n", name);
+	printf("INT variable %s is created.\n", name);
 }
 
 void CreateBOOL(char *name) {
@@ -1975,9 +1973,11 @@ void Draw(char *name) {
 }
 
 void yyerror (const char *msg)
-{ printf("%s\n", msg);}
+{ //printf("%s\n", msg);
+}
 
 int main()
-{ return yyparse(); }
+{ 
+return yyparse(); }
 
 
