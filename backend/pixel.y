@@ -315,5 +315,9 @@ void Draw(char *name) {
 //{ printf("%s\n", msg);}
 
 int main()
-{ return yyparse(); }
+{ 
+	
+	return yyparse(); 
+
+}
 

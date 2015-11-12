@@ -63,6 +63,7 @@
 /* Using locations.  */
 #define YYLSP_NEEDED 0
 
+#define YYPARSE_PARAM parm
 
 
 /* Copy the first part of user declarations.  */
@@ -78,7 +79,7 @@
 	#include "lex.yy.c"
 	
 	char* ToLower(char* color);
-
+	//yy_switch_to_buffer(yy_scan_string(YYPARSE_PARAM));
 	class BaseType{
 		protected:
 			std::string type;
@@ -1332,7 +1333,7 @@ yyparse ()
 #endif
 {
 
-
+	yy_switch_to_buffer(yy_scan_string((const char *)YYPARSE_PARAM));
     int yystate;
     /* Number of tokens to shift before error messages enabled.  */
     int yyerrstatus;
