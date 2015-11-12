@@ -5,21 +5,21 @@
 
 SOCKET soc;
 SOCKET init_soc(int port) {
-    struct sockaddr_in serveraddr;
+	struct sockaddr_in serveraddr;
 	memset(&serveraddr, 0, sizeof(serveraddr));
-    serveraddr.sin_family = AF_INET;
-    serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    serveraddr.sin_port = htons((unsigned short)port);
-    if (bind(soc, (struct sockaddr *)&serveraddr, sizeof(serveraddr)) < 0) {
-    	puts("Failed: Bind");
+	serveraddr.sin_family = AF_INET;
+	serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	serveraddr.sin_port = htons((unsigned short)port);
+	if (bind(soc, (struct sockaddr *)&serveraddr, sizeof(serveraddr)) < 0) {
+		puts("Failed: Bind");
 		exit(-1);
-    }
-    if (listen(soc, SOMAXCONN) < 0) {
-    	puts("Failed: Listen");
+	}
+	if (listen(soc, SOMAXCONN) < 0) {
+		puts("Failed: Listen");
 		exit(-1);
-    }
-    printf("Listening: %d\n", port);
-    return soc;
+	}
+	printf("Listening: %d\n", port);
+	return soc;
 }
 
 BOOL CtrlHandler(DWORD fdwCtrlType) {
@@ -39,11 +39,11 @@ int main() {
 		puts("Failed: Catch Ctrl-C");
 		puts("But it's safe to continue...");
 	}
-    if (WSAStartup(MAKEWORD(2, 2), &wsa) ||
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) ||
 		(soc = socket(AF_INET, SOCK_STREAM, IPPROTO_IP)) < 0) {
-    	puts("Failed: Initialize");
+		puts("Failed: Initialize");
 		exit(-1);
-    }
+	}
 	init_soc(8123);
 	while ("serve forever") {
 		struct sockaddr clientaddr;
