@@ -9,7 +9,8 @@
 	#include <string>
 	#include <map>
 	#include "lex.yy.c"
-
+	
+	#define YYPARSE_PARAM pram
 	std::string ans;
 
 	class BaseType{
@@ -23,10 +24,10 @@
 				g = _g;
 				b = _b;
 			}
+			virtual void Init(const std::string& _type, int _val) {}
 			virtual void Init(const std::string& _type, char *_color) {
 				type = _type;
 				color = _color;
-				SetColorName(_color);
 			}
 			virtual void Init(const std::string& _type, int _r, int _g, int _b) {
 				type = _type;
@@ -40,7 +41,13 @@
 	std::map<std::string, BaseType *> vars;
 	
 	class iINT : public BaseType {
+		protected:
+			int val;
 		public:
+			void Init(const std::string& _type, int _val) {
+				BaseType::type = _type;
+				val = _val;
+			}
 			void draw() {
 				//printf("ERROR: can't draw a INT.\n");
 			}
@@ -48,7 +55,13 @@
 
 
 	class iBOOL : public BaseType {
+		protected:
+			int val;
 		public:
+			void Init(const std::string& _type, int _val) {
+				BaseType::type = _type;
+				val = _val;
+			}
 			void draw() {
 				//printf("ERROR: can't draw a BOOL.\n");
 			}
@@ -67,7 +80,7 @@
 			void draw() {
 				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, x, y, BaseType::r, BaseType::g, BaseType::b);
 				char *tmp;
-				tmp = calloc(256, sizeof(char));
+				tmp = (char *)calloc(256, sizeof(char));
 				sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, BaseType::r, BaseType::g, BaseType::b);	
 				ans += tmp;
 				free(tmp);
@@ -90,7 +103,7 @@
 			void draw() {
 				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>\n</svg>\n", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
 				char *tmp;
-				tmp = calloc(256, sizeof(char));
+				tmp = (char *)calloc(256, sizeof(char));
 				sprintf(tmp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
 				ans += tmp;
 				free(tmp);
@@ -112,7 +125,7 @@
 			void draw() {
 				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
 				char *tmp;
-				tmp = calloc(256, sizeof(char));
+				tmp = (char *)calloc(256, sizeof(char));
 				sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, r, BaseType::r, BaseType::g, BaseType::b);
 				ans += tmp;
 				free(tmp);
@@ -135,17 +148,17 @@
 			void draw() {
 				//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x/2, y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
 				char *tmp;
-				tmp = calloc(256, sizeof(char));
+				tmp = (char *)calloc(256, sizeof(char));
 				sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x/2, y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
 				ans += tmp;
 				free(tmp);
 			}
 	};
 
-	bool MultipleDef(char *name, BaseType *base_type);
+	void MultipleDef(char *name);
 	char* GetName(char *name);
-	void CreateINT(char *name);
-	void CreateBOOL(char *name);
+	void CreateINT(char *name, int _val);
+	void CreateBOOL(char *name, int _val);
 	void CreatePOINT(char *name, int x, int y, char *color);
 	void CreateLINE(char *name, int x, int y, int x1, int y1, char *color);
 	void CreateCIRCLE(char *name, int x, int y, int r, char *color);
@@ -154,11 +167,9 @@
 	void Draw(char *name);
 	void yyerror (const char *msg);
 //	extern int yylex();
-
->>>>>>> master
 %}
 
-%token str name number INT BOOL POINT LINE circle rect color text IF ELSE WHILE CONTINUE BREAK draw DELETE backgroud func TRUE FALSE relop call EQU leftsma rightsma leftbig rightbig newline OR AND comma
+%token str name number INT BOOL POINT LINE circle rect color text IF ELSE WHILE CONTINUE BREAK draw backgroud func TRUE FALSE relop call EQU leftsma rightsma leftbig rightbig newline OR AND comma
 %%
 
 input	: lines
@@ -170,15 +181,15 @@ lines : line lines
 	;
 
 line	: newline
-	| INT name { CreateINT((char *)$2); }
-	| BOOL name { CreateBOOL((char *)$2); }
-	| POINT name EQU POINT leftsma number comma number comma name rightsma { CreatePOINT(GetName((char *)$2), $6, $8, GetName((char *)$10)); }
-	| LINE name EQU LINE leftsma number comma number comma number comma number comma name rightsma { CreateLINE(GetName((char *)$2), $6, $8, $10, $12, GetName((char *)$14)); }
-	| circle name EQU circle leftsma number comma number comma number comma name rightsma { CreateCIRCLE(GetName((char *)$2),$6, $8, $10, GetName((char *)$12)); }
-	| rect name EQU rect leftsma number comma number comma number comma number comma name rightsma { CreateRECT(GetName((char *)$2), $6, $8, $10, $12, GetName((char *)$14)); }
-	| color name EQU color leftsma number comma number comma number rightsma { CreateCOLOR(GetName((char *)$2), $6, $8, $10); }
-	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { //printf("define a if statement, the value of expr is %d\n", $3); 
-	}
+	| name EQU TRUE{ CreateBOOL(GetName((char *)$1), 1); }
+	| name EQU FALSE { CreateBOOL(GetName((char *)$1), 0);}
+	| name EQU number { CreateINT(GetName((char *)$1), $3);}
+	| name EQU POINT leftsma number comma number comma name rightsma { CreatePOINT(GetName((char *)$1), $5, $7, GetName((char *)$9)); }
+	| name EQU LINE leftsma number comma number comma number comma number comma name rightsma { CreateLINE(GetName((char *)$1), $5, $7, $9, $11, GetName((char *)$13)); }
+	| name EQU circle leftsma number comma number comma number comma name rightsma { CreateCIRCLE(GetName((char *)$1),$5, $7, $9, GetName((char *)$11)); }
+	| name EQU rect leftsma number comma number comma number comma number comma name rightsma { CreateRECT(GetName((char *)$1), $5, $7, $9, $11, GetName((char *)$13)); }
+	| name EQU color leftsma number comma number comma number rightsma { CreateCOLOR(GetName((char *)$1), $5, $7, $9); }
+	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { /*printf("define a if statement, the value of expr is %d\n", $3); */ }
 	| WHILE leftsma expr rightsma leftbig lines rightbig { //printf("define a while statement, the value of expr is %d\n", $3); 
 	}
 	| CONTINUE { //printf("define a continue\n"); 
@@ -197,7 +208,7 @@ callargs	: name comma callargs
 		| /* empty */
 		;
 		
-expr	: boolexpr
+expr	: boolexpr { $$ = $1; }
 	| relexpr
 	;
 	
@@ -232,13 +243,10 @@ boolexpr_term	: name
 //			;
 
 %%
-bool MultipleDef(char *name) {
+void MultipleDef(char *name) {
 	std::map<std::string, BaseType *>::iterator p = vars.find(name);
-	if (p != vars.end()) {
-		//printf("Can't create variable %s: Multiple definition.\n", name);
-		return 1;
-	} else 
-		return 0;
+	if (p != vars.end()) 
+		vars.erase(p);
 }
 
 char *GetName(char *name) {
@@ -255,58 +263,58 @@ char *GetName(char *name) {
 	return name;
 }
 
-void CreateINT(char *name) {
+void CreateINT(char *name, int val) {
+	MultipleDef(name);
 	BaseType *base_type = new iINT();
-	base_type->Init("INT", NULL);
-	if (MultipleDef(name)) return;
+	base_type->Init("INT", val);
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
 	//printf("INT variable %s is created.\n", name);
 }
 
-void CreateBOOL(char *name) {
+void CreateBOOL(char *name, int val) {
+	MultipleDef(name);
 	BaseType *base_type = new iBOOL();
-	base_type->Init("BOOL", NULL);
-	if (MultipleDef(name)) return;
+	base_type->Init("BOOL", val);
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
 	//printf("BOOL variable %s is created.\n", name);
 }
 
 void CreatePOINT(char *name, int x, int y, char *color) {
+	MultipleDef(name);
 	BaseType *base_type = new iPOINT();
 	base_type->Init("POINT", x, y, color);
-	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
 	//printf("POINT variable %s is created. Location is (%d, %d). Color is %s.\n", name, x, y, color);
 }
 
 void CreateLINE(char *name, int x, int y, int x1, int y1, char *color) {
+	MultipleDef(name);
 	BaseType *base_type = new iLINE();
 	base_type->Init("LINE", x, y, x1, y1, color);
-	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
 	//printf("LINE variable %s is created. Location is (%d, %d), (%d, %d). Color is %s.\n", name, x, y, x1, y1, color);
 }
 
 void CreateCIRCLE(char *name, int x, int y, int r, char *color) {
+	MultipleDef(name);
 	BaseType *base_type = new iCIRCLE();
 	base_type->Init("CIRCLE", x, y, r, color);
-	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
 	//printf("CIRCLE variable %s is created. Location is (%d, %d). Radius is %d. Color is %s.\n", name, x, y, r, color);
 }
 
 void CreateRECT(char *name, int x, int y, int w, int h, char *color) {
+	MultipleDef(name);
 	BaseType *base_type = new iRECT();
 	base_type->Init("RECT", x, y, w, h, color);
-	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
 	//printf("RECT variable %s is created. Left_upper corner is (%d, %d). Width is %d. Length is %d. Color is %s.\n", name, x, y, w, h, color);
 }
 
 void CreateCOLOR(char *name, int r, int g, int b) {
+	MultipleDef(name);
 	BaseType *base_type = new BaseType();
 	base_type->Init("COLOR", r, g, b);
-	if (MultipleDef(name)) return;
 	vars.insert(std::pair<std::string, BaseType *>(name, base_type));
 	//printf("COLOR variable %s=(%d, %d, %d) is created.\n", name, r, g, b);
 }
@@ -335,7 +343,7 @@ void Draw(char *name) {
 int main()
 { 
 	
-	return yyparse(); 
+	return yyparse(pram); 
 
 }
 
