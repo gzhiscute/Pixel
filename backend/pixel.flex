@@ -4,6 +4,8 @@
 %{
 #include <stdio.h>
 #include "pixel.h"
+#include "pixel.tab.h"
+// tab.h contains the token number values produced by the parser
 
 %}
 
