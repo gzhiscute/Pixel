@@ -42,7 +42,6 @@ rect	{return rect;}
 color	{return color;}
 text	{return text;}
 draw	{return draw;}
-DELETE	{return DELETE;}
 func	{return func;}
 call	{return call;}
 {number}	{yylval = atoi(yytext); return number;}
