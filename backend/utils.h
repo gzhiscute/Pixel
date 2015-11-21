@@ -11,10 +11,10 @@ class BaseType{
 	protected:
 		std::string type;
 	public:
-		std::string color;
+		std::string cname;
 		int r, g, b;
 		void SetColor(int _r, int _g, int _b); 
-		virtual void draw() {}
+		virtual void drawsvg() {}
 };
 std::map<std::string, BaseType *> vars;
 
@@ -23,7 +23,7 @@ class iINT : public BaseType {
 		int val;
 	public:
 		iINT(const std::string& _type, int _val);
-		void draw() {
+		void drawsvg() {
 			//printf("ERROR: can't draw a INT.\n");
 		}
 };
@@ -34,7 +34,7 @@ class iBOOL : public BaseType {
 		int val;
 	public:
 		iBOOL(const std::string& _type, int _val);
-		void draw() {
+		void drawsvg() {
 			//printf("ERROR: can't draw a BOOL.\n");
 		}
 };
@@ -44,7 +44,7 @@ class iPOINT : public BaseType {
 		int x, y;
 	public:
 		iPOINT(const std::string& _type, int _x, int _y, char *_color);
-		void draw();
+		void drawsvg();
 };
 
 class iLINE : public BaseType {
@@ -52,7 +52,7 @@ class iLINE : public BaseType {
 		int x, y, x1, y1;
 	public:
 		iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color);
-		void draw(); 
+		void drawsvg(); 
 };
 
 class iCIRCLE : public BaseType {
@@ -60,7 +60,7 @@ class iCIRCLE : public BaseType {
 		int x, y, r;
 	public:
 		iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color);
-		void draw();
+		void drawsvg();
 };
 		
 class iRECT : public BaseType {
@@ -68,7 +68,7 @@ class iRECT : public BaseType {
 		int x, y, w, h;
 	public:
 		iRECT(const std::string& _type, int _x, int _y, int _w, int _h, char *_color);
-		void draw();
+		void drawsvg();
 };
 
 class line_node {
@@ -78,27 +78,28 @@ class line_node {
 
 class def_node : public line_node {
 	protected:
-		std::string name;
+		std::string node_name;
 		BaseType *base_type;
 	public:
-		def_node(std::string name, BaseType *base_type);
+		def_node(std::string node_name, BaseType *base_type);
 		void evaluate();
 };
 
 class draw_node : public line_node {
 	protected:
-		std::string name;
+		std::string node_name;
 	public:
-		draw_node(std::string name);
+		draw_node(std::string node_name);
 		void evaluate();
 };
 
 class lines_node {
 	public:
-		std::list<line_node *> *lines;
+		std::list<line_node *> *cmdlines;
 
 		lines_node(std::list<line_node *> *_lines);
 		void evaluate();
 };
+
 		
 #endif /* __COMPILER_PIXEL_BACKEND__ */	
