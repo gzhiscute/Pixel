@@ -47,6 +47,6 @@ draw	{return draw;}
 func	{return func;}
 call	{return call;}
 {number}	{yylval.num = atoi(yytext); return number;}
-{name}		{yylval.str = (int)yytext; return name;}
+{name}		{yylval.str = (char *)yytext; return name;}
 
 %%
