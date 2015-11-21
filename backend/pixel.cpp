@@ -145,9 +145,9 @@
 	#include <iostream>
 	#include <string>
 	#include <map>
+	#include "utils.h"
 	#include "lex.yy.c" /* yylex file*/
 	/*Header file for AST*/
-	#include "utils.h"
 
 	lines_node *root;	/* the root of the abstract syntax tree*/
 	std::list<line_node *> *tmp_line; /*store the temporary line*/	
@@ -160,7 +160,7 @@
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+# define YYDEBUG 0
 #endif
 
 /* Enabling verbose error messages.  */
@@ -187,7 +187,7 @@ typedef union YYSTYPE
 	lines_node *lsnode;
 }
 /* Line 193 of yacc.c.  */
-#line 191 "y.tab.c"
+#line 191 "pixel.cpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -200,7 +200,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 204 "y.tab.c"
+#line 204 "pixel.cpp"
 
 #ifdef short
 # undef short
@@ -1455,14 +1455,14 @@ yyreduce:
     { 
 				(yyval.lsnode) = (yyvsp[(1) - (1)].lsnode); 
 				root = (yyval.lsnode);
-			}
+			;}
     break;
 
   case 3:
 #line 59 "pixel.y"
     {
 			(yyval.lsnode) = (yyvsp[(1) - (2)].lsnode);
-		}
+		;}
     break;
 
   case 4:
@@ -1470,15 +1470,15 @@ yyreduce:
     { 
 			(yyval.lsnode) = (yyvsp[(1) - (3)].lsnode);
 			(yyvsp[(1) - (3)].lsnode)->cmdlines->push_front((yyvsp[(2) - (3)].lnode)); 
-		}
+		;}
     break;
 
   case 5:
 #line 68 "pixel.y"
     { 	
-			tmp_line = new std::list<line_node *>();	/* empty string*/
+			tmp_line = new std::list<line_node *>;	/* empty string*/
 			(yyval.lsnode) = new lines_node(tmp_line);
-		}
+		;}
     break;
 
   case 6:
@@ -1486,7 +1486,7 @@ yyreduce:
     { 
 				tmp_var = new iBOOL("bool", 1);
 				(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str), tmp_var);
-			}
+			;}
     break;
 
   case 7:
@@ -1494,7 +1494,7 @@ yyreduce:
     { 
 			tmp_var = new iBOOL("bool", 1);
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str)), tmp_var);
-		}
+		;}
     break;
 
   case 8:
@@ -1502,7 +1502,7 @@ yyreduce:
     {
 			tmp_var = new iINT("int", (yyvsp[(3) - (3)].num));
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str)), tmp_var);
-		}
+		;}
     break;
 
   case 9:
@@ -1510,7 +1510,7 @@ yyreduce:
     { 
 			tmp_var = new iPOINT("point", (yyvsp[(5) - (10)].num), (yyvsp[(7) - (10)].num), GetName((yyvsp[(9) - (10)].str)));
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (10)].str)), tmp_var);
-		}
+		;}
     break;
 
   case 10:
@@ -1518,7 +1518,7 @@ yyreduce:
     { 
 			tmp_var = new iLINE("line", (yyvsp[(5) - (14)].num), (yyvsp[(7) - (14)].num), (yyvsp[(9) - (14)].num), (yyvsp[(11) - (14)].num), GetName((yyvsp[(13) - (14)].str)));
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (14)].str)), tmp_var);
-		}
+		;}
     break;
 
   case 11:
@@ -1526,7 +1526,7 @@ yyreduce:
     { 
 			tmp_var = new iCIRCLE("circle", (yyvsp[(5) - (12)].num), (yyvsp[(7) - (12)].num), (yyvsp[(9) - (12)].num), GetName((yyvsp[(11) - (12)].str)));
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (12)].str)), tmp_var);
-		}
+		;}
     break;
 
   case 12:
@@ -1534,47 +1534,47 @@ yyreduce:
     {
 	 		tmp_var = new iRECT("rect", (yyvsp[(5) - (14)].num), (yyvsp[(7) - (14)].num), (yyvsp[(9) - (14)].num), (yyvsp[(11) - (14)].num), GetName((yyvsp[(13) - (14)].str)));
 	 		(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (14)].str)), tmp_var);
-		}
+		;}
     break;
 
   case 13:
 #line 102 "pixel.y"
     { 
-			tmp_var = new BaseType();
+			tmp_var = new BaseType;
 			tmp_var->type = "color";
 			tmp_var->cname = GetName((yyvsp[(1) - (10)].str));
 			tmp_var->SetColor((yyvsp[(5) - (10)].num), (yyvsp[(7) - (10)].num), (yyvsp[(9) - (10)].num));
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (10)].str)), tmp_var);
-		}
+		;}
     break;
 
   case 14:
 #line 109 "pixel.y"
-    { /*printf("define a if statement, the value of expr is %d\n", $3); */ }
+    { /*printf("define a if statement, the value of expr is %d\n", $3); */ ;}
     break;
 
   case 15:
 #line 110 "pixel.y"
     { //printf("define a while statement, the value of expr is %d\n", $3); 
-	}
+	;}
     break;
 
   case 16:
 #line 112 "pixel.y"
     { //printf("define a continue\n"); 
-	}
+	;}
     break;
 
   case 17:
 #line 114 "pixel.y"
     { 
 			(yyval.lnode) = new draw_node(GetName((yyvsp[(2) - (2)].str)));
-		}
+		;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1578 "y.tab.c"
+#line 1578 "pixel.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);

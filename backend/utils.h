@@ -1,10 +1,10 @@
 #ifndef __COMPILER_PIXEL_BACKEND__
-#define __COMPIKER_PIXEK_BACKEND__
+#define __COMPILER_PIXEL_BACKEND__
 
 #include <string>
 #include <map>
 #include <list>
-
+using namespace std;
 std::string ans;
 
 class BaseType{

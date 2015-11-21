@@ -8,9 +8,9 @@
 	#include <iostream>
 	#include <string>
 	#include <map>
+	#include "utils.h"
 	#include "lex.yy.c" /* yylex file*/
 	/*Header file for AST*/
-	#include "utils.h"
 
 	lines_node *root;	/* the root of the abstract syntax tree*/
 	std::list<line_node *> *tmp_line; /*store the temporary line*/	
@@ -66,7 +66,7 @@ lines : lines newline /*empty line*/
 		}
 	| /* empty */
 		{ 	
-			tmp_line = new std::list<line_node *>();	/* empty string*/
+			tmp_line = new std::list<line_node *>;	/* empty string*/
 			$$ = new lines_node(tmp_line);
 		}
 	;
@@ -100,7 +100,7 @@ line	: name EQU TRUE {
 	 		$$ = new def_node(GetName($1), tmp_var);
 		}
 	| name EQU color leftsma number comma number comma number rightsma { 
-			tmp_var = new BaseType();
+			tmp_var = new BaseType;
 			tmp_var->type = "color";
 			tmp_var->cname = GetName($1);
 			tmp_var->SetColor($5, $7, $9);
