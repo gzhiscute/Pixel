@@ -926,7 +926,7 @@ YY_RULE_SETUP
 case 28:
 YY_RULE_SETUP
 #line 49 "pixel.flex"
-{yylval.str = (char *)yytext; return name;}
+{yylval.str = (char *)yytext; return allname;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP

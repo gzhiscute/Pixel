@@ -14,7 +14,7 @@ ws		{delim}+
 letter	[A-Za-z]
 digit	[0-9]
 number  {digit}+
-name	({letter}|_)({digit}|{letter}|_)*
+allname	({letter}|_)({digit}|{letter}|_)*
 
 %%
 {ws}	{/* no action and no return */}
@@ -46,6 +46,6 @@ draw	{return draw;}
 func	{return func;}
 call	{return call;}
 {number}	{yylval.num = atoi(yytext); return number;}
-{name}		{yylval.str = (char *)yytext; return name;}
+{allname}		{yylval.str = (char *)yytext; return allname;}
 
 %%

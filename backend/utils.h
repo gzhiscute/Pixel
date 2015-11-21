@@ -4,19 +4,16 @@
 #include <string>
 #include <map>
 #include <list>
-using namespace std;
-std::string ans;
 
 class BaseType{
-	protected:
-		std::string type;
 	public:
+		std::string type;
 		std::string cname;
 		int r, g, b;
 		void SetColor(int _r, int _g, int _b); 
 		virtual void drawsvg() {}
 };
-std::map<std::string, BaseType *> vars;
+
 
 class iINT : public BaseType {
 	protected:

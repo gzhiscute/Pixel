@@ -66,7 +66,7 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     name = 258,
+     allname = 258,
      number = 259,
      INT = 260,
      BOOL = 261,
@@ -101,7 +101,7 @@
    };
 #endif
 /* Tokens.  */
-#define name 258
+#define allname 258
 #define number 259
 #define INT 260
 #define BOOL 261
@@ -138,7 +138,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 5 "pixel.y"
+#line 2 "pixel.y"
 
 	#include <cstdio>
 	#include <cstring>
@@ -154,7 +154,9 @@
 	BaseType *tmp_var;	/*store the temporary variable*/
 
 	char* GetName(char *nname);
-	void yyerror (const char *msg);
+	void yyerror(void * addr_root, const char *p) {
+		//fprintf(stderr, "Error at line %d: %s\n", yylineno, p);
+	}
 //	extern int yylex();
 
 
@@ -178,7 +180,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 27 "pixel.y"
+#line 25 "pixel.y"
 {
 	int num;
 	char *str;
@@ -187,7 +189,7 @@ typedef union YYSTYPE
 	lines_node *lsnode;
 }
 /* Line 193 of yacc.c.  */
-#line 191 "pixel.cpp"
+#line 193 "pixel.cpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -200,7 +202,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 204 "pixel.cpp"
+#line 206 "pixel.cpp"
 
 #ifdef short
 # undef short
@@ -506,12 +508,12 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "name", "number", "INT", "BOOL", "POINT",
-  "LINE", "circle", "rect", "color", "text", "IF", "ELSE", "WHILE",
-  "CONTINUE", "BREAK", "newline", "draw", "backgroud", "func", "TRUE",
-  "FALSE", "relop", "call", "EQU", "leftsma", "rightsma", "leftbig",
-  "rightbig", "OR", "AND", "comma", "expr", "$accept", "input", "lines",
-  "line", 0
+  "$end", "error", "$undefined", "allname", "number", "INT", "BOOL",
+  "POINT", "LINE", "circle", "rect", "color", "text", "IF", "ELSE",
+  "WHILE", "CONTINUE", "BREAK", "newline", "draw", "backgroud", "func",
+  "TRUE", "FALSE", "relop", "call", "EQU", "leftsma", "rightsma",
+  "leftbig", "rightbig", "OR", "AND", "comma", "expr", "$accept", "input",
+  "lines", "line", 0
 };
 #endif
 
@@ -663,7 +665,7 @@ do								\
     }								\
   else								\
     {								\
-      yyerror (input_Buff, YY_("syntax error: cannot back up")); \
+      yyerror (Buff, YY_("syntax error: cannot back up")); \
       YYERROR;							\
     }								\
 while (YYID (0))
@@ -743,7 +745,7 @@ do {									  \
     {									  \
       YYFPRINTF (stderr, "%s ", Title);					  \
       yy_symbol_print (stderr,						  \
-		  Type, Value, input_Buff); \
+		  Type, Value, Buff); \
       YYFPRINTF (stderr, "\n");						  \
     }									  \
 } while (YYID (0))
@@ -757,19 +759,19 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, void *input_Buff)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, void *Buff)
 #else
 static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep, input_Buff)
+yy_symbol_value_print (yyoutput, yytype, yyvaluep, Buff)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
-    void *input_Buff;
+    void *Buff;
 #endif
 {
   if (!yyvaluep)
     return;
-  YYUSE (input_Buff);
+  YYUSE (Buff);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
@@ -791,14 +793,14 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, input_Buff)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, void *input_Buff)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, void *Buff)
 #else
 static void
-yy_symbol_print (yyoutput, yytype, yyvaluep, input_Buff)
+yy_symbol_print (yyoutput, yytype, yyvaluep, Buff)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
-    void *input_Buff;
+    void *Buff;
 #endif
 {
   if (yytype < YYNTOKENS)
@@ -806,7 +808,7 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, input_Buff)
   else
     YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep, input_Buff);
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep, Buff);
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -846,13 +848,13 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, int yyrule, void *input_Buff)
+yy_reduce_print (YYSTYPE *yyvsp, int yyrule, void *Buff)
 #else
 static void
-yy_reduce_print (yyvsp, yyrule, input_Buff)
+yy_reduce_print (yyvsp, yyrule, Buff)
     YYSTYPE *yyvsp;
     int yyrule;
-    void *input_Buff;
+    void *Buff;
 #endif
 {
   int yynrhs = yyr2[yyrule];
@@ -866,7 +868,7 @@ yy_reduce_print (yyvsp, yyrule, input_Buff)
       fprintf (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       , input_Buff);
+		       		       , Buff);
       fprintf (stderr, "\n");
     }
 }
@@ -874,7 +876,7 @@ yy_reduce_print (yyvsp, yyrule, input_Buff)
 # define YY_REDUCE_PRINT(Rule)		\
 do {					\
   if (yydebug)				\
-    yy_reduce_print (yyvsp, Rule, input_Buff); \
+    yy_reduce_print (yyvsp, Rule, Buff); \
 } while (YYID (0))
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -1125,18 +1127,18 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, void *input_Buff)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, void *Buff)
 #else
 static void
-yydestruct (yymsg, yytype, yyvaluep, input_Buff)
+yydestruct (yymsg, yytype, yyvaluep, Buff)
     const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
-    void *input_Buff;
+    void *Buff;
 #endif
 {
   YYUSE (yyvaluep);
-  YYUSE (input_Buff);
+  YYUSE (Buff);
 
   if (!yymsg)
     yymsg = "Deleting";
@@ -1161,7 +1163,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (void *input_Buff);
+int yyparse (void *Buff);
 #else
 int yyparse ();
 #endif
@@ -1198,11 +1200,11 @@ yyparse (YYPARSE_PARAM)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 int
-yyparse (void *input_Buff)
+yyparse (void *Buff)
 #else
 int
-yyparse (input_Buff)
-    void *input_Buff;
+yyparse (Buff)
+    void *Buff;
 #endif
 #endif
 {
@@ -1485,7 +1487,7 @@ yyreduce:
 #line 74 "pixel.y"
     { 
 				tmp_var = new iBOOL("bool", 1);
-				(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str), tmp_var);
+				(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str)), tmp_var);
 			;}
     break;
 
@@ -1574,7 +1576,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1578 "pixel.cpp"
+#line 1580 "pixel.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1610,7 +1612,7 @@ yyerrlab:
     {
       ++yynerrs;
 #if ! YYERROR_VERBOSE
-      yyerror (input_Buff, YY_("syntax error"));
+      yyerror (Buff, YY_("syntax error"));
 #else
       {
 	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
@@ -1634,11 +1636,11 @@ yyerrlab:
 	if (0 < yysize && yysize <= yymsg_alloc)
 	  {
 	    (void) yysyntax_error (yymsg, yystate, yychar);
-	    yyerror (input_Buff, yymsg);
+	    yyerror (Buff, yymsg);
 	  }
 	else
 	  {
-	    yyerror (input_Buff, YY_("syntax error"));
+	    yyerror (Buff, YY_("syntax error"));
 	    if (yysize != 0)
 	      goto yyexhaustedlab;
 	  }
@@ -1662,7 +1664,7 @@ yyerrlab:
       else
 	{
 	  yydestruct ("Error: discarding",
-		      yytoken, &yylval, input_Buff);
+		      yytoken, &yylval, Buff);
 	  yychar = YYEMPTY;
 	}
     }
@@ -1718,7 +1720,7 @@ yyerrlab1:
 
 
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp, input_Buff);
+		  yystos[yystate], yyvsp, Buff);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1756,7 +1758,7 @@ yyabortlab:
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (input_Buff, YY_("memory exhausted"));
+  yyerror (Buff, YY_("memory exhausted"));
   yyresult = 2;
   /* Fall through.  */
 #endif
@@ -1764,7 +1766,7 @@ yyexhaustedlab:
 yyreturn:
   if (yychar != YYEOF && yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval, input_Buff);
+		 yytoken, &yylval, Buff);
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
@@ -1772,7 +1774,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp, input_Buff);
+		  yystos[*yyssp], yyvsp, Buff);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -1805,14 +1807,14 @@ char *GetName(char *nname) {
 	return nname;
 }
 
-void yyerror (const char *msg)
-{ printf("%s\n", msg);}
+//void yyerror (const char *msg)
+//{ printf("%s\n", msg);}
 
 int main()
 { 
-	yy_switch_to_buffer(yy_scan_string((char *)input_Buff));
-	return yyparse(input_Buff); 
-
+	//yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
+	//return yyparse(YYPARSE_PARAM); 
+	return 0;
 }
 
 

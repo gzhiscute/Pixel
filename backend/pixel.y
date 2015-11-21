@@ -1,7 +1,4 @@
-/*
-	memset(vars);
-	memset(ans);
-*/
+
 %{
 	#include <cstdio>
 	#include <cstring>
@@ -17,11 +14,12 @@
 	BaseType *tmp_var;	/*store the temporary variable*/
 
 	char* GetName(char *nname);
-	void yyerror (const char *msg);
+	void yyerror(void * addr_root, const char *p) {
+		//fprintf(stderr, "Error at line %d: %s\n", yylineno, p);
+	}
 //	extern int yylex();
 %}
 
-%parse-param {void *input_Buff}
 
 /* union is the return type */
 %union {
@@ -32,7 +30,9 @@
 	lines_node *lsnode;
 };
 
-%token <str> name
+%parse-param {void *Buff}
+
+%token <str> allname
 %token <num> number
 %token <bstp> INT BOOL POINT LINE circle rect
 %token color text IF ELSE WHILE CONTINUE BREAK newline
@@ -71,35 +71,35 @@ lines : lines newline /*empty line*/
 		}
 	;
 
-line	: name EQU TRUE { 
+line	: allname EQU TRUE { 
 				tmp_var = new iBOOL("bool", 1);
-				$$ = new def_node(GetName($1, tmp_var);
+				$$ = new def_node(GetName($1), tmp_var);
 			}
-	| name EQU FALSE { 
+	| allname EQU FALSE { 
 			tmp_var = new iBOOL("bool", 1);
 			$$ = new def_node(GetName($1), tmp_var);
 		}
-	| name EQU number {
+	| allname EQU number {
 			tmp_var = new iINT("int", $3);
 			$$ = new def_node(GetName($1), tmp_var);
 		}
-	| name EQU POINT leftsma number comma number comma name rightsma { 
+	| allname EQU POINT leftsma number comma number comma allname rightsma { 
 			tmp_var = new iPOINT("point", $5, $7, GetName($9));
 			$$ = new def_node(GetName($1), tmp_var);
 		}
-	| name EQU LINE leftsma number comma number comma number comma number comma name rightsma { 
+	| allname EQU LINE leftsma number comma number comma number comma number comma allname rightsma { 
 			tmp_var = new iLINE("line", $5, $7, $9, $11, GetName($13));
 			$$ = new def_node(GetName($1), tmp_var);
 		}
-	| name EQU circle leftsma number comma number comma number comma name rightsma { 
+	| allname EQU circle leftsma number comma number comma number comma allname rightsma { 
 			tmp_var = new iCIRCLE("circle", $5, $7, $9, GetName($11));
 			$$ = new def_node(GetName($1), tmp_var);
 		}
-	| name EQU rect leftsma number comma number comma number comma number comma name rightsma {
+	| allname EQU rect leftsma number comma number comma number comma number comma allname rightsma {
 	 		tmp_var = new iRECT("rect", $5, $7, $9, $11, GetName($13));
 	 		$$ = new def_node(GetName($1), tmp_var);
 		}
-	| name EQU color leftsma number comma number comma number rightsma { 
+	| allname EQU color leftsma number comma number comma number rightsma { 
 			tmp_var = new BaseType;
 			tmp_var->type = "color";
 			tmp_var->cname = GetName($1);
@@ -111,7 +111,7 @@ line	: name EQU TRUE {
 	}
 	| CONTINUE { //printf("define a continue\n"); 
 	}
-	| draw name { 
+	| draw allname { 
 			$$ = new draw_node(GetName($2));
 		}
 //	| call name leftsma callargs rightsma { //printf("define a function call"); 
@@ -177,13 +177,13 @@ char *GetName(char *nname) {
 	return nname;
 }
 
-void yyerror (const char *msg)
-{ printf("%s\n", msg);}
+//void yyerror (const char *msg)
+//{ printf("%s\n", msg);}
 
 int main()
 { 
-	yy_switch_to_buffer(yy_scan_string((char *)input_Buff));
-	return yyparse(input_Buff); 
-
+	//yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
+	//return yyparse(YYPARSE_PARAM); 
+	return 0;
 }
 

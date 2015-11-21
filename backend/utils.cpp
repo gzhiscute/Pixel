@@ -1,9 +1,13 @@
-#include "utils.h"
+#ifndef __COMPILER_PIXEL_BACKEND__
+	#include "utils.h"
+#endif
 
 #include <cstdio>
 #include <cstring>
 #include <iostream>
 #include <cstdlib>
+std::string ans;
+std::map<std::string, BaseType *> vars;
 
 void DeletMulDef(std::string node_name)
 {
