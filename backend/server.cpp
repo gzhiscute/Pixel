@@ -3,8 +3,10 @@
 #include <windows.h>
 #include <string.h>
 #include "parse.h"
+#include "utils.h"
 #include <string>
 
+extern lines_node *root;
 SOCKET soc;
 SOCKET init_soc(int port) {
 	struct sockaddr_in serveraddr;
@@ -96,12 +98,14 @@ int main() {
 			std::string k(s);
 			k = UrlDecode(k);
 			strcpy(s, k.c_str());
-			ans = (char *)malloc(10000);
+			//ans = (char *)malloc(10000);
 			// code is stored in the string s
 			yyparse(s);
-			len = strlen(ans);
-			send(clientfd, ans, len, 0);
-			free(ans);
+			root->evaluate();
+			len = ans.length();
+			printf("%s\n", ans.c_str());
+			send(clientfd, ans.c_str(), len, 0);
+			//free(ans);
 		}
 		closesocket(clientfd);
 	}

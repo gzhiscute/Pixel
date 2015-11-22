@@ -142,5 +142,6 @@ void lines_node::evaluate() {
 	std::list<line_node *>::iterator lineIter;
 	for (lineIter = cmdlines->begin(); lineIter != cmdlines->end(); lineIter++) {
 		(*lineIter)->evaluate();
+		printf("%s\n", ans.c_str());
 	}
 }
