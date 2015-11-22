@@ -14,10 +14,7 @@
 	BaseType *tmp_var;	/*store the temporary variable*/
 
 	char* GetName(char *nname);
-	void yyerror(void * addr_root, const char *p) {
-		//fprintf(stderr, "Error at line %d: %s\n", yylineno, p);
-	}
-//	extern int yylex();
+	void yyerror (const char *msg);
 %}
 
 
@@ -30,7 +27,7 @@
 	lines_node *lsnode;
 };
 
-%parse-param {void *Buff}
+// %parse-param {void *Buff}
 
 %token <str> allname
 %token <num> number
@@ -177,8 +174,9 @@ char *GetName(char *nname) {
 	return nname;
 }
 
-//void yyerror (const char *msg)
-//{ printf("%s\n", msg);}
+void yyerror(const char *msg)
+{
+}
 
 int main()
 { 

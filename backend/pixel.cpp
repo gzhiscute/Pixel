@@ -154,10 +154,7 @@
 	BaseType *tmp_var;	/*store the temporary variable*/
 
 	char* GetName(char *nname);
-	void yyerror(void * addr_root, const char *p) {
-		//fprintf(stderr, "Error at line %d: %s\n", yylineno, p);
-	}
-//	extern int yylex();
+	void yyerror (const char *msg);
 
 
 /* Enabling traces.  */
@@ -180,7 +177,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 25 "pixel.y"
+#line 22 "pixel.y"
 {
 	int num;
 	char *str;
@@ -189,7 +186,7 @@ typedef union YYSTYPE
 	lines_node *lsnode;
 }
 /* Line 193 of yacc.c.  */
-#line 193 "pixel.cpp"
+#line 190 "pixel.cpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -202,7 +199,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 206 "pixel.cpp"
+#line 203 "pixel.cpp"
 
 #ifdef short
 # undef short
@@ -498,8 +495,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    51,    51,    58,    63,    68,    74,    78,    82,    86,
-      90,    94,    98,   102,   109,   110,   112,   114
+       0,    48,    48,    55,    60,    65,    71,    75,    79,    83,
+      87,    91,    95,    99,   106,   107,   109,   111
 };
 #endif
 
@@ -665,7 +662,7 @@ do								\
     }								\
   else								\
     {								\
-      yyerror (Buff, YY_("syntax error: cannot back up")); \
+      yyerror (YY_("syntax error: cannot back up")); \
       YYERROR;							\
     }								\
 while (YYID (0))
@@ -745,7 +742,7 @@ do {									  \
     {									  \
       YYFPRINTF (stderr, "%s ", Title);					  \
       yy_symbol_print (stderr,						  \
-		  Type, Value, Buff); \
+		  Type, Value); \
       YYFPRINTF (stderr, "\n");						  \
     }									  \
 } while (YYID (0))
@@ -759,19 +756,17 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, void *Buff)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
 #else
 static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep, Buff)
+yy_symbol_value_print (yyoutput, yytype, yyvaluep)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
-    void *Buff;
 #endif
 {
   if (!yyvaluep)
     return;
-  YYUSE (Buff);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
@@ -793,14 +788,13 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, Buff)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, void *Buff)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
 #else
 static void
-yy_symbol_print (yyoutput, yytype, yyvaluep, Buff)
+yy_symbol_print (yyoutput, yytype, yyvaluep)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
-    void *Buff;
 #endif
 {
   if (yytype < YYNTOKENS)
@@ -808,7 +802,7 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, Buff)
   else
     YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep, Buff);
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep);
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -848,13 +842,12 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, int yyrule, void *Buff)
+yy_reduce_print (YYSTYPE *yyvsp, int yyrule)
 #else
 static void
-yy_reduce_print (yyvsp, yyrule, Buff)
+yy_reduce_print (yyvsp, yyrule)
     YYSTYPE *yyvsp;
     int yyrule;
-    void *Buff;
 #endif
 {
   int yynrhs = yyr2[yyrule];
@@ -868,7 +861,7 @@ yy_reduce_print (yyvsp, yyrule, Buff)
       fprintf (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       , Buff);
+		       		       );
       fprintf (stderr, "\n");
     }
 }
@@ -876,7 +869,7 @@ yy_reduce_print (yyvsp, yyrule, Buff)
 # define YY_REDUCE_PRINT(Rule)		\
 do {					\
   if (yydebug)				\
-    yy_reduce_print (yyvsp, Rule, Buff); \
+    yy_reduce_print (yyvsp, Rule); \
 } while (YYID (0))
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -1127,18 +1120,16 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, void *Buff)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
 #else
 static void
-yydestruct (yymsg, yytype, yyvaluep, Buff)
+yydestruct (yymsg, yytype, yyvaluep)
     const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
-    void *Buff;
 #endif
 {
   YYUSE (yyvaluep);
-  YYUSE (Buff);
 
   if (!yymsg)
     yymsg = "Deleting";
@@ -1154,7 +1145,7 @@ yydestruct (yymsg, yytype, yyvaluep, Buff)
 
 
 /* Prevent warnings from -Wmissing-prototypes.  */
-
+#define YYPARSE_PARAM parm
 #ifdef YYPARSE_PARAM
 #if defined __STDC__ || defined __cplusplus
 int yyparse (void *YYPARSE_PARAM);
@@ -1163,7 +1154,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (void *Buff);
+int yyparse (void);
 #else
 int yyparse ();
 #endif
@@ -1200,15 +1191,15 @@ yyparse (YYPARSE_PARAM)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 int
-yyparse (void *Buff)
+yyparse (void)
 #else
 int
-yyparse (Buff)
-    void *Buff;
+yyparse ()
+
 #endif
 #endif
 {
-  
+  yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
   int yystate;
   int yyn;
   int yyresult;
@@ -1453,7 +1444,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 51 "pixel.y"
+#line 48 "pixel.y"
     { 
 				(yyval.lsnode) = (yyvsp[(1) - (1)].lsnode); 
 				root = (yyval.lsnode);
@@ -1461,14 +1452,14 @@ yyreduce:
     break;
 
   case 3:
-#line 59 "pixel.y"
+#line 56 "pixel.y"
     {
 			(yyval.lsnode) = (yyvsp[(1) - (2)].lsnode);
 		;}
     break;
 
   case 4:
-#line 63 "pixel.y"
+#line 60 "pixel.y"
     { 
 			(yyval.lsnode) = (yyvsp[(1) - (3)].lsnode);
 			(yyvsp[(1) - (3)].lsnode)->cmdlines->push_front((yyvsp[(2) - (3)].lnode)); 
@@ -1476,7 +1467,7 @@ yyreduce:
     break;
 
   case 5:
-#line 68 "pixel.y"
+#line 65 "pixel.y"
     { 	
 			tmp_line = new std::list<line_node *>;	/* empty string*/
 			(yyval.lsnode) = new lines_node(tmp_line);
@@ -1484,7 +1475,7 @@ yyreduce:
     break;
 
   case 6:
-#line 74 "pixel.y"
+#line 71 "pixel.y"
     { 
 				tmp_var = new iBOOL("bool", 1);
 				(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str)), tmp_var);
@@ -1492,7 +1483,7 @@ yyreduce:
     break;
 
   case 7:
-#line 78 "pixel.y"
+#line 75 "pixel.y"
     { 
 			tmp_var = new iBOOL("bool", 1);
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str)), tmp_var);
@@ -1500,7 +1491,7 @@ yyreduce:
     break;
 
   case 8:
-#line 82 "pixel.y"
+#line 79 "pixel.y"
     {
 			tmp_var = new iINT("int", (yyvsp[(3) - (3)].num));
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str)), tmp_var);
@@ -1508,7 +1499,7 @@ yyreduce:
     break;
 
   case 9:
-#line 86 "pixel.y"
+#line 83 "pixel.y"
     { 
 			tmp_var = new iPOINT("point", (yyvsp[(5) - (10)].num), (yyvsp[(7) - (10)].num), GetName((yyvsp[(9) - (10)].str)));
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (10)].str)), tmp_var);
@@ -1516,7 +1507,7 @@ yyreduce:
     break;
 
   case 10:
-#line 90 "pixel.y"
+#line 87 "pixel.y"
     { 
 			tmp_var = new iLINE("line", (yyvsp[(5) - (14)].num), (yyvsp[(7) - (14)].num), (yyvsp[(9) - (14)].num), (yyvsp[(11) - (14)].num), GetName((yyvsp[(13) - (14)].str)));
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (14)].str)), tmp_var);
@@ -1524,7 +1515,7 @@ yyreduce:
     break;
 
   case 11:
-#line 94 "pixel.y"
+#line 91 "pixel.y"
     { 
 			tmp_var = new iCIRCLE("circle", (yyvsp[(5) - (12)].num), (yyvsp[(7) - (12)].num), (yyvsp[(9) - (12)].num), GetName((yyvsp[(11) - (12)].str)));
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (12)].str)), tmp_var);
@@ -1532,7 +1523,7 @@ yyreduce:
     break;
 
   case 12:
-#line 98 "pixel.y"
+#line 95 "pixel.y"
     {
 	 		tmp_var = new iRECT("rect", (yyvsp[(5) - (14)].num), (yyvsp[(7) - (14)].num), (yyvsp[(9) - (14)].num), (yyvsp[(11) - (14)].num), GetName((yyvsp[(13) - (14)].str)));
 	 		(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (14)].str)), tmp_var);
@@ -1540,7 +1531,7 @@ yyreduce:
     break;
 
   case 13:
-#line 102 "pixel.y"
+#line 99 "pixel.y"
     { 
 			tmp_var = new BaseType;
 			tmp_var->type = "color";
@@ -1551,24 +1542,24 @@ yyreduce:
     break;
 
   case 14:
-#line 109 "pixel.y"
+#line 106 "pixel.y"
     { /*printf("define a if statement, the value of expr is %d\n", $3); */ ;}
     break;
 
   case 15:
-#line 110 "pixel.y"
+#line 107 "pixel.y"
     { //printf("define a while statement, the value of expr is %d\n", $3); 
 	;}
     break;
 
   case 16:
-#line 112 "pixel.y"
+#line 109 "pixel.y"
     { //printf("define a continue\n"); 
 	;}
     break;
 
   case 17:
-#line 114 "pixel.y"
+#line 111 "pixel.y"
     { 
 			(yyval.lnode) = new draw_node(GetName((yyvsp[(2) - (2)].str)));
 		;}
@@ -1576,7 +1567,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1580 "pixel.cpp"
+#line 1571 "pixel.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1612,7 +1603,7 @@ yyerrlab:
     {
       ++yynerrs;
 #if ! YYERROR_VERBOSE
-      yyerror (Buff, YY_("syntax error"));
+      yyerror (YY_("syntax error"));
 #else
       {
 	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
@@ -1636,11 +1627,11 @@ yyerrlab:
 	if (0 < yysize && yysize <= yymsg_alloc)
 	  {
 	    (void) yysyntax_error (yymsg, yystate, yychar);
-	    yyerror (Buff, yymsg);
+	    yyerror (yymsg);
 	  }
 	else
 	  {
-	    yyerror (Buff, YY_("syntax error"));
+	    yyerror (YY_("syntax error"));
 	    if (yysize != 0)
 	      goto yyexhaustedlab;
 	  }
@@ -1664,7 +1655,7 @@ yyerrlab:
       else
 	{
 	  yydestruct ("Error: discarding",
-		      yytoken, &yylval, Buff);
+		      yytoken, &yylval);
 	  yychar = YYEMPTY;
 	}
     }
@@ -1720,7 +1711,7 @@ yyerrlab1:
 
 
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp, Buff);
+		  yystos[yystate], yyvsp);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1758,7 +1749,7 @@ yyabortlab:
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (Buff, YY_("memory exhausted"));
+  yyerror (YY_("memory exhausted"));
   yyresult = 2;
   /* Fall through.  */
 #endif
@@ -1766,7 +1757,7 @@ yyexhaustedlab:
 yyreturn:
   if (yychar != YYEOF && yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval, Buff);
+		 yytoken, &yylval);
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
@@ -1774,7 +1765,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp, Buff);
+		  yystos[*yyssp], yyvsp);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -1790,7 +1781,7 @@ yyreturn:
 }
 
 
-#line 164 "pixel.y"
+#line 161 "pixel.y"
 
 
 char *GetName(char *nname) {
@@ -1807,14 +1798,15 @@ char *GetName(char *nname) {
 	return nname;
 }
 
-//void yyerror (const char *msg)
-//{ printf("%s\n", msg);}
+void yyerror(const char *msg)
+{
+}
 
-int main()
-{ 
+//int main()
+//{ 
 	//yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
 	//return yyparse(YYPARSE_PARAM); 
-	return 0;
-}
+//	return 0;
+//}
 
 
