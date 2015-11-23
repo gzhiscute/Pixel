@@ -42,33 +42,50 @@
 IF ELSE WHILE CONTINUE BREAK draw backgroud func TRUE FALSE relop 
 call EQU leftsma rightsma leftbig rightbig newline OR AND comma
 */
+%start input
 
 %%
 
 input	: lines { 
 				$$ = $1; 
 				root = $$;
+				printf("input\n. root is 0x%x", root);
 			}
 //	| func name leftsma defargs rightsma leftbig lines rightbig
 	;
  
-lines : lines newline /*empty line*/
-		{
-			$$ = $1;
-		}
+// lines : lines newline /*empty line*/
+// 		{
+// 			$$ = $1;
+// 			printf("lines $1 is: 0x%x\n", $1);
+// 		}
 
-	| 	lines line newline{ 
-			$$ = $1;
-			$1->cmdlines->push_front($2); 
+// 	| 	lines line newline{ 
+// 			$$ = $1;
+// 			$1->cmdlines->push_end($2); 
+// 			printf("lines $2 is: 0x%x\n", $1);
+// 		}
+// 	| /* empty */
+// 		{ 	
+// 			tmp_line = new std::list<line_node *>;	/* empty string*/
+// 			$$ = new lines_node(tmp_line);
+// 			printf("lines $3 is: 0x%x\n", $$);
+// 		}
+// 	;
+lines : line lines {
+			$2->cmdlines->push_front($1);
+			$$ = $2;
+			printf("lines $1 is: 0x%x\n", $$);
 		}
-	| /* empty */
-		{ 	
+	| {
 			tmp_line = new std::list<line_node *>;	/* empty string*/
 			$$ = new lines_node(tmp_line);
-		}
+			printf("empty\n");
+		}//
 	;
 
-line	: allname EQU TRUE { 
+line	: newline {printf("newline\n")}
+	|allname EQU TRUE { 
 				tmp_var = new iBOOL("bool", 1);
 				$$ = new def_node(GetName($1), tmp_var);
 			}
