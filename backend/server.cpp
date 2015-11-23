@@ -100,7 +100,10 @@ int main() {
 			strcpy(s, k.c_str());
 			//ans = (char *)malloc(10000);
 			// code is stored in the string s
+			ans = "";
+			printf("the s is: %s", s);
 			yyparse(s);
+			printf("the root is: 0x%x", root);
 			root->evaluate();
 			len = ans.length();
 			printf("%s\n", ans.c_str());
