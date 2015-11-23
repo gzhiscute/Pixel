@@ -6,8 +6,7 @@
 #include <cstring>
 #include <iostream>
 #include <cstdlib>
-std::string ans;
-std::map<std::string, BaseType *> vars;
+#include <time.h>
 
 void DeletMulDef(std::string node_name)
 {
@@ -102,6 +101,42 @@ void iRECT::drawsvg() {
 	free(tmp);
 }
 
+void iTREE::CalcMinX(int p, int *Max, int dep) {
+	(*Max) = std::max((*Max), dep);
+	if (nodes[p].first) 
+		CalcMinX(nodes[p].first, Max, dep+1);
+	if (nodes[p].second) 
+		CalcMinX(nodes[p].second, Max, dep+1);
+}
+
+void iTREE::DrawTree(int p, int x, int y, int dep) {
+	int xlength = TreeBottomLength*(1<<dep)/2;
+
+	if (nodes[p].first) {
+		BaseType *line1 = new iLINE("LINE", x, y, x-xlength, y+TreeYLength);
+		line1->SetColor(0, 0, 0);
+		DrawTree(nodes[p].first, x-xlength, y+TreeYLength, dep-1);
+	}
+	if (nodes[p].second) {
+		BaseType *line2 = new iLINE("LINE", x, y, x+xlength, y+TreeYLength);
+		line2->SetColor(0, 0, 0);
+		DrawTree(nodes[p].second, x+xlength, y+TreeYLength, dep-1);
+	}
+
+	BaseType *cir = new iCIRCLE("CIRCLE", x, y, TreeR);
+	cir->SetColor(rand()%256, rand()%256, rand()%256);
+	cir->drawsvg();
+}
+
+void iTREE::drawsvg() {
+	int Max = 0;
+	CalcMinX(root, &Max, 0);
+	if (Max == 0)
+		DrawTree(root, TreeBottomLength, 2*TreeR, 0);
+	else 
+		DrawTree(root, TreeBottomLength*((1<<Max)-1)/2, 2*TreeR, Max-1);
+}
+
 def_node::def_node(std::string _name, BaseType *_base_type) {
 	node_name = _name;
 	base_type = _base_type;
@@ -142,6 +177,6 @@ void lines_node::evaluate() {
 	std::list<line_node *>::iterator lineIter;
 	for (lineIter = cmdlines->begin(); lineIter != cmdlines->end(); lineIter++) {
 		(*lineIter)->evaluate();
-		printf("%s\n", ans.c_str());
+		printf("~~%s\n", ans.c_str());
 	}
 }

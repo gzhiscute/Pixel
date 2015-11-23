@@ -4,6 +4,13 @@
 #include <string>
 #include <map>
 #include <list>
+#include <vector>
+
+#define TreeR 5
+#define TreeBottomLength 60 /* The length between two bottom nodes. */
+#define TreeYLength 30 /* The length between two layers. */
+
+std::string ans;
 
 class BaseType{
 	public:
@@ -13,7 +20,7 @@ class BaseType{
 		void SetColor(int _r, int _g, int _b); 
 		virtual void drawsvg() {}
 };
-
+std::map<std::string, BaseType *> vars;
 
 class iINT : public BaseType {
 	protected:
@@ -48,7 +55,7 @@ class iLINE : public BaseType {
 	protected:
 		int x, y, x1, y1;
 	public:
-		iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color);
+		iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color=NULL);
 		void drawsvg(); 
 };
 
@@ -56,7 +63,7 @@ class iCIRCLE : public BaseType {
 	protected:
 		int x, y, r;
 	public:
-		iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color);
+		iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color=NULL);
 		void drawsvg();
 };
 		
@@ -66,6 +73,16 @@ class iRECT : public BaseType {
 	public:
 		iRECT(const std::string& _type, int _x, int _y, int _w, int _h, char *_color);
 		void drawsvg();
+};
+
+class iTREE : public BaseType {
+	public:
+		int root;
+		std::vector<std::pair<int, int> > nodes;
+		void drawsvg();
+	private:
+		void CalcMinX(int p, int *Max, int dep);
+		void DrawTree(int p, int x, int y, int dep);
 };
 
 class line_node {
