@@ -7,7 +7,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
-
+std::string ans;
+std::map<std::string, BaseType *> vars;
 void DeletMulDef(std::string node_name)
 {
 	std::map<std::string, BaseType *>::iterator p = vars.find(node_name);
@@ -101,7 +102,15 @@ void iRECT::drawsvg() {
 	free(tmp);
 }
 
+iTREE::iTREE(const std::string& _type, int _rt, char *_color) {
+	BaseType::type = _type;
+	BaseType::cname = _color;
+	binroot = _rt;
+	printf("create a tree! root: 0x%x\n", binroot);
+}
+
 void iTREE::CalcMinX(int p, int *Max, int dep) {
+	printf("CallcMinX p:%d, Max %d, dep: %d\n", p, *Max, dep);
 	(*Max) = std::max((*Max), dep);
 	if (nodes[p].first) 
 		CalcMinX(nodes[p].first, Max, dep+1);
@@ -111,30 +120,35 @@ void iTREE::CalcMinX(int p, int *Max, int dep) {
 
 void iTREE::DrawTree(int p, int x, int y, int dep) {
 	int xlength = TreeBottomLength*(1<<dep)/2;
+	printf("drawtree!!\n");
+	printf("child: left %d, right %d\n", nodes[p].first, nodes[p].second);
 
 	if (nodes[p].first) {
-		BaseType *line1 = new iLINE("LINE", x, y, x-xlength, y+TreeYLength);
+		BaseType *line1 = new iLINE("line", x, y, x-xlength, y+TreeYLength, "nocolor");
+		printf("drawtree!! step4 line 0x%x\n", line1);
 		line1->SetColor(0, 0, 0);
 		DrawTree(nodes[p].first, x-xlength, y+TreeYLength, dep-1);
 	}
 	if (nodes[p].second) {
-		BaseType *line2 = new iLINE("LINE", x, y, x+xlength, y+TreeYLength);
+		BaseType *line2 = new iLINE("line", x, y, x+xlength, y+TreeYLength, "nocolor");
 		line2->SetColor(0, 0, 0);
 		DrawTree(nodes[p].second, x+xlength, y+TreeYLength, dep-1);
 	}
-
-	BaseType *cir = new iCIRCLE("CIRCLE", x, y, TreeR);
+	printf("drawtree!! step2\n");
+	BaseType *cir = new iCIRCLE("circle", x, y, TreeR, "nocolor");
+	printf("drawtree!! step3 cir 0x%x\n", cir);
 	cir->SetColor(rand()%256, rand()%256, rand()%256);
+
 	cir->drawsvg();
 }
 
 void iTREE::drawsvg() {
 	int Max = 0;
-	CalcMinX(root, &Max, 0);
+	CalcMinX(binroot, &Max, 0);
 	if (Max == 0)
-		DrawTree(root, TreeBottomLength, 2*TreeR, 0);
+		DrawTree(binroot, TreeBottomLength, 2*TreeR, 0);
 	else 
-		DrawTree(root, TreeBottomLength*((1<<Max)-1)/2, 2*TreeR, Max-1);
+		DrawTree(binroot, TreeBottomLength*((1<<Max)-1)/2, 2*TreeR, Max-1);
 }
 
 def_node::def_node(std::string _name, BaseType *_base_type) {
@@ -161,11 +175,12 @@ void draw_node::evaluate() {
 
 	std::map<std::string, BaseType *>::iterator _color;
 	_color = vars.find(var->second->cname);
-	if (_color == vars.end()) {
+	if (_color == vars.end() && var->second->type != "tree") {
 		//std::cout << "Can't find color variable " << var->second->color << "." << std::endl;
 		return;
 	}
-	var->second->SetColor(_color->second->r, _color->second->g, _color->second->b);
+	if (var->second->type != "tree") // don't set color for tree!
+		var->second->SetColor(_color->second->r, _color->second->g, _color->second->b);
 	var->second->drawsvg();
 }
 

@@ -5,16 +5,19 @@
 	#include <iostream>
 	#include <string>
 	#include <map>
+	#include <vector>
 	#include "utils.h"
 	#include "lex.yy.c" /* yylex file*/
 	/*Header file for AST*/
 
 	lines_node *root;	/* the root of the abstract syntax tree*/
-	std::list<line_node *> *tmp_line; /*store the temporary line*/	
-	BaseType *tmp_var;	/*store the temporary variable*/
+	static	std::list<line_node *> *tmp_line; /*store the temporary line*/	
+	static	BaseType *tmp_var;	/*store the temporary variable*/
+	static	iTREE *tmp_tree;
+	static	std::vector<std::pair<int, int> > *tmp_vector;
 
-	char* GetName(char *nname);
-	void yyerror (const char *msg);
+	static	char* GetName(char *nname);
+	void yyerror (void *addr, const char *msg);
 %}
 
 
@@ -25,18 +28,23 @@
 	BaseType *bstp;
 	line_node *lnode;
 	lines_node *lsnode;
+	std::pair<int, int> *childpair;
+	std::vector<std::pair<int, int> > *binvect;
 };
 
-// %parse-param {void *Buff}
+%parse-param {void *Buff}
 
 %token <str> allname
 %token <num> number
-%token <bstp> INT BOOL POINT LINE circle rect
+%token <bstp> INT BOOL POINT LINE circle rect tree
 %token color text IF ELSE WHILE CONTINUE BREAK newline
 %token draw backgroud func TRUE FALSE relop call EQU
 %token leftsma rightsma leftbig rightbig OR AND comma expr
 %type <lnode> line 
 %type <lsnode> lines input
+%type <childpair> treenode
+%type <binvect> bintree
+
 /*
 %token str name number INT BOOL POINT LINE circle rect color text 
 IF ELSE WHILE CONTINUE BREAK draw backgroud func TRUE FALSE relop 
@@ -54,24 +62,6 @@ input	: lines {
 //	| func name leftsma defargs rightsma leftbig lines rightbig
 	;
  
-// lines : lines newline /*empty line*/
-// 		{
-// 			$$ = $1;
-// 			printf("lines $1 is: 0x%x\n", $1);
-// 		}
-
-// 	| 	lines line newline{ 
-// 			$$ = $1;
-// 			$1->cmdlines->push_end($2); 
-// 			printf("lines $2 is: 0x%x\n", $1);
-// 		}
-// 	| /* empty */
-// 		{ 	
-// 			tmp_line = new std::list<line_node *>;	/* empty string*/
-// 			$$ = new lines_node(tmp_line);
-// 			printf("lines $3 is: 0x%x\n", $$);
-// 		}
-// 	;
 lines : line lines {
 			$2->cmdlines->push_front($1);
 			$$ = $2;
@@ -120,6 +110,13 @@ line	: newline {printf("newline\n")}
 			tmp_var->SetColor($5, $7, $9);
 			$$ = new def_node(GetName($1), tmp_var);
 		}
+	| allname EQU tree leftsma number comma bintree /*rightsma*/ {
+			printf("newtree!!\n");
+			tmp_tree = new iTREE("tree", $5, "nocolor");
+			tmp_tree->nodes = *tmp_vector;
+			//tmp_var = tmp_tree;
+			$$ = new def_node(GetName($1), tmp_tree);
+		}
 	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { /*printf("define a if statement, the value of expr is %d\n", $3); */ }
 	| WHILE leftsma expr rightsma leftbig lines rightbig { //printf("define a while statement, the value of expr is %d\n", $3); 
 	}
@@ -131,6 +128,33 @@ line	: newline {printf("newline\n")}
 //	| call name leftsma callargs rightsma { //printf("define a function call"); 
 //	}
 	;
+
+/* bintree is the sequence of parameters */
+/* e.g (2, 3)(0, 4) means node 1 has left child 2, and right child 3*/
+/* and node 2 has only left child 4*/
+/* if one of the child is <= 0 then set child to 0, no child */
+/* to avoid loop, we think children number must larger than parent's */
+bintree	: treenode bintree {
+				printf("empty bintree2\n");
+				$2->insert($2->begin(), *($1));
+				$$ = $2;
+				printf("lines $4 is: 0x%x\n", $$);
+			}
+		| rightsma /*empty*/{
+				printf("empty bintree\n");
+				tmp_vector = new std::vector<std::pair<int, int> >;	/* empty string*/
+				$$ = tmp_vector;
+			}
+		;
+
+treenode : leftsma number comma number rightsma {
+				printf("empty bintree3\n");
+				$$ = new std::pair<int, int>;
+				$$->first = $2;
+				$$->second = $4;
+				printf("node is: (%d, %d)\n", $2, $4);
+			}
+		;
 
 // defargs	: name comma defargs
 // 	| /* empty */
@@ -191,14 +215,20 @@ char *GetName(char *nname) {
 	return nname;
 }
 
-void yyerror(const char *msg)
+void yyerror(void *addr, const char *msg)
 {
 }
 
 int main()
 { 
 	//yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
-	//return yyparse(YYPARSE_PARAM); 
+	char buffer[100];
+	while(1) {
+		yyparse(buffer); 
+		root->evaluate();		 
+	}
+
 	return 0;
+	//return 0;
 }
 

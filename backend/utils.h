@@ -10,7 +10,7 @@
 #define TreeBottomLength 60 /* The length between two bottom nodes. */
 #define TreeYLength 30 /* The length between two layers. */
 
-std::string ans;
+//std::string ans;
 
 class BaseType{
 	public:
@@ -20,7 +20,7 @@ class BaseType{
 		void SetColor(int _r, int _g, int _b); 
 		virtual void drawsvg() {}
 };
-std::map<std::string, BaseType *> vars;
+//std::map<std::string, BaseType *> vars;
 
 class iINT : public BaseType {
 	protected:
@@ -77,9 +77,10 @@ class iRECT : public BaseType {
 
 class iTREE : public BaseType {
 	public:
-		int root;
+		int binroot;
 		std::vector<std::pair<int, int> > nodes;
 		void drawsvg();
+		iTREE(const std::string& _type, int _rt, char *_color = NULL);
 	private:
 		void CalcMinX(int p, int *Max, int dep);
 		void DrawTree(int p, int x, int y, int dep);
