@@ -128,11 +128,13 @@ void iTREE::DrawTree(int p, int x, int y, int dep) {
 	if (nodes[p].first) {
 		BaseType *line1 = new iLINE("LINE", x, y, x-xlength, y+TreeYLength, NULL);
 		line1->SetColor(0, 0, 0);
+		line1->drawsvg();
 		DrawTree(nodes[p].first, x-xlength, y+TreeYLength, dep-1);
 	}
 	if (nodes[p].second) {
 		BaseType *line2 = new iLINE("LINE", x, y, x+xlength, y+TreeYLength, NULL);
 		line2->SetColor(0, 0, 0);
+		line2->drawsvg();
 		DrawTree(nodes[p].second, x+xlength, y+TreeYLength, dep-1);
 	}
 
