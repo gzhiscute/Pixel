@@ -10,17 +10,16 @@
 #define TreeBottomLength 60 /* The length between two bottom nodes. */
 #define TreeYLength 30 /* The length between two layers. */
 
-//std::string ans;
-
 class BaseType{
 	public:
 		std::string type;
 		std::string cname;
 		int r, g, b;
-		void SetColor(int _r, int _g, int _b); 
+		BaseType() {type = cname = "", r = g = b = 0; }
+		void SetColor(int _r, int _g, int _b);
+		void SetBaseVars(const std::string& _type, char *_color);
 		virtual void drawsvg() {}
 };
-//std::map<std::string, BaseType *> vars;
 
 class iINT : public BaseType {
 	protected:
@@ -55,7 +54,7 @@ class iLINE : public BaseType {
 	protected:
 		int x, y, x1, y1;
 	public:
-		iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color=NULL);
+		iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color);
 		void drawsvg(); 
 };
 
@@ -63,7 +62,7 @@ class iCIRCLE : public BaseType {
 	protected:
 		int x, y, r;
 	public:
-		iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color=NULL);
+		iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color);
 		void drawsvg();
 };
 		
@@ -80,9 +79,9 @@ class iTREE : public BaseType {
 		int binroot;
 		std::vector<std::pair<int, int> > nodes;
 		void drawsvg();
-		iTREE(const std::string& _type, int _rt, char *_color = NULL);
+		iTREE(const std::string& _type, int _rt);
 	private:
-		void CalcMinX(int p, int *Max, int dep);
+		void CalcDep(int p, int *Max, int dep);
 		void DrawTree(int p, int x, int y, int dep);
 };
 
