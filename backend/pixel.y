@@ -17,7 +17,7 @@
 	static	std::vector<std::pair<int, int> > *tmp_vector;
 
 	static	char* GetName(char *nname);
-	void yyerror (void *addr, const char *msg);
+	void yyerror (const char *msg);
 %}
 
 
@@ -32,7 +32,7 @@
 	std::vector<std::pair<int, int> > *binvect;
 };
 
-%parse-param {void *Buff}
+/* %parse-param {void *Buff} */
 
 %token <str> allname
 %token <num> number
@@ -112,7 +112,7 @@ line	: newline {printf("newline\n")}
 		}
 	| allname EQU tree leftsma number comma bintree /*rightsma*/ {
 			printf("newtree!!\n");
-			tmp_tree = new iTREE("tree", $5, "nocolor");
+			tmp_tree = new iTREE("tree", $5);
 			tmp_tree->nodes = *tmp_vector;
 			//tmp_var = tmp_tree;
 			$$ = new def_node(GetName($1), tmp_tree);
@@ -215,18 +215,18 @@ char *GetName(char *nname) {
 	return nname;
 }
 
-void yyerror(void *addr, const char *msg)
+void yyerror(const char *msg)
 {
 }
 
 int main()
 { 
 	//yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
-	char buffer[100];
-	while(1) {
-		yyparse(buffer); 
-		root->evaluate();		 
-	}
+	//char buffer[100];
+	//while(1) {
+//		yyparse(buffer); 
+//		root->evaluate();		 
+//	}
 
 	return 0;
 	//return 0;
