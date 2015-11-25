@@ -14,10 +14,10 @@
 	static	std::list<line_node *> *tmp_line; /*store the temporary line*/	
 	static	BaseType *tmp_var;	/*store the temporary variable*/
 	static	iTREE *tmp_tree;
-	static	std::vector<std::pair<int, int> > *tmp_vector;
-
+	static	std::map<int, std::pair<int, int> > *tmp_map;
+	static	std::pair<int, std::pair<int, int> > *tmp_pair;
 	static	char* GetName(char *nname);
-	void yyerror (const char *msg);
+	void yyerror (/*void *a, */const char *msg);
 %}
 
 
@@ -28,11 +28,11 @@
 	BaseType *bstp;
 	line_node *lnode;
 	lines_node *lsnode;
-	std::pair<int, int> *childpair;
-	std::vector<std::pair<int, int> > *binvect;
+	std::pair<int, std::pair<int, int> > *childpair;
+	std::map<int, std::pair<int, int> > *binvect;
 };
 
-/* %parse-param {void *Buff} */
+ //%parse-param {void *Buff} 
 
 %token <str> allname
 %token <num> number
@@ -113,7 +113,7 @@ line	: newline {printf("newline\n")}
 	| allname EQU tree leftsma number comma bintree /*rightsma*/ {
 			printf("newtree!!\n");
 			tmp_tree = new iTREE("tree", $5);
-			tmp_tree->nodes = *tmp_vector;
+			tmp_tree->nodes = *tmp_map;
 			//tmp_var = tmp_tree;
 			$$ = new def_node(GetName($1), tmp_tree);
 		}
@@ -136,23 +136,26 @@ line	: newline {printf("newline\n")}
 /* to avoid loop, we think children number must larger than parent's */
 bintree	: treenode bintree {
 				printf("empty bintree2\n");
-				$2->insert($2->begin(), *($1));
+				//(*$2)[$1->first] = $1->second; //don't use insert!! coz may fail!!
+				//(*$2)[$1->second.first] = std::make_pair(0,0); //tmp leaf
+				//(*$2)[$1->second.second] = std::make_pair(0,0);
+				$2->insert(*$1);
 				$$ = $2;
-				printf("lines $4 is: 0x%x\n", $$);
+				printf("the map is %d, %d\n", (*$2)[$1->first].first, (*$2)[$1->first].second);
 			}
 		| rightsma /*empty*/{
 				printf("empty bintree\n");
-				tmp_vector = new std::vector<std::pair<int, int> >;	/* empty string*/
-				$$ = tmp_vector;
+				tmp_map = new std::map<int, std::pair<int, int> > ;	/* empty string*/
+				$$ = tmp_map;
 			}
 		;
 
-treenode : leftsma number comma number rightsma {
+treenode : leftsma number comma number comma number rightsma {
 				printf("empty bintree3\n");
-				$$ = new std::pair<int, int>;
+				$$ = new std::pair<int, std::pair<int, int> >;
 				$$->first = $2;
-				$$->second = $4;
-				printf("node is: (%d, %d)\n", $2, $4);
+				$$->second = std::make_pair($4, $6);
+				printf("node is: (%d, %d, %d)\n", $2, $4, $6);
 			}
 		;
 
@@ -215,18 +218,18 @@ char *GetName(char *nname) {
 	return nname;
 }
 
-void yyerror(const char *msg)
+void yyerror(/*void *a, */const char *msg)
 {
 }
 
 int main()
 { 
 	//yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
-	//char buffer[100];
-	//while(1) {
-//		yyparse(buffer); 
-//		root->evaluate();		 
-//	}
+	// char buffer[100];
+	// while(1) {
+	// 	yyparse(buffer); 
+	// 	root->evaluate();		 
+	// }
 
 	return 0;
 	//return 0;

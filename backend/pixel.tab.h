@@ -121,8 +121,8 @@ typedef union YYSTYPE
 	BaseType *bstp;
 	line_node *lnode;
 	lines_node *lsnode;
-	std::pair<int, int> *childpair;
-	std::vector<std::pair<int, int> > *binvect;
+	std::pair<int, std::pair<int, int> > *childpair;
+	std::map<int, std::pair<int, int> > *binvect;
 }
 /* Line 1529 of yacc.c.  */
 #line 129 "pixel.tab.h"

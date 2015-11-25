@@ -156,10 +156,10 @@
 	static	std::list<line_node *> *tmp_line; /*store the temporary line*/	
 	static	BaseType *tmp_var;	/*store the temporary variable*/
 	static	iTREE *tmp_tree;
-	static	std::vector<std::pair<int, int> > *tmp_vector;
-
+	static	std::map<int, std::pair<int, int> > *tmp_map;
+	static	std::pair<int, std::pair<int, int> > *tmp_pair;
 	static	char* GetName(char *nname);
-	void yyerror (const char *msg);
+	void yyerror (/*void *a, */const char *msg);
 
 
 /* Enabling traces.  */
@@ -189,8 +189,8 @@ typedef union YYSTYPE
 	BaseType *bstp;
 	line_node *lnode;
 	lines_node *lsnode;
-	std::pair<int, int> *childpair;
-	std::vector<std::pair<int, int> > *binvect;
+	std::pair<int, std::pair<int, int> > *childpair;
+	std::map<int, std::pair<int, int> > *binvect;
 }
 /* Line 193 of yacc.c.  */
 #line 197 "pixel.cpp"
@@ -421,7 +421,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  14
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   91
+#define YYLAST   94
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  36
@@ -430,7 +430,7 @@ union yyalloc
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  21
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  96
+#define YYNSTATES  98
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -500,7 +500,7 @@ static const yytype_int8 yyrhs[] =
       30,    38,    31,    15,    30,    38,    31,    -1,    16,    28,
       35,    29,    30,    38,    31,    -1,    17,    -1,    20,     3,
       -1,    41,    40,    -1,    29,    -1,    28,     4,    34,     4,
-      29,    -1
+      34,     4,    29,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
@@ -508,7 +508,7 @@ static const yytype_uint8 yyrline[] =
 {
        0,    57,    57,    65,    70,    77,    78,    82,    86,    90,
       94,    98,   102,   106,   113,   120,   121,   123,   125,   137,
-     143,   150
+     146,   153
 };
 #endif
 
@@ -551,7 +551,7 @@ static const yytype_uint8 yyr2[] =
 {
        0,     2,     1,     2,     0,     1,     3,     3,     3,    10,
       14,    12,    14,    10,     7,    11,     7,     1,     2,     2,
-       1,     5
+       1,     7
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -567,8 +567,8 @@ static const yytype_uint8 yydefact[] =
        0,     0,     0,     0,     0,     0,    20,    14,     0,     0,
        0,    16,     0,     0,     0,     0,     0,    19,     0,     0,
        0,     0,     0,     0,     0,     0,     4,     9,     0,     0,
-       0,     0,    13,     0,     0,     0,     0,    21,    15,     0,
-      11,     0,     0,     0,    10,    12
+       0,     0,    13,     0,     0,     0,     0,     0,    15,     0,
+      11,     0,     0,     0,     0,    21,    10,    12
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
@@ -590,8 +590,8 @@ static const yytype_int8 yypact[] =
       25,    20,    26,    27,    28,    53,   -25,   -25,   -18,    29,
       43,   -25,    56,    60,    61,    62,    37,   -25,    64,    39,
       45,    38,    46,    47,    66,    50,    -1,   -25,    69,    72,
-      73,    54,   -25,    51,    52,    55,    57,   -25,   -25,    75,
-     -25,    82,    58,    59,   -25,   -25
+      73,    51,   -25,    52,    54,    55,    57,    74,   -25,    79,
+     -25,    83,    58,    63,    65,   -25,   -25,   -25
 };
 
 /* YYPGOTO[NTERM-NUM].  */
@@ -615,8 +615,8 @@ static const yytype_uint8 yytable[] =
       47,    48,    54,    59,    62,    60,    61,    66,    69,    70,
       63,    64,    65,    68,    71,    72,    73,    83,    75,    76,
       81,    74,    78,    84,    77,    85,    67,    86,    92,    82,
-      79,    80,    88,    87,    90,    93,    89,    94,    95,     0,
-       0,    91
+      79,    80,    93,    88,    90,    87,    94,    95,    89,     0,
+       0,    91,    96,     0,    97
 };
 
 static const yytype_int8 yycheck[] =
@@ -628,9 +628,9 @@ static const yytype_int8 yycheck[] =
        4,    30,    30,    34,    34,     4,     4,    34,     4,    34,
       34,    34,     4,     4,    34,    31,    31,     4,    15,     3,
       34,    34,    34,    34,     4,     4,     4,    76,     4,    30,
-       4,    34,    34,     4,    29,     3,    58,     4,     3,    29,
-      34,    34,    31,    29,    29,     3,    34,    29,    29,    -1,
-      -1,    34
+       4,    34,    34,     4,    29,     3,    58,     4,     4,    29,
+      34,    34,     3,    31,    29,    34,     3,    29,    34,    -1,
+      -1,    34,    29,    -1,    29
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -645,8 +645,8 @@ static const yytype_uint8 yystos[] =
       38,     4,     4,     4,     4,    28,    29,    40,    41,     4,
       31,    31,    34,    34,    34,    34,     4,    40,    34,    15,
        3,     4,     4,     4,    34,     4,    30,    29,    34,    34,
-      34,     4,    29,    38,     4,     3,     4,    29,    31,    34,
-      29,    34,     3,     3,    29,    29
+      34,     4,    29,    38,     4,     3,     4,    34,    31,    34,
+      29,    34,     4,     3,     3,    29,    29,    29
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1564,7 +1564,7 @@ yyreduce:
     {
 			printf("newtree!!\n");
 			tmp_tree = new iTREE("tree", (yyvsp[(5) - (7)].num));
-			tmp_tree->nodes = *tmp_vector;
+			tmp_tree->nodes = *tmp_map;
 			//tmp_var = tmp_tree;
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (7)].str)), tmp_tree);
 		;}
@@ -1598,35 +1598,38 @@ yyreduce:
 #line 137 "pixel.y"
     {
 				printf("empty bintree2\n");
-				(yyvsp[(2) - (2)].binvect)->insert((yyvsp[(2) - (2)].binvect)->begin(), *((yyvsp[(1) - (2)].childpair)));
+				//(*$2)[$1->first] = $1->second; //don't use insert!! coz may fail!!
+				//(*$2)[$1->second.first] = std::make_pair(0,0); //tmp leaf
+				//(*$2)[$1->second.second] = std::make_pair(0,0);
+				(yyvsp[(2) - (2)].binvect)->insert(*(yyvsp[(1) - (2)].childpair));
 				(yyval.binvect) = (yyvsp[(2) - (2)].binvect);
-				printf("lines $4 is: 0x%x\n", (yyval.binvect));
+				printf("the map is %d, %d\n", (*(yyvsp[(2) - (2)].binvect))[(yyvsp[(1) - (2)].childpair)->first].first, (*(yyvsp[(2) - (2)].binvect))[(yyvsp[(1) - (2)].childpair)->first].second);
 			;}
     break;
 
   case 20:
-#line 143 "pixel.y"
+#line 146 "pixel.y"
     {
 				printf("empty bintree\n");
-				tmp_vector = new std::vector<std::pair<int, int> >;	/* empty string*/
-				(yyval.binvect) = tmp_vector;
+				tmp_map = new std::map<int, std::pair<int, int> > ;	/* empty string*/
+				(yyval.binvect) = tmp_map;
 			;}
     break;
 
   case 21:
-#line 150 "pixel.y"
+#line 153 "pixel.y"
     {
 				printf("empty bintree3\n");
-				(yyval.childpair) = new std::pair<int, int>;
-				(yyval.childpair)->first = (yyvsp[(2) - (5)].num);
-				(yyval.childpair)->second = (yyvsp[(4) - (5)].num);
-				printf("node is: (%d, %d)\n", (yyvsp[(2) - (5)].num), (yyvsp[(4) - (5)].num));
+				(yyval.childpair) = new std::pair<int, std::pair<int, int> >;
+				(yyval.childpair)->first = (yyvsp[(2) - (7)].num);
+				(yyval.childpair)->second = std::make_pair((yyvsp[(4) - (7)].num), (yyvsp[(6) - (7)].num));
+				printf("node is: (%d, %d, %d)\n", (yyvsp[(2) - (7)].num), (yyvsp[(4) - (7)].num), (yyvsp[(6) - (7)].num));
 			;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1630 "pixel.cpp"
+#line 1633 "pixel.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1840,7 +1843,7 @@ yyreturn:
 }
 
 
-#line 202 "pixel.y"
+#line 205 "pixel.y"
 
 
 char *GetName(char *nname) {
@@ -1857,9 +1860,10 @@ char *GetName(char *nname) {
 	return nname;
 }
 
-void yyerror(const char *msg)
+void yyerror(/*void *a, */const char *msg)
 {
 }
+
 
 
 
