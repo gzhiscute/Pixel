@@ -7,6 +7,9 @@
 #include <string>
 
 extern lines_node *root;
+extern int yyparse(void *);
+extern std::string ans;
+
 SOCKET soc;
 SOCKET init_soc(int port) {
 	struct sockaddr_in serveraddr;

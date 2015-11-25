@@ -3,7 +3,10 @@
 #include <windows.h>
 #include <string.h>
 #include "parse.h"
+#include "utils.h"
+#include <string>
 
+extern lines_node *root;
 SOCKET soc;
 SOCKET init_soc(int port) {
 	struct sockaddr_in serveraddr;
@@ -28,6 +31,36 @@ BOOL CtrlHandler(DWORD fdwCtrlType) {
 	WSACleanup();
 	puts("Closed");
 	exit(0);
+}
+
+std::string UrlDecode(const std::string& szToDecode)
+{
+	std::string result;
+	int hex = 0;
+	for (size_t i = 0; i < szToDecode.length(); ++i)
+	{
+		switch (szToDecode[i])
+		{
+		case '+':
+			result += ' ';
+			break;
+		case '%':
+			if (isxdigit(szToDecode[i + 1]) && isxdigit(szToDecode[i + 2]))
+			{
+				std::string hexStr = szToDecode.substr(i + 1, 2);
+				hex = strtol(hexStr.c_str(), 0, 16);
+				result += char(hex);
+				i += 2;
+			}else {
+				result += '%';
+			}
+			break;
+		default:
+			result += szToDecode[i];
+			break;
+		}
+	}
+	return result;
 }
 
 #define BUF_SIZE 4096
@@ -62,11 +95,20 @@ int main() {
 		char *s = strstr(buf, "\r\n\r\n");
 		if (s >= 0 && s + 9 - buf < len) {
 			s += 9;
+			std::string k(s);
+			k = UrlDecode(k);
+			strcpy(s, k.c_str());
+			//ans = (char *)malloc(10000);
 			// code is stored in the string s
+			ans = "";
+			printf("the s is: %s", s);
 			yyparse(s);
-			len = strlen(ans);
-			memcpy(s, ans, len);
-			send(clientfd, s, len - (s - buf), 0);
+			printf("the root is: 0x%x", root);
+			root->evaluate();
+			len = ans.length();
+			printf("%s\n", ans.c_str());
+			send(clientfd, ans.c_str(), len, 0);
+			//free(ans);
 		}
 		closesocket(clientfd);
 	}
