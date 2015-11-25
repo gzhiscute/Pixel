@@ -77,11 +77,11 @@ class iRECT : public BaseType {
 class iTREE : public BaseType {
 	public:
 		int binroot;
-		std::vector<std::pair<int, int> > nodes;
+		std::map<int, std::pair<int, int> > nodes;
 		void drawsvg();
 		iTREE(const std::string& _type, int _rt);
 	private:
-		void CalcDep(int p, int *Max, int dep);
+		bool CalcDep(int p, int *Max, int dep);
 		void DrawTree(int p, int x, int y, int dep);
 };
 

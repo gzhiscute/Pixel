@@ -111,31 +111,37 @@ iTREE::iTREE(const std::string& _type, int _rt) {
 //	printf("create a tree! root: 0x%x\n", binroot);
 }
 
-void iTREE::CalcDep(int p, int *Max, int dep) {
+bool iTREE::CalcDep(int p, int *Max, int dep) {
 	(*Max) = std::max((*Max), dep);
-	if (nodes[p].first) 
-		CalcDep(nodes[p].first, Max, dep+1);
-	if (nodes[p].second) 
-		CalcDep(nodes[p].second, Max, dep+1);
+	std::map<int, std::pair<int, int> >::iterator node = nodes.find(p);
+	if (node == nodes.end()) return 0;
+	if (node->second.first) 
+		if (!CalcDep(node->second.first, Max, dep+1))
+			return 0;
+	if (node->second.second) 
+		if (!CalcDep(node->second.second, Max, dep+1))
+			return 0;
+	return 1;
 }
 
 void iTREE::DrawTree(int p, int x, int y, int dep) {
 	
 	int xlength = 0;
-	if (nodes[p].first || nodes[p].second)
+	std::map<int, std::pair<int, int> >::iterator node = nodes.find(p);
+	if (node->second.first || node->second.second)
 		xlength = TreeBottomLength*(1<<dep)/2;
 
-	if (nodes[p].first) {
+	if (node->second.first) {
 		BaseType *line1 = new iLINE("LINE", x, y, x-xlength, y+TreeYLength, NULL);
 		line1->SetColor(0, 0, 0);
 		line1->drawsvg();
-		DrawTree(nodes[p].first, x-xlength, y+TreeYLength, dep-1);
+		DrawTree(node->second.first, x-xlength, y+TreeYLength, dep-1);
 	}
-	if (nodes[p].second) {
+	if (node->second.second) {
 		BaseType *line2 = new iLINE("LINE", x, y, x+xlength, y+TreeYLength, NULL);
 		line2->SetColor(0, 0, 0);
 		line2->drawsvg();
-		DrawTree(nodes[p].second, x+xlength, y+TreeYLength, dep-1);
+		DrawTree(node->second.second, x+xlength, y+TreeYLength, dep-1);
 	}
 
 	BaseType *cir = new iCIRCLE("CIRCLE", x, y, TreeR, NULL);
@@ -145,11 +151,10 @@ void iTREE::DrawTree(int p, int x, int y, int dep) {
 
 void iTREE::drawsvg() {
 	int Max = 0;
-	CalcDep(binroot, &Max, 0);
-	if (Max == 0)
-		DrawTree(binroot, TreeBottomLength, 2*TreeR, 0);
-	else 
-		DrawTree(binroot, TreeBottomLength*((1<<Max)-1)/2+2*TreeR, 2*TreeR, Max-1);
+	if (!CalcDep(binroot, &Max, 0)) {
+		return;
+	}
+	DrawTree(binroot, TreeBottomLength*((1<<Max)-1)/2+2*TreeR, 2*TreeR, Max-1);
 }
 
 def_node::def_node(std::string _name, BaseType *_base_type) {
