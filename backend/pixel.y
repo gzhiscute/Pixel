@@ -117,6 +117,7 @@ line	: newline {printf("newline\n")}
 			//tmp_var = tmp_tree;
 			$$ = new def_node(GetName($1), tmp_tree);
 		}
+	| allname EQU tree leftsma number comma number comma number comma bintree /* add location information */
 	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { /*printf("define a if statement, the value of expr is %d\n", $3); */ }
 	| WHILE leftsma expr rightsma leftbig lines rightbig { //printf("define a while statement, the value of expr is %d\n", $3); 
 	}
@@ -125,6 +126,10 @@ line	: newline {printf("newline\n")}
 	| draw allname { 
 			$$ = new draw_node(GetName($2));
 		}
+		/* add '=' operation */
+	| allname EQU allname
+	| allname dot vara EQU number
+	| allname dot colorstr EQU allname
 //	| call name leftsma callargs rightsma { //printf("define a function call"); 
 //	}
 	;
@@ -234,4 +239,13 @@ int main()
 	return 0;
 	//return 0;
 }
+
+int fun(int a, int b, int c) {
+	
+
+}
+
+
+
+
 
