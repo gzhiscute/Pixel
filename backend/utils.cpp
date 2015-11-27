@@ -11,6 +11,40 @@
 std::string ans;
 std::map<std::string, BaseType *> vars;
 
+int StringToInt(std::string s) {
+	if (!s.compare("x"))
+		return 0;
+	else if (!s.compare("y"))
+		return 1;
+	else if (!s.compare("x1"))
+		return 2;
+	else if (!s.compare("y1"))
+		return 3;
+	else if (!s.compare("r"))
+		return 4;
+	else if (!s.compare("val"))
+		return 5;
+	else if (!s.compare("w"))
+		return 6;
+	else if (!s.compare("h"))
+		return 7;
+	else if (!s.compare("int"))
+		return 8;
+	else if (!s.compare("bool"))
+		return 9;
+	else if (!s.compare("point"))
+		return 10;
+	else if (!s.compare("line"))
+		return 11;
+	else if (!s.compare("circle"))
+		return 12;
+	else if (!s.compare("rect"))
+		return 13;
+	else if (!s.compare("tree"))
+		return 14;
+	return -1;
+}
+
 void DeletMulDef(std::string node_name)
 {
 	std::map<std::string, BaseType *>::iterator p = vars.find(node_name);
@@ -34,10 +68,23 @@ iINT::iINT(const std::string& _type, int _val) {
 	val = _val;
 }
 
+void iINT::ChangeField(std::string var_name, int right) {
+	switch (StringToInt(var_name)) {
+		case 5 : val = right;
+		default : return;
+	}
+}
 
 iBOOL::iBOOL(const std::string& _type, int _val) {
 	BaseType::SetBaseVars(_type, NULL);
 	val = _val;
+}
+
+void iBOOL::ChangeField(std::string var_name, int right) {
+	switch (StringToInt(var_name)) {
+		case 5 : val = right;
+		default : return;
+	}
 }
 
 iPOINT::iPOINT(const std::string& _type, int _x, int _y, char *_color) {
@@ -53,6 +100,14 @@ void iPOINT::drawsvg() {
 	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, BaseType::r, BaseType::g, BaseType::b);	
 	ans += tmp;
 	free(tmp);
+}
+
+void iPOINT::ChangeField(std::string var_name, int right) {
+	switch (StringToInt(var_name)) {
+		case 0 : x = right;
+		case 1 : y = right;
+		default : return;
+	}
 }
 
 iLINE::iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color) {
@@ -72,6 +127,16 @@ void iLINE::drawsvg() {
 	free(tmp);
 }
 
+void iLINE::ChangeField(std::string var_name, int right) {
+	switch (StringToInt(var_name)) {
+		case 0 : x = right;
+		case 1 : y = right;
+		case 2 : x1 = right;
+		case 3 : y1 = right;
+		default : return;
+	}
+}
+
 iCIRCLE::iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color) {
 	BaseType::SetBaseVars(_type, _color);
 	x = _x;
@@ -86,6 +151,15 @@ void iCIRCLE::drawsvg() {
 	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, r, BaseType::r, BaseType::g, BaseType::b);
 	ans += tmp;
 	free(tmp);
+}
+
+void iCIRCLE::ChangeField(std::string var_name, int right) {
+	switch (StringToInt(var_name)) {
+		case 0 : x = right;
+		case 1 : y = right;
+		case 4 : r = right;
+		default : return;
+	}
 }
 
 iRECT::iRECT(const std::string& _type, int _x, int _y, int _w, int _h, char *_color) {
@@ -103,6 +177,16 @@ void iRECT::drawsvg() {
 	sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", (x-w)/2, (y-h)/2, w, h, BaseType::r, BaseType::g, BaseType::b);
 	ans += tmp;
 	free(tmp);
+}
+
+void iRECT::ChangeField(std::string var_name, int right) {
+	switch (StringToInt(var_name)) {
+		case 0 : x = right;
+		case 1 : y = right;
+		case 6 : w = right;
+		case 7 : h = right;
+		default : return;
+	}
 }
 
 iTREE::iTREE(const std::string& _type, int _rt) {
@@ -199,6 +283,49 @@ void draw_node::evaluate() {
 		var->second->SetColor(_color->second->r, _color->second->g, _color->second->b);
 	}
 	var->second->drawsvg();
+}
+
+equ_sts_node::equ_sts_node(std::string _left, std::string _right) {
+	left = _left;
+	right = _right;
+}
+
+void equ_sts_node::evaluate() {
+	std::map<std::string, BaseType *>::iterator var = vars.find(right);
+	if (var == vars.end()) return;
+	
+	BaseType *p;
+	switch (StringToInt(var->second->type)) {
+		case 8 :
+			p = new iINT(*(var->second));
+		case 9 :
+			p = new iBOOL(*(var->second));
+		case 10 :
+			p = new iPOINT(*(var->second));
+		case 11 :
+			p = new iLINE(*(var->second));
+		case 12 :
+			p = new iCIRCLE(*(var->second));
+		case 13 :
+			p = new iRECT(*(var->second));
+		case 14 :
+			p = new iTREE(*(var->second));
+		default : return;
+	}
+	vars.insert(std::pair<std::string, BaseType *>(left, p));
+}
+
+equ_stn_node::equ_stn_node(std::string _left, std::string _var_name, int _right) {
+	left = _left;
+	var_name = _var_name;
+	right = _right;
+}
+
+void equ_stn_node::evaluate() {
+	std::map<std::string, BaseType *>::iterator var = vars.find(left);
+	if (var == vars.end()) return;
+
+	var->second->ChangeField(var_name, right);
 }
 
 lines_node::lines_node(std::list<line_node *> *_lines) {
