@@ -111,15 +111,19 @@ iTREE::iTREE(const std::string& _type, int _rt) {
 //	printf("create a tree! root: 0x%x\n", binroot);
 }
 
-bool iTREE::CalcDep(int p, int *Max, int dep) {
+bool iTREE::CalcDep(int p, int *Max, int dep, std::set<int> *vis) {
+	std::set<int>::iterator vised = vis->find(p);
+	if (vised != vis->end()) return 0;
+	vis->insert(p);
+
 	(*Max) = std::max((*Max), dep);
 	std::map<int, std::pair<int, int> >::iterator node = nodes.find(p);
-	if (node == nodes.end()) return 0;
+	if (node == nodes.end()) return 1;
 	if (node->second.first) 
-		if (!CalcDep(node->second.first, Max, dep+1))
+		if (!CalcDep(node->second.first, Max, dep+1, vis))
 			return 0;
 	if (node->second.second) 
-		if (!CalcDep(node->second.second, Max, dep+1))
+		if (!CalcDep(node->second.second, Max, dep+1, vis))
 			return 0;
 	return 1;
 }
@@ -128,6 +132,8 @@ void iTREE::DrawTree(int p, int x, int y, int dep) {
 	
 	int xlength = 0;
 	std::map<int, std::pair<int, int> >::iterator node = nodes.find(p);
+	if (node == nodes.end()) return;
+	
 	if (node->second.first || node->second.second)
 		xlength = TreeBottomLength*(1<<dep)/2;
 
@@ -150,8 +156,10 @@ void iTREE::DrawTree(int p, int x, int y, int dep) {
 }
 
 void iTREE::drawsvg() {
+	std::set<int> vis;
+	vis.clear();
 	int Max = 0;
-	if (!CalcDep(binroot, &Max, 0)) {
+	if (!CalcDep(binroot, &Max, 0, &vis)) {
 		return;
 	}
 	DrawTree(binroot, TreeBottomLength*((1<<Max)-1)/2+2*TreeR, 2*TreeR, Max-1);
