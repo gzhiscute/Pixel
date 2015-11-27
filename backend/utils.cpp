@@ -297,21 +297,20 @@ void equ_sts_node::evaluate() {
 	BaseType *p;
 	switch (StringToInt(var->second->type)) {
 		case 8 :
-			p = new iINT(*(var->second));
+			p = new iINT("int", var->second->GetVal());
 		case 9 :
-			p = new iBOOL(*(var->second));
+			p = new iBOOL("bool", var->second->GetVal());
 		case 10 :
-			p = new iPOINT(*(var->second));
+			p = new iPOINT("point", var->second->GetX(), var->second->GetY(), NULL);
 		case 11 :
-			p = new iLINE(*(var->second));
+			p = new iLINE("line", var->second->GetX(), var->second->GetY(), var->second->GetX1(), var->second->GetY1(), NULL);
 		case 12 :
-			p = new iCIRCLE(*(var->second));
+			p = new iCIRCLE("circle", var->second->GetX(), var->second->GetY(), var->second->GetR(), NULL);
 		case 13 :
-			p = new iRECT(*(var->second));
-		case 14 :
-			p = new iTREE(*(var->second));
+			p = new iRECT("rect", var->second->GetX(), var->second->GetY(), var->second->GetW(), var->second->GetH(), NULL);
 		default : return;
 	}
+	p->cname = var->second->cname;
 	vars.insert(std::pair<std::string, BaseType *>(left, p));
 }
 

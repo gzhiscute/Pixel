@@ -21,6 +21,14 @@ class BaseType{
 		void SetBaseVars(const std::string& _type, char *_color);
 		virtual void drawsvg() {}
 		virtual void ChangeField(std::string var_name, int right) {}
+		virtual int GetVal() {}
+		virtual int GetX() {}
+		virtual int GetY() {}
+		virtual int GetX1() {}
+		virtual int GetY1() {}
+		virtual int GetR() {}
+		virtual int GetW() {}
+		virtual int GetH() {}
 };
 
 class iINT : public BaseType {
@@ -32,6 +40,7 @@ class iINT : public BaseType {
 			//printf("ERROR: can't draw a INT.\n");
 		}
 		void ChangeField(std::string var_name, int right);
+		int GetVal() { return val; }
 };
 
 
@@ -44,6 +53,7 @@ class iBOOL : public BaseType {
 			//printf("ERROR: can't draw a BOOL.\n");
 		}
 		void ChangeField(std::string var_name, int right);
+		int GetVal() { return val; }
 };
 
 class iPOINT : public BaseType {
@@ -53,6 +63,8 @@ class iPOINT : public BaseType {
 		iPOINT(const std::string& _type, int _x, int _y, char *_color);
 		void drawsvg();
 		void ChangeField(std::string var_name, int right);
+		int GetX() { return x; }
+		int GetY() { return y; }
 };
 
 class iLINE : public BaseType {
@@ -62,6 +74,10 @@ class iLINE : public BaseType {
 		iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color);
 		void drawsvg(); 
 		void ChangeField(std::string var_name, int right);
+		int GetX() { return x; }
+		int GetY() { return y; }
+		int GetX1() { return x1; }
+		int GetY1() { return y1; }
 };
 
 class iCIRCLE : public BaseType {
@@ -71,6 +87,9 @@ class iCIRCLE : public BaseType {
 		iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color);
 		void drawsvg();
 		void ChangeField(std::string var_name, int right);
+		int GetX() { return x; }
+		int GetY() { return y; }
+		int GetR() { return r; }
 };
 		
 class iRECT : public BaseType {
@@ -80,6 +99,10 @@ class iRECT : public BaseType {
 		iRECT(const std::string& _type, int _x, int _y, int _w, int _h, char *_color);
 		void drawsvg();
 		void ChangeField(std::string var_name, int right);
+		int GetX() { return x; }
+		int GetY() { return y; }
+		int GetW() { return w; }
+		int GetH() { return h; }
 };
 
 class iTREE : public BaseType {
