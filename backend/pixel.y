@@ -38,8 +38,9 @@
 %token <num> number
 %token <bstp> INT BOOL POINT LINE circle rect tree
 %token color text IF ELSE WHILE CONTINUE BREAK newline
-%token draw backgroud func TRUE FALSE relop call EQU
+%token draw backgroud func TRUE FALSE relop call EQU DOT
 %token leftsma rightsma leftbig rightbig OR AND comma expr
+%token colname
 %type <lnode> line 
 %type <lsnode> lines input
 %type <childpair> treenode
@@ -117,7 +118,7 @@ line	: newline {printf("newline\n")}
 			//tmp_var = tmp_tree;
 			$$ = new def_node(GetName($1), tmp_tree);
 		}
-	| allname EQU tree leftsma number comma number comma number comma bintree /* add location information */
+	/*| allname EQU tree leftsma number comma number comma number comma bintree *//* add location information */
 	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { /*printf("define a if statement, the value of expr is %d\n", $3); */ }
 	| WHILE leftsma expr rightsma leftbig lines rightbig { //printf("define a while statement, the value of expr is %d\n", $3); 
 	}
@@ -127,9 +128,18 @@ line	: newline {printf("newline\n")}
 			$$ = new draw_node(GetName($2));
 		}
 		/* add '=' operation */
-	| allname EQU allname
-	| allname dot vara EQU number
-	| allname dot colorstr EQU allname
+	| allname EQU allname {
+			/* a = b */
+			$$ = new equ_sts_node(GetName($1), GetName($3));
+		}
+	| allname DOT allname EQU number {
+			/* a.x = 1 */
+			$$ = new equ_stn_node(GetName($1), GetName($3), $5);
+		}
+	| allname DOT colname EQU allname {
+			/* a.cname = 'red' */
+			$$ = new equ_cts_node(GetName($1), GetName($5));
+		}
 //	| call name leftsma callargs rightsma { //printf("define a function call"); 
 //	}
 	;
@@ -240,10 +250,10 @@ int main()
 	//return 0;
 }
 
-int fun(int a, int b, int c) {
+// int fun(int a, int b, int c) {
 	
 
-}
+// }
 
 
 

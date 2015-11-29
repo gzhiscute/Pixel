@@ -21,6 +21,7 @@ class BaseType{
 		void SetBaseVars(const std::string& _type, char *_color);
 		virtual void drawsvg() {}
 		virtual void ChangeField(std::string var_name, int right) {}
+		virtual void ChangeColor(std::string colorstr) {}
 		virtual int GetVal() {}
 		virtual int GetX() {}
 		virtual int GetY() {}
@@ -63,6 +64,7 @@ class iPOINT : public BaseType {
 		iPOINT(const std::string& _type, int _x, int _y, char *_color);
 		void drawsvg();
 		void ChangeField(std::string var_name, int right);
+		void ChangeColor(std::string colorstr);
 		int GetX() { return x; }
 		int GetY() { return y; }
 };
@@ -74,6 +76,7 @@ class iLINE : public BaseType {
 		iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color);
 		void drawsvg(); 
 		void ChangeField(std::string var_name, int right);
+		void ChangeColor(std::string colorstr);
 		int GetX() { return x; }
 		int GetY() { return y; }
 		int GetX1() { return x1; }
@@ -87,6 +90,7 @@ class iCIRCLE : public BaseType {
 		iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color);
 		void drawsvg();
 		void ChangeField(std::string var_name, int right);
+		void ChangeColor(std::string colorstr);
 		int GetX() { return x; }
 		int GetY() { return y; }
 		int GetR() { return r; }
@@ -99,6 +103,7 @@ class iRECT : public BaseType {
 		iRECT(const std::string& _type, int _x, int _y, int _w, int _h, char *_color);
 		void drawsvg();
 		void ChangeField(std::string var_name, int right);
+		void ChangeColor(std::string colorstr);
 		int GetX() { return x; }
 		int GetY() { return y; }
 		int GetW() { return w; }

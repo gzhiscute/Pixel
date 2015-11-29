@@ -70,7 +70,7 @@ iINT::iINT(const std::string& _type, int _val) {
 
 void iINT::ChangeField(std::string var_name, int right) {
 	switch (StringToInt(var_name)) {
-		case 5 : val = right;
+		case 5 : val = right; break;
 		default : return;
 	}
 }
@@ -82,7 +82,7 @@ iBOOL::iBOOL(const std::string& _type, int _val) {
 
 void iBOOL::ChangeField(std::string var_name, int right) {
 	switch (StringToInt(var_name)) {
-		case 5 : val = right;
+		case 5 : val = right; break;
 		default : return;
 	}
 }
@@ -104,10 +104,14 @@ void iPOINT::drawsvg() {
 
 void iPOINT::ChangeField(std::string var_name, int right) {
 	switch (StringToInt(var_name)) {
-		case 0 : x = right;
-		case 1 : y = right;
+		case 0 : x = right; break;
+		case 1 : y = right; break;
 		default : return;
 	}
+}
+
+void iPOINT::ChangeColor(std::string colorstr) {
+	this->cname = colorstr;
 }
 
 iLINE::iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color) {
@@ -129,12 +133,16 @@ void iLINE::drawsvg() {
 
 void iLINE::ChangeField(std::string var_name, int right) {
 	switch (StringToInt(var_name)) {
-		case 0 : x = right;
-		case 1 : y = right;
-		case 2 : x1 = right;
-		case 3 : y1 = right;
+		case 0 : x = right; break;
+		case 1 : y = right; break;
+		case 2 : x1 = right; break;
+		case 3 : y1 = right; break;
 		default : return;
 	}
+}
+
+void iLINE::ChangeColor(std::string colorstr) {
+	this->cname = colorstr;
 }
 
 iCIRCLE::iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color) {
@@ -155,11 +163,14 @@ void iCIRCLE::drawsvg() {
 
 void iCIRCLE::ChangeField(std::string var_name, int right) {
 	switch (StringToInt(var_name)) {
-		case 0 : x = right;
-		case 1 : y = right;
-		case 4 : r = right;
+		case 0 : x = right; break;
+		case 1 : y = right; break;
+		case 4 : r = right; break;
 		default : return;
 	}
+}
+void iCIRCLE::ChangeColor(std::string colorstr) {
+	this->cname = colorstr;
 }
 
 iRECT::iRECT(const std::string& _type, int _x, int _y, int _w, int _h, char *_color) {
@@ -181,12 +192,16 @@ void iRECT::drawsvg() {
 
 void iRECT::ChangeField(std::string var_name, int right) {
 	switch (StringToInt(var_name)) {
-		case 0 : x = right;
-		case 1 : y = right;
-		case 6 : w = right;
-		case 7 : h = right;
+		case 0 : x = right; break;
+		case 1 : y = right; break;
+		case 6 : w = right; break;
+		case 7 : h = right; break;
 		default : return;
 	}
+}
+
+void iRECT::ChangeColor(std::string colorstr) {
+	this->cname = colorstr;
 }
 
 iTREE::iTREE(const std::string& _type, int _rt) {
@@ -216,22 +231,22 @@ void iTREE::DrawTree(int p, int x, int y, int dep) {
 	
 	int xlength = 0;
 	std::map<int, std::pair<int, int> >::iterator node = nodes.find(p);
-	if (node == nodes.end()) return;
-	
-	if (node->second.first || node->second.second)
-		xlength = TreeBottomLength*(1<<dep)/2;
+	if (node != nodes.end()) {
+		if (node->second.first || node->second.second)
+			xlength = TreeBottomLength*(1<<dep)/2;
 
-	if (node->second.first) {
-		BaseType *line1 = new iLINE("LINE", x, y, x-xlength, y+TreeYLength, NULL);
-		line1->SetColor(0, 0, 0);
-		line1->drawsvg();
-		DrawTree(node->second.first, x-xlength, y+TreeYLength, dep-1);
-	}
-	if (node->second.second) {
-		BaseType *line2 = new iLINE("LINE", x, y, x+xlength, y+TreeYLength, NULL);
-		line2->SetColor(0, 0, 0);
-		line2->drawsvg();
-		DrawTree(node->second.second, x+xlength, y+TreeYLength, dep-1);
+		if (node->second.first) {
+			BaseType *line1 = new iLINE("LINE", x, y, x-xlength, y+TreeYLength, NULL);
+			line1->SetColor(0, 0, 0);
+			line1->drawsvg();
+			DrawTree(node->second.first, x-xlength, y+TreeYLength, dep-1);
+		}
+		if (node->second.second) {
+			BaseType *line2 = new iLINE("LINE", x, y, x+xlength, y+TreeYLength, NULL);
+			line2->SetColor(0, 0, 0);
+			line2->drawsvg();
+			DrawTree(node->second.second, x+xlength, y+TreeYLength, dep-1);
+		}
 	}
 
 	BaseType *cir = new iCIRCLE("CIRCLE", x, y, TreeR, NULL);
@@ -297,17 +312,21 @@ void equ_sts_node::evaluate() {
 	BaseType *p;
 	switch (StringToInt(var->second->type)) {
 		case 8 :
-			p = new iINT("int", var->second->GetVal());
+			p = new iINT("int", var->second->GetVal()); break;
 		case 9 :
-			p = new iBOOL("bool", var->second->GetVal());
+			p = new iBOOL("bool", var->second->GetVal()); break;
 		case 10 :
 			p = new iPOINT("point", var->second->GetX(), var->second->GetY(), NULL);
+			break;
 		case 11 :
 			p = new iLINE("line", var->second->GetX(), var->second->GetY(), var->second->GetX1(), var->second->GetY1(), NULL);
+			break;
 		case 12 :
 			p = new iCIRCLE("circle", var->second->GetX(), var->second->GetY(), var->second->GetR(), NULL);
+			break;
 		case 13 :
 			p = new iRECT("rect", var->second->GetX(), var->second->GetY(), var->second->GetW(), var->second->GetH(), NULL);
+			break;
 		default : return;
 	}
 	p->cname = var->second->cname;
@@ -325,6 +344,17 @@ void equ_stn_node::evaluate() {
 	if (var == vars.end()) return;
 
 	var->second->ChangeField(var_name, right);
+}
+
+equ_cts_node::equ_cts_node(std::string _left, std::string _right) {
+	left = _left;
+	right = _right;
+}
+
+void equ_cts_node::evaluate() {
+	std::map<std::string, BaseType *>::iterator var = vars.find(left);
+	if (var == vars.end()) return;
+	var->second->ChangeColor(right);
 }
 
 lines_node::lines_node(std::list<line_node *> *_lines) {

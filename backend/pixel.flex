@@ -46,6 +46,8 @@ draw	{return draw;}
 func	{return func;}
 call	{return call;}
 tree	{return tree;}
+cname	{return colname;}
+"."		{return DOT;}
 {number}	{yylval.num = atoi(yytext); return number;}
 {allname}		{yylval.str = (char *)yytext; return allname;}
 

@@ -64,14 +64,16 @@
      relop = 280,
      call = 281,
      EQU = 282,
-     leftsma = 283,
-     rightsma = 284,
-     leftbig = 285,
-     rightbig = 286,
-     OR = 287,
-     AND = 288,
-     comma = 289,
-     expr = 290
+     DOT = 283,
+     leftsma = 284,
+     rightsma = 285,
+     leftbig = 286,
+     rightbig = 287,
+     OR = 288,
+     AND = 289,
+     comma = 290,
+     expr = 291,
+     colname = 292
    };
 #endif
 /* Tokens.  */
@@ -100,14 +102,16 @@
 #define relop 280
 #define call 281
 #define EQU 282
-#define leftsma 283
-#define rightsma 284
-#define leftbig 285
-#define rightbig 286
-#define OR 287
-#define AND 288
-#define comma 289
-#define expr 290
+#define DOT 283
+#define leftsma 284
+#define rightsma 285
+#define leftbig 286
+#define rightbig 287
+#define OR 288
+#define AND 289
+#define comma 290
+#define expr 291
+#define colname 292
 
 
 
@@ -125,7 +129,7 @@ typedef union YYSTYPE
 	std::map<int, std::pair<int, int> > *binvect;
 }
 /* Line 1529 of yacc.c.  */
-#line 129 "pixel.tab.h"
+#line 133 "pixel.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
