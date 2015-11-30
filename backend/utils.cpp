@@ -501,3 +501,43 @@ int divide_node::evaluate() {
 
 	return num;
 }
+
+gt_node::gt_node(exp_node *L, exp_node *R) : operator_node(L,R) {}
+
+int gt_node::evaluate() {
+	int leftnum, rightnum;
+	leftnum = left->evaluate();
+	rightnum = right->evaluate();
+	num = leftnum > rightnum;
+	return num;
+}
+
+ge_node::ge_node(exp_node *L, exp_node *R) : operator_node(L,R) {}
+
+int ge_node::evaluate() {
+	int leftnum, rightnum;
+	leftnum = left->evaluate();
+	rightnum = right->evaluate();
+	num = leftnum >= rightnum;
+	return num;
+}
+
+lt_node::lt_node(exp_node *L, exp_node *R) : operator_node(L,R) {}
+
+int lt_node::evaluate() {
+	int leftnum, rightnum;
+	leftnum = left->evaluate();
+	rightnum = right->evaluate();
+	num = leftnum < rightnum;
+	return num;
+}
+
+le_node::le_node(exp_node *L, exp_node *R) : operator_node(L,R) {}
+
+int le_node::evaluate() {
+	int leftnum, rightnum;
+	leftnum = left->evaluate();
+	rightnum = right->evaluate();
+	num = leftnum <= rightnum;
+	return num;
+}

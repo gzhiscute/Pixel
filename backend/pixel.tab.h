@@ -61,21 +61,24 @@
      func = 277,
      TRUE = 278,
      FALSE = 279,
-     relop = 280,
-     call = 281,
-     EQU = 282,
-     DOT = 283,
-     MINUS = 284,
-     PLUS = 285,
-     DIVIDE = 286,
-     TIMES = 287,
-     leftsma = 288,
-     rightsma = 289,
-     leftbig = 290,
-     rightbig = 291,
-     OR = 292,
-     AND = 293,
-     comma = 294
+     call = 280,
+     EQU = 281,
+     DOT = 282,
+     LE = 283,
+     LT = 284,
+     GE = 285,
+     GT = 286,
+     MINUS = 287,
+     PLUS = 288,
+     DIVIDE = 289,
+     TIMES = 290,
+     leftsma = 291,
+     rightsma = 292,
+     leftbig = 293,
+     rightbig = 294,
+     OR = 295,
+     AND = 296,
+     comma = 297
    };
 #endif
 /* Tokens.  */
@@ -101,21 +104,24 @@
 #define func 277
 #define TRUE 278
 #define FALSE 279
-#define relop 280
-#define call 281
-#define EQU 282
-#define DOT 283
-#define MINUS 284
-#define PLUS 285
-#define DIVIDE 286
-#define TIMES 287
-#define leftsma 288
-#define rightsma 289
-#define leftbig 290
-#define rightbig 291
-#define OR 292
-#define AND 293
-#define comma 294
+#define call 280
+#define EQU 281
+#define DOT 282
+#define LE 283
+#define LT 284
+#define GE 285
+#define GT 286
+#define MINUS 287
+#define PLUS 288
+#define DIVIDE 289
+#define TIMES 290
+#define leftsma 291
+#define rightsma 292
+#define leftbig 293
+#define rightbig 294
+#define OR 295
+#define AND 296
+#define comma 297
 
 
 
@@ -134,7 +140,7 @@ typedef union YYSTYPE
 	std::map<int, std::pair<int, int> > *binvect;
 }
 /* Line 1529 of yacc.c.  */
-#line 138 "pixel.tab.h"
+#line 144 "pixel.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

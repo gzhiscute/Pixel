@@ -220,6 +220,30 @@ class  divide_node : public operator_node {
 		 int evaluate();
 };
 
+class  gt_node : public operator_node {
+	public:
+		 gt_node(exp_node *L, exp_node *R);
+		 int evaluate();
+};
+
+class  ge_node : public operator_node {
+	public:
+		 ge_node(exp_node *L, exp_node *R);
+		 int evaluate();
+};
+
+class  lt_node : public operator_node {
+	public:
+		 lt_node(exp_node *L, exp_node *R);
+		 int evaluate();
+};
+
+class  le_node : public operator_node {
+	public:
+		 le_node(exp_node *L, exp_node *R);
+		 int evaluate();
+};
+
 // allname dot vara EQU number
 class equ_stn_node : public line_node {
 	protected:

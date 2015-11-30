@@ -40,7 +40,8 @@
 %token <num> number
 %token <bstp> INT BOOL POINT LINE circle rect tree
 %token color text IF ELSE WHILE CONTINUE BREAK newline
-%token draw backgroud func TRUE FALSE relop call EQU DOT
+%token draw backgroud func TRUE FALSE call EQU DOT
+%right GT GE LT LE /*> >= < <=*/
 %left PLUS MINUS
 %left TIMES DIVIDE
 %token leftsma rightsma leftbig rightbig OR AND comma
@@ -206,6 +207,18 @@ supernum : allname DOT allname {
  		| expr DIVIDE expr {
  				$$ = new divide_node($1, $3);
  			}
+ 		| expr GT expr {
+ 				$$ = new gt_node($1, $3);
+ 			}
+ 		| expr GE expr {
+ 				$$ = new ge_node($1, $3);
+ 			}
+ 		| expr LT expr {
+ 				$$ = new lt_node($1, $3);
+ 			}
+ 		| expr LE expr {
+ 				$$ = new le_node($1, $3);
+ 			}
  		| leftsma expr rightsma {
  				$$ = $2;
  			}
@@ -214,8 +227,6 @@ supernum : allname DOT allname {
  			}
  		;
 
-// boolexpr : supernum relop supernum
-// 		 ;
 // defargs	: name comma defargs
 // 	| /* empty */
 // 	;

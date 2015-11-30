@@ -22,7 +22,11 @@ allname	({letter}|_)({digit}|{letter}|_)*
 "-"	{return MINUS;}
 "*"	{return TIMES;}
 "/"	{return DIVIDE;}
-= 	{return EQU;}
+"<" {return LT;}
+">" {return GT;}
+"<="	{return LE;}
+">="	{return GE;}
+"=" 	{return EQU;}
 "(" 	{return leftsma;}
 ")"	{return rightsma;}
 {	{return leftbig;}
