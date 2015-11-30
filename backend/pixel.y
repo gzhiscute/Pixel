@@ -17,6 +17,7 @@
 	static	std::map<int, std::pair<int, int> > *tmp_map;
 	static	std::pair<int, std::pair<int, int> > *tmp_pair;
 	static	char* GetName(char *nname);
+	extern	std::map<std::string, BaseType *> vars;
 	void yyerror (/*void *a, */const char *msg);
 %}
 
@@ -28,6 +29,7 @@
 	BaseType *bstp;
 	line_node *lnode;
 	lines_node *lsnode;
+	exp_node *expnode;
 	std::pair<int, std::pair<int, int> > *childpair;
 	std::map<int, std::pair<int, int> > *binvect;
 };
@@ -39,12 +41,14 @@
 %token <bstp> INT BOOL POINT LINE circle rect tree
 %token color text IF ELSE WHILE CONTINUE BREAK newline
 %token draw backgroud func TRUE FALSE relop call EQU DOT
-%token leftsma rightsma leftbig rightbig OR AND comma expr
-%token colname
+%left PLUS MINUS
+%left TIMES DIVIDE
+%token leftsma rightsma leftbig rightbig OR AND comma
 %type <lnode> line 
 %type <lsnode> lines input
 %type <childpair> treenode
 %type <binvect> bintree
+%type <expnode>  supernum expr
 
 /*
 %token str name number INT BOOL POINT LINE circle rect color text 
@@ -133,17 +137,17 @@ line	: newline {printf("newline\n")}
 			/* a = b */
 			$$ = new equ_sts_node(GetName($1), GetName($3));
 		}
-	 | allname DOT allname EQU number {
+	// | allname DOT allname EQU number {
 	 		
-	 		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
-	 	}
+	//  		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
+	//  	}
 	| allname DOT color EQU allname {
 		/* a.cname = 'red' */
-		$$ = new equ_cts_node(GetName($1), GetName($5));
+			$$ = new equ_cts_node(GetName($1), GetName($5));
 		}
-	// | allname DOT allname EQU expr {
-
-	// 	}
+	 | allname DOT allname EQU expr {
+	 		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
+	 	}
 
 //	| call name leftsma callargs rightsma { //printf("define a function call"); 
 //	}
@@ -179,14 +183,36 @@ treenode : leftsma number comma number comma number rightsma {
 			}
 		;
 
-// supernum : allname DOT allname 
-// 		| number 
-// 		| allname
-// 		;
+supernum : allname DOT allname {
+				$$ = new field_node(GetName($1), GetName($3));
+			} 
+ 		| number {
+ 				$$ = new number_node($1);
+ 			} 
+ 		| allname {
+ 				$$ = new int_node(GetName($1));
+ 			}
+ 		;
 		
-// expr : 	supernum PLUS expr
-// 		| supernum
-// 		;
+ expr : expr PLUS expr {
+ 				$$ = new plus_node($1, $3);
+ 			}
+ 		| expr MINUS expr {
+ 				$$ = new minus_node($1, $3);
+ 			}
+ 		| expr TIMES expr {
+ 				$$ = new times_node($1, $3);
+ 			}
+ 		| expr DIVIDE expr {
+ 				$$ = new divide_node($1, $3);
+ 			}
+ 		| leftsma expr rightsma {
+ 				$$ = $2;
+ 			}
+ 		| supernum {
+ 				$$ = $1;
+ 			}
+ 		;
 
 // boolexpr : supernum relop supernum
 // 		 ;

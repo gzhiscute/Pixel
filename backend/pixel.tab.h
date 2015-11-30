@@ -65,15 +65,17 @@
      call = 281,
      EQU = 282,
      DOT = 283,
-     leftsma = 284,
-     rightsma = 285,
-     leftbig = 286,
-     rightbig = 287,
-     OR = 288,
-     AND = 289,
-     comma = 290,
-     expr = 291,
-     colname = 292
+     MINUS = 284,
+     PLUS = 285,
+     DIVIDE = 286,
+     TIMES = 287,
+     leftsma = 288,
+     rightsma = 289,
+     leftbig = 290,
+     rightbig = 291,
+     OR = 292,
+     AND = 293,
+     comma = 294
    };
 #endif
 /* Tokens.  */
@@ -103,33 +105,36 @@
 #define call 281
 #define EQU 282
 #define DOT 283
-#define leftsma 284
-#define rightsma 285
-#define leftbig 286
-#define rightbig 287
-#define OR 288
-#define AND 289
-#define comma 290
-#define expr 291
-#define colname 292
+#define MINUS 284
+#define PLUS 285
+#define DIVIDE 286
+#define TIMES 287
+#define leftsma 288
+#define rightsma 289
+#define leftbig 290
+#define rightbig 291
+#define OR 292
+#define AND 293
+#define comma 294
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 25 "pixel.y"
+#line 26 "pixel.y"
 {
 	int num;
 	char *str;
 	BaseType *bstp;
 	line_node *lnode;
 	lines_node *lsnode;
+	exp_node *expnode;
 	std::pair<int, std::pair<int, int> > *childpair;
 	std::map<int, std::pair<int, int> > *binvect;
 }
 /* Line 1529 of yacc.c.  */
-#line 133 "pixel.tab.h"
+#line 138 "pixel.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

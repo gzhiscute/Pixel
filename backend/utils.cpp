@@ -114,6 +114,15 @@ void iPOINT::ChangeColor(std::string colorstr) {
 	this->cname = colorstr;
 }
 
+int iPOINT::GetField(std::string var_name) {
+	switch (StringToInt(var_name)) {
+		case 0 : return this->x;
+		case 1 : return this->y;
+		default : printf("invalid field!\n");
+				return -1;
+	}
+}
+
 iLINE::iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color) {
 	BaseType::SetBaseVars(_type, _color);
 	x = _x;
@@ -145,6 +154,17 @@ void iLINE::ChangeColor(std::string colorstr) {
 	this->cname = colorstr;
 }
 
+int iLINE::GetField(std::string var_name) {
+	switch (StringToInt(var_name)) {
+		case 0 : return this->x;
+		case 1 : return this->y;
+		case 2 : return this->x1;
+		case 3 : return this->y1;
+		default : printf("invalid field!\n");
+				return -1;
+	}
+}
+
 iCIRCLE::iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color) {
 	BaseType::SetBaseVars(_type, _color);
 	x = _x;
@@ -171,6 +191,16 @@ void iCIRCLE::ChangeField(std::string var_name, int right) {
 }
 void iCIRCLE::ChangeColor(std::string colorstr) {
 	this->cname = colorstr;
+}
+
+int iCIRCLE::GetField(std::string var_name) {
+	switch (StringToInt(var_name)) {
+		case 0 : return this->x;
+		case 1 : return this->y;
+		case 4 : return this->r;
+		default : printf("invalid field!\n");
+				return -1;
+	}
 }
 
 iRECT::iRECT(const std::string& _type, int _x, int _y, int _w, int _h, char *_color) {
@@ -202,6 +232,17 @@ void iRECT::ChangeField(std::string var_name, int right) {
 
 void iRECT::ChangeColor(std::string colorstr) {
 	this->cname = colorstr;
+}
+
+int iRECT::GetField(std::string var_name) {
+	switch (StringToInt(var_name)) {
+		case 0 : return this->x;
+		case 1 : return this->y;
+		case 6 : return this->w;
+		case 7 : return this->h;
+		default : printf("invalid field!\n");
+				return -1;
+	}
 }
 
 iTREE::iTREE(const std::string& _type, int _rt) {
@@ -333,7 +374,7 @@ void equ_sts_node::evaluate() {
 	vars.insert(std::pair<std::string, BaseType *>(left, p));
 }
 
-equ_stn_node::equ_stn_node(std::string _left, std::string _var_name, int _right) {
+equ_stn_node::equ_stn_node(std::string _left, std::string _var_name, exp_node *_right) {
 	left = _left;
 	var_name = _var_name;
 	right = _right;
@@ -342,8 +383,8 @@ equ_stn_node::equ_stn_node(std::string _left, std::string _var_name, int _right)
 void equ_stn_node::evaluate() {
 	std::map<std::string, BaseType *>::iterator var = vars.find(left);
 	if (var == vars.end()) return;
-
-	var->second->ChangeField(var_name, right);
+	int ret = right->evaluate();
+	var->second->ChangeField(var_name, ret);
 }
 
 equ_cts_node::equ_cts_node(std::string _left, std::string _right) {
@@ -367,4 +408,96 @@ void lines_node::evaluate() {
 		(*lineIter)->evaluate();
 		printf("~~%s\n", ans.c_str());
 	}
+}
+
+operator_node::operator_node(exp_node *L, exp_node *R) {
+	left = L;
+	right = R;
+}
+
+field_node::field_node(std::string _left, std::string _var_name) {
+	left = _left;
+	var_name = _var_name;
+}
+
+int field_node::evaluate() {
+	std::map<std::string, BaseType *>::iterator var = vars.find(left);
+	if (var == vars.end()) {
+		printf("no such name\n");
+		return -1;
+	}
+	return var->second->GetField(var_name);
+}
+
+number_node::number_node(int _num) {
+	num = _num;
+}
+
+int number_node::evaluate() {
+	return num;
+}
+
+int_node::int_node(std::string _var_name) {
+	var_name = _var_name;
+}
+
+int int_node::evaluate() {
+	std::map<std::string, BaseType *>::iterator var = vars.find(var_name);
+	if (var == vars.end()) {
+		printf("no such name\n");
+		return -1;
+	}
+	if (var->second->type != "int") {
+		printf("invalid name\n");
+		return -1;
+	}
+	return var->second->GetVal();
+}
+
+plus_node::plus_node(exp_node *L, exp_node *R) : operator_node(L,R) {}
+
+int plus_node::evaluate() {
+	int leftnum, rightnum;
+	leftnum = left->evaluate();
+	rightnum = right->evaluate();
+	num = leftnum + rightnum;
+	return num;
+}
+
+minus_node::minus_node(exp_node *L, exp_node *R) : operator_node(L,R) {}
+
+int minus_node::evaluate() {
+	int leftnum, rightnum;
+	leftnum = left->evaluate();
+	rightnum = right->evaluate();
+	num = leftnum - rightnum;
+	return num;
+}
+
+times_node::times_node(exp_node *L, exp_node *R) : operator_node(L,R) {}
+
+int times_node::evaluate() {
+	int leftnum, rightnum;
+	leftnum = left->evaluate();
+	rightnum = right->evaluate();
+	num = leftnum * rightnum;
+	return num;
+}
+
+divide_node::divide_node(exp_node *L, exp_node *R) : operator_node(L,R) {}
+
+int divide_node::evaluate() {
+	int leftnum, rightnum;
+	leftnum = left->evaluate();
+	rightnum = right->evaluate();
+	if (rightnum) {
+		num = leftnum / rightnum;
+		return num;		
+	}
+	else {
+		printf("divide zero!\n");
+		return -1;
+	}
+
+	return num;
 }

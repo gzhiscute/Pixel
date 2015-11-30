@@ -11,6 +11,8 @@
 #define TreeBottomLength 60 /* The length between two bottom nodes. */
 #define TreeYLength 30 /* The length between two layers. */
 
+int StringToInt(std::string s);
+
 class BaseType{
 	public:
 		std::string type;
@@ -22,6 +24,7 @@ class BaseType{
 		virtual void drawsvg() {}
 		virtual void ChangeField(std::string var_name, int right) {}
 		virtual void ChangeColor(std::string colorstr) {}
+		virtual int GetField(std::string var_name) {}
 		virtual int GetVal() {}
 		virtual int GetX() {}
 		virtual int GetY() {}
@@ -65,6 +68,7 @@ class iPOINT : public BaseType {
 		void drawsvg();
 		void ChangeField(std::string var_name, int right);
 		void ChangeColor(std::string colorstr);
+		int GetField(std::string var_name);
 		int GetX() { return x; }
 		int GetY() { return y; }
 };
@@ -77,6 +81,7 @@ class iLINE : public BaseType {
 		void drawsvg(); 
 		void ChangeField(std::string var_name, int right);
 		void ChangeColor(std::string colorstr);
+		int GetField(std::string var_name);
 		int GetX() { return x; }
 		int GetY() { return y; }
 		int GetX1() { return x1; }
@@ -91,6 +96,7 @@ class iCIRCLE : public BaseType {
 		void drawsvg();
 		void ChangeField(std::string var_name, int right);
 		void ChangeColor(std::string colorstr);
+		int GetField(std::string var_name);
 		int GetX() { return x; }
 		int GetY() { return y; }
 		int GetR() { return r; }
@@ -104,6 +110,7 @@ class iRECT : public BaseType {
 		void drawsvg();
 		void ChangeField(std::string var_name, int right);
 		void ChangeColor(std::string colorstr);
+		int GetField(std::string var_name);
 		int GetX() { return x; }
 		int GetY() { return y; }
 		int GetW() { return w; }
@@ -153,14 +160,74 @@ class equ_sts_node : public line_node {
 		void evaluate();
 };
 
+class exp_node {
+	public:
+		int num;
+		virtual int evaluate() = 0;
+};
+
+class operator_node : public exp_node {
+	public:
+		exp_node *left;
+		exp_node *right;
+		operator_node(exp_node *L, exp_node *R);
+};
+
+class field_node : public exp_node {
+	protected:
+		std::string left;
+		std::string var_name;
+	public:
+		field_node(std::string _left, std::string _var_name);
+		int evaluate();
+};
+
+class number_node : public exp_node {
+	public:
+		number_node(int _num);
+		int evaluate();
+};
+
+class int_node : public exp_node {
+	protected:
+		std::string var_name;
+	public:
+		int_node(std::string _var_name);
+		int evaluate();
+};
+
+class plus_node : public operator_node {
+	public:
+		plus_node(exp_node *L, exp_node *R);
+		int evaluate();
+};
+
+class minus_node : public operator_node {
+	public:
+		minus_node(exp_node *L, exp_node *R);
+		int evaluate();
+};
+
+class times_node : public operator_node {
+	public:
+		times_node(exp_node *L, exp_node *R);
+		int evaluate();
+};
+
+class  divide_node : public operator_node {
+	public:
+		 divide_node(exp_node *L, exp_node *R);
+		 int evaluate();
+};
+
 // allname dot vara EQU number
 class equ_stn_node : public line_node {
 	protected:
 		std::string left;
 		std::string var_name;
-		int right;
+		exp_node *right;
 	public:
-		equ_stn_node(std::string _left, std::string _var_name, int _right);
+		equ_stn_node(std::string _left, std::string _var_name, exp_node *_right);
 		void evaluate();
 };
 
@@ -181,6 +248,5 @@ class lines_node {
 		lines_node(std::list<line_node *> *_lines);
 		void evaluate();
 };
-
 		
 #endif /* __COMPILER_PIXEL_BACKEND__ */	
