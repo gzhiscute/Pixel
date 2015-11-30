@@ -120,9 +120,9 @@ line	: newline {printf("newline\n")}
 		}
 	/*| allname EQU tree leftsma number comma number comma number comma bintree *//* add location information */
 //	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { /*printf("define a if statement, the value of expr is %d\n", $3); */ }
-	| WHILE leftsma boolexpr rightsma leftbig lines rightbig { //printf("define a while statement, the value of expr is %d\n", $3); 
+	//| WHILE leftsma boolexpr rightsma leftbig lines rightbig { //printf("define a while statement, the value of expr is %d\n", $3); 
 	
-	}
+	//}
 	| CONTINUE { //printf("define a continue\n"); 
 	}
 	| draw allname { 
@@ -133,17 +133,17 @@ line	: newline {printf("newline\n")}
 			/* a = b */
 			$$ = new equ_sts_node(GetName($1), GetName($3));
 		}
-	// | allname DOT allname EQU number {
-	// 		
-	// 		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
-	// 	}
+	 | allname DOT allname EQU number {
+	 		
+	 		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
+	 	}
 	| allname DOT color EQU allname {
 		/* a.cname = 'red' */
 		$$ = new equ_cts_node(GetName($1), GetName($5));
 		}
-	| allname DOT allname EQU expr {
+	// | allname DOT allname EQU expr {
 
-		}
+	// 	}
 
 //	| call name leftsma callargs rightsma { //printf("define a function call"); 
 //	}
@@ -179,17 +179,17 @@ treenode : leftsma number comma number comma number rightsma {
 			}
 		;
 
-supernum : allname DOT allname 
-		| number 
-		| allname
-		;
+// supernum : allname DOT allname 
+// 		| number 
+// 		| allname
+// 		;
 		
-expr : 	supernum PLUS expr
-		| supernum
-		;
+// expr : 	supernum PLUS expr
+// 		| supernum
+// 		;
 
-boolexpr : supernum relop supernum
-		 ;
+// boolexpr : supernum relop supernum
+// 		 ;
 // defargs	: name comma defargs
 // 	| /* empty */
 // 	;
