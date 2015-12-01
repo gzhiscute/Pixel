@@ -293,8 +293,8 @@ void yyerror(/*void *a, */const char *msg)
 {
 }
 
-//int main()
-//{ 
+int main()
+{ 
 	//yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
 	// char buffer[100];
 	// while(1) {
@@ -304,7 +304,7 @@ void yyerror(/*void *a, */const char *msg)
 
 //	return 0;
 	//return 0;
-//}
+}
 
 // int fun(int a, int b, int c) {
 	
