@@ -549,15 +549,23 @@ while_node::while_node(exp_node *_left, lines_node *_right) {
 }
 
 void while_node::evaluate() {
-	std::map<std::string, BaseType *> tmp;
-	tmp.clear();
+	std::map<std::string, BaseType *> before;
+	before.clear();
 	for (std::map<std::string, BaseType *>::iterator varIter = vars.begin(); varIter != vars.end(); ++varIter)
-		tmp.insert(*varIter);
+		before.insert(*varIter);
 	
 	while (left->evaluate()) 
 		right->evaluate();
 	
+	std::map<std::string, BaseType *> after;
+	after.clear();
+	std::map<std::string, BaseType *>::iterator var;
+	for (std::map<std::string, BaseType *>::iterator varIter = vars.begin(); varIter != vars.end(); ++varIter) {
+		var = before.find(varIter->first);
+		if (var != before.end())
+			after.insert(*varIter);
+	}
 	vars.clear();
-	for (std::map<std::string, BaseType *>::iterator varIter = tmp.begin(); varIter != tmp.end(); ++varIter)
+	for (std::map<std::string, BaseType *>::iterator varIter = after.begin(); varIter != after.end(); ++varIter) 
 		vars.insert(*varIter);
 }
