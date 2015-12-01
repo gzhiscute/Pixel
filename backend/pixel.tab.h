@@ -1,24 +1,23 @@
-/* A Bison parser, made by GNU Bison 2.3.  */
+
+/* A Bison parser, made by GNU Bison 2.4.1.  */
 
 /* Skeleton interface for Bison's Yacc-like parsers in C
-
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+   
+      Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
    Free Software Foundation, Inc.
-
-   This program is free software; you can redistribute it and/or modify
+   
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
-
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+   
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-
+   
    You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -29,9 +28,10 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-
+   
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
+
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -81,55 +81,16 @@
      comma = 297
    };
 #endif
-/* Tokens.  */
-#define allname 258
-#define number 259
-#define INT 260
-#define BOOL 261
-#define POINT 262
-#define LINE 263
-#define circle 264
-#define rect 265
-#define tree 266
-#define color 267
-#define text 268
-#define IF 269
-#define ELSE 270
-#define WHILE 271
-#define CONTINUE 272
-#define BREAK 273
-#define newline 274
-#define draw 275
-#define backgroud 276
-#define func 277
-#define TRUE 278
-#define FALSE 279
-#define call 280
-#define EQU 281
-#define DOT 282
-#define LE 283
-#define LT 284
-#define GE 285
-#define GT 286
-#define MINUS 287
-#define PLUS 288
-#define DIVIDE 289
-#define TIMES 290
-#define leftsma 291
-#define rightsma 292
-#define leftbig 293
-#define rightbig 294
-#define OR 295
-#define AND 296
-#define comma 297
-
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 26 "pixel.y"
 {
+
+/* Line 1676 of yacc.c  */
+#line 28 "pixel.y"
+
 	int num;
 	char *str;
 	BaseType *bstp;
@@ -138,14 +99,17 @@ typedef union YYSTYPE
 	exp_node *expnode;
 	std::pair<int, std::pair<int, int> > *childpair;
 	std::map<int, std::pair<int, int> > *binvect;
-}
-/* Line 1529 of yacc.c.  */
-#line 144 "pixel.tab.h"
-	YYSTYPE;
+
+
+
+/* Line 1676 of yacc.c  */
+#line 107 "pixel.tab.h"
+} YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
-# define YYSTYPE_IS_TRIVIAL 1
 #endif
 
 extern YYSTYPE yylval;
+
 

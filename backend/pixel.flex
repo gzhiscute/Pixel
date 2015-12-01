@@ -29,8 +29,8 @@ allname	({letter}|_)({digit}|{letter}|_)*
 "=" 	{return EQU;}
 "(" 	{return leftsma;}
 ")"	{return rightsma;}
-{	{return leftbig;}
-}	{return rightbig;}
+"{"	{return leftbig;}
+"}"	{return rightbig;}
 ,	{return comma;}
 '\n'	{return newline;}
 "||"	{return OR;}

@@ -245,10 +245,11 @@ int iRECT::GetField(std::string var_name) {
 	}
 }
 
-iTREE::iTREE(const std::string& _type, int _rt) {
+iTREE::iTREE(const std::string& _type, int _rt, int _tx, int _ty) {
 	BaseType::type = _type;
 	binroot = _rt;
-//	printf("create a tree! root: 0x%x\n", binroot);
+	treex = _tx;
+	treey = _ty;
 }
 
 bool iTREE::CalcDep(int p, int *Max, int dep, std::set<int> *vis) {
@@ -302,7 +303,7 @@ void iTREE::drawsvg() {
 	if (!CalcDep(binroot, &Max, 0, &vis)) {
 		return;
 	}
-	DrawTree(binroot, TreeBottomLength*((1<<Max)-1)/2+2*TreeR, 2*TreeR, Max-1);
+	DrawTree(binroot, TreeBottomLength*((1<<Max)-1)/2+treex, treey, Max-1);
 }
 
 def_node::def_node(std::string _name, BaseType *_base_type) {
@@ -540,4 +541,23 @@ int le_node::evaluate() {
 	rightnum = right->evaluate();
 	num = leftnum <= rightnum;
 	return num;
+}
+
+while_node::while_node(exp_node *_left, lines_node *_right) {
+	left = _left;
+	right = _right;
+}
+
+void while_node::evaluate() {
+	std::map<std::string, BaseType *> tmp;
+	tmp.clear();
+	for (std::map<std::string, BaseType *>::iterator varIter = vars.begin(); varIter != vars.end(); ++varIter)
+		tmp.insert(*varIter);
+	
+	while (left->evaluate()) 
+		right->evaluate();
+	
+	vars.clear();
+	for (std::map<std::string, BaseType *>::iterator varIter = tmp.begin(); varIter != tmp.end(); ++varIter)
+		vars.insert(*varIter);
 }

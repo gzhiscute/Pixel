@@ -119,10 +119,10 @@ class iRECT : public BaseType {
 
 class iTREE : public BaseType {
 	public:
-		int binroot;
+		int binroot, treex, treey;
 		std::map<int, std::pair<int, int> > nodes;
 		void drawsvg();
-		iTREE(const std::string& _type, int _rt);
+		iTREE(const std::string& _type, int _rt, int _tx, int _ty);
 	private:
 		bool CalcDep(int p, int *Max, int dep, std::set<int> *vis);
 		void DrawTree(int p, int x, int y, int dep);
@@ -272,5 +272,14 @@ class lines_node {
 		lines_node(std::list<line_node *> *_lines);
 		void evaluate();
 };
-		
+
+class while_node : public line_node {
+	public:
+		exp_node *left;
+		lines_node *right;
+
+		while_node(exp_node *_left, lines_node *_right);
+		void evaluate();
+};
+
 #endif /* __COMPILER_PIXEL_BACKEND__ */	

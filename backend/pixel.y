@@ -10,6 +10,8 @@
 	#include "lex.yy.c" /* yylex file*/
 	/*Header file for AST*/
 
+	#define YYPARSE_PARAM parm
+
 	lines_node *root;	/* the root of the abstract syntax tree*/
 	static	std::list<line_node *> *tmp_line; /*store the temporary line*/	
 	static	BaseType *tmp_var;	/*store the temporary variable*/
@@ -77,11 +79,11 @@ lines : line lines {
 			tmp_line = new std::list<line_node *>;	/* empty string*/
 			$$ = new lines_node(tmp_line);
 			printf("empty\n");
-		}//
+		}
 	;
 
 line	: newline {printf("newline\n")}
-	|allname EQU TRUE { 
+	| allname EQU TRUE { 
 				tmp_var = new iBOOL("bool", 1);
 				$$ = new def_node(GetName($1), tmp_var);
 			}
@@ -118,16 +120,22 @@ line	: newline {printf("newline\n")}
 		}
 	| allname EQU tree leftsma number comma bintree /*rightsma*/ {
 			printf("newtree!!\n");
-			tmp_tree = new iTREE("tree", $5);
+			tmp_tree = new iTREE("tree", $5, TreeR, TreeR);
 			tmp_tree->nodes = *tmp_map;
 			//tmp_var = tmp_tree;
 			$$ = new def_node(GetName($1), tmp_tree);
 		}
-	/*| allname EQU tree leftsma number comma number comma number comma bintree *//* add location information */
+	| allname EQU tree leftsma number comma number comma number comma bintree {
+			tmp_tree = new iTREE("tree", $5, $7, $9);
+			tmp_tree->nodes = *tmp_map;
+			$$ = new def_node(GetName($1), tmp_tree);
+		}
 //	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { /*printf("define a if statement, the value of expr is %d\n", $3); */ }
-	//| WHILE leftsma boolexpr rightsma leftbig lines rightbig { //printf("define a while statement, the value of expr is %d\n", $3); 
-	
-	//}
+	| WHILE leftsma expr rightsma leftbig lines rightbig { 
+			
+			printf("define a while statement, the value of expr\n");
+			$$ = new while_node($3, $6);
+		}
 	| CONTINUE { //printf("define a continue\n"); 
 	}
 	| draw allname { 
@@ -138,10 +146,6 @@ line	: newline {printf("newline\n")}
 			/* a = b */
 			$$ = new equ_sts_node(GetName($1), GetName($3));
 		}
-	// | allname DOT allname EQU number {
-	 		
-	//  		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
-	//  	}
 	| allname DOT color EQU allname {
 		/* a.cname = 'red' */
 			$$ = new equ_cts_node(GetName($1), GetName($5));
@@ -150,8 +154,7 @@ line	: newline {printf("newline\n")}
 	 		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
 	 	}
 
-//	| call name leftsma callargs rightsma { //printf("define a function call"); 
-//	}
+/*	| call name leftsma callargs rightsma { //printf("define a function call"); } */
 	;
 
 /* bintree is the sequence of parameters */
@@ -290,8 +293,8 @@ void yyerror(/*void *a, */const char *msg)
 {
 }
 
-int main()
-{ 
+//int main()
+//{ 
 	//yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
 	// char buffer[100];
 	// while(1) {
@@ -299,9 +302,9 @@ int main()
 	// 	root->evaluate();		 
 	// }
 
-	return 0;
+//	return 0;
 	//return 0;
-}
+//}
 
 // int fun(int a, int b, int c) {
 	
