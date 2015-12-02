@@ -1536,7 +1536,7 @@ yyreduce:
 
   case 5:
 #line 85 "pixel.y"
-    {printf("newline\n");}
+    {printf("newline\n"); ;}
     break;
 
   case 6:

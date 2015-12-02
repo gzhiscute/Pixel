@@ -42,8 +42,15 @@ int StringToInt(std::string s) {
 		return 13;
 	else if (!s.compare("tree"))
 		return 14;
+	else if (!s.compare("R"))
+		return 15;
+	else if (!s.compare("G"))
+		return 16;
+	else if (!s.compare("B"))
+		return 17;
 	return -1;
 }
+
 
 void DeletMulDef(std::string node_name)
 {
@@ -61,6 +68,16 @@ void BaseType::SetColor(int _r, int _g, int _b) {
 	r = _r;
 	g = _g;
 	b = _b;
+}
+
+void BaseType::ChangeField(std::string var_name, int right) {
+	// only color could be the basetype
+	switch (StringToInt(var_name)) {
+		case 15 : r = right; break;
+		case 16	: g = right; break;
+		case 17 : b = right; break;
+		default : return;
+	}
 }
 
 iINT::iINT(const std::string& _type, int _val) {
@@ -407,7 +424,7 @@ void lines_node::evaluate() {
 	std::list<line_node *>::iterator lineIter;
 	for (lineIter = cmdlines->begin(); lineIter != cmdlines->end(); lineIter++) {
 		(*lineIter)->evaluate();
-		printf("~~%s\n", ans.c_str());
+		//printf("~~%s\n", ans.c_str());
 	}
 }
 

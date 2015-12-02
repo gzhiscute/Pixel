@@ -22,7 +22,7 @@ class BaseType{
 		void SetColor(int _r, int _g, int _b);
 		void SetBaseVars(const std::string& _type, char *_color);
 		virtual void drawsvg() {}
-		virtual void ChangeField(std::string var_name, int right) {}
+		virtual void ChangeField(std::string var_name, int right);
 		virtual void ChangeColor(std::string colorstr) {}
 		virtual int GetField(std::string var_name) {}
 		virtual int GetVal() {}

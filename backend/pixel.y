@@ -1,4 +1,4 @@
-
+/* pixel.y this is our teams' parser*/
 %{
 	#include <cstdio>
 	#include <cstring>
@@ -82,7 +82,7 @@ lines : line lines {
 		}
 	;
 
-line	: newline {printf("newline\n")}
+line	: newline {printf("newline\n"); }
 	| allname EQU TRUE { 
 				tmp_var = new iBOOL("bool", 1);
 				$$ = new def_node(GetName($1), tmp_var);

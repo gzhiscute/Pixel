@@ -15,9 +15,11 @@ letter	[A-Za-z]
 digit	[0-9]
 number  {digit}+
 allname	({letter}|_)({digit}|{letter}|_)*
+cmt 	"#"[^#]*"#"
 
 %%
 {ws}	{/* no action and no return */}
+{cmt}	{/* no action and no return */}
 "+"	{return PLUS;}
 "-"	{return MINUS;}
 "*"	{return TIMES;}
