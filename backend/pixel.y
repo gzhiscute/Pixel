@@ -130,14 +130,15 @@ line	: newline {printf("newline\n"); }
 			tmp_tree->nodes = *tmp_map;
 			$$ = new def_node(GetName($1), tmp_tree);
 		}
-//	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { /*printf("define a if statement, the value of expr is %d\n", $3); */ }
+	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { 
+			printf("define a IF-ELSE statement, the value of expr\n");
+			$$ = new if_else_node($3, $6, $10);
+		}
 	| WHILE leftsma expr rightsma leftbig lines rightbig { 
 			
 			printf("define a while statement, the value of expr\n");
 			$$ = new while_node($3, $6);
 		}
-	| CONTINUE { //printf("define a continue\n"); 
-	}
 	| draw allname { 
 			$$ = new draw_node(GetName($2));
 		}
@@ -153,6 +154,12 @@ line	: newline {printf("newline\n"); }
 	 | allname DOT allname EQU expr {
 	 		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
 	 	}
+//	 | allname EQU func leftsma varlist leftbig lines rightbig {
+//
+//	 	}
+//	 | call allname leftsma paramlist {
+//
+//	 	}
 
 /*	| call name leftsma callargs rightsma { //printf("define a function call"); } */
 	;
@@ -229,49 +236,6 @@ supernum : allname DOT allname {
  				$$ = $1;
  			}
  		;
-
-// defargs	: name comma defargs
-// 	| /* empty */
-// 	;
-
-// callargs	: name comma callargs
-// 		| number comma callargs
-// 		| /* empty */
-// 		;
-		
-// expr	: boolexpr { $$ = $1; }
-// 	| relexpr
-// 	;
-	
-// relexpr	: name relop name
-// 	;
-		
-// boolexpr	: boolexpr_term boolexpr_
-// 		| /* empty */
-// 		;
-
-// boolexpr_	: OR boolexpr_term boolexpr_
-// 		| AND boolexpr_term boolexpr_
-// 		| /* empty */
-		
-			 
-// boolexpr_term	: name
-// 		| TRUE
-// 		| FALSE
-// 		| leftsma boolexpr rightsma
-// 		;
-
-//relexpr	: relexpr OR relexpr_ { printf("define a relexpr with ||\n"); } 
-//		| relexpr AND relexpr_ { printf("define a relexpr with &&\n"); }
-//		| leftsma relexpr rightsma { printf("define a relexpr with ()\n"); }
-//		| TRUE { printf("define a relexpr with true\n"); }
-//		| FALSE { printf("define a relexpr with false\n"); }
-//		;
-
-//relexpr_	: name { printf("define a relexpr_ name\n"); }
-//			| TRUE { printf("define a relexpr_ true\n"); }
-//			| FALSE { printf("define a relexpr_ false\n"); }
-//			;
 
 %%
 

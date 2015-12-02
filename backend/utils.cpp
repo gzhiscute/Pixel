@@ -311,6 +311,11 @@ void iTREE::DrawTree(int p, int x, int y, int dep) {
 	BaseType *cir = new iCIRCLE("CIRCLE", x, y, TreeR, NULL);
 	cir->SetColor(rand()%256, rand()%256, rand()%256);
 	cir->drawsvg();
+	char *tmp;
+	tmp = (char *)calloc(256, sizeof(char));
+	sprintf(tmp, "<text x=\"%d\" y=\"%d\" font-family=\"Times New Roman\" font-size=\"14\" fill=\"white\">%d</text>", x-2, y+1, p);
+	ans += tmp;
+	free(tmp);
 }
 
 void iTREE::drawsvg() {
