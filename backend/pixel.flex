@@ -28,6 +28,7 @@ cmt 	"#"[^#]*"#"
 ">" {return GT;}
 "<="	{return LE;}
 ">="	{return GE;}
+"=="	{return EE;}
 "=" 	{return EQU;}
 "(" 	{return leftsma;}
 ")"	{return rightsma;}

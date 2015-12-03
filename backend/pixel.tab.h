@@ -64,21 +64,22 @@
      call = 280,
      EQU = 281,
      DOT = 282,
-     LE = 283,
-     LT = 284,
-     GE = 285,
-     GT = 286,
-     MINUS = 287,
-     PLUS = 288,
-     DIVIDE = 289,
-     TIMES = 290,
-     leftsma = 291,
-     rightsma = 292,
-     leftbig = 293,
-     rightbig = 294,
-     OR = 295,
-     AND = 296,
-     comma = 297
+     EE = 283,
+     LE = 284,
+     LT = 285,
+     GE = 286,
+     GT = 287,
+     MINUS = 288,
+     PLUS = 289,
+     DIVIDE = 290,
+     TIMES = 291,
+     leftsma = 292,
+     rightsma = 293,
+     leftbig = 294,
+     rightbig = 295,
+     OR = 296,
+     AND = 297,
+     comma = 298
    };
 #endif
 /* Tokens.  */
@@ -107,21 +108,22 @@
 #define call 280
 #define EQU 281
 #define DOT 282
-#define LE 283
-#define LT 284
-#define GE 285
-#define GT 286
-#define MINUS 287
-#define PLUS 288
-#define DIVIDE 289
-#define TIMES 290
-#define leftsma 291
-#define rightsma 292
-#define leftbig 293
-#define rightbig 294
-#define OR 295
-#define AND 296
-#define comma 297
+#define EE 283
+#define LE 284
+#define LT 285
+#define GE 286
+#define GT 287
+#define MINUS 288
+#define PLUS 289
+#define DIVIDE 290
+#define TIMES 291
+#define leftsma 292
+#define rightsma 293
+#define leftbig 294
+#define rightbig 295
+#define OR 296
+#define AND 297
+#define comma 298
 
 
 
@@ -140,7 +142,7 @@ typedef union YYSTYPE
 	std::map<int, std::pair<int, int> > *binvect;
 }
 /* Line 1529 of yacc.c.  */
-#line 144 "pixel.tab.h"
+#line 146 "pixel.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -43,7 +43,7 @@
 %token <bstp> INT BOOL POINT LINE circle rect tree
 %token color text IF ELSE WHILE CONTINUE BREAK newline
 %token draw backgroud func TRUE FALSE call EQU DOT
-%right GT GE LT LE /*> >= < <=*/
+%right GT GE LT LE EE/*> >= < <= ==*/
 %left PLUS MINUS
 %left TIMES DIVIDE
 %token leftsma rightsma leftbig rightbig OR AND comma
@@ -53,11 +53,6 @@
 %type <binvect> bintree
 %type <expnode>  supernum expr
 
-/*
-%token str name number INT BOOL POINT LINE circle rect color text 
-IF ELSE WHILE CONTINUE BREAK draw backgroud func TRUE FALSE relop 
-call EQU leftsma rightsma leftbig rightbig newline OR AND comma
-*/
 %start input
 
 %%
@@ -151,7 +146,7 @@ line	: newline {printf("newline\n"); }
 		/* a.cname = 'red' */
 			$$ = new equ_cts_node(GetName($1), GetName($5));
 		}
-	 | allname DOT allname EQU expr {
+	| allname DOT allname EQU expr {
 	 		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
 	 	}
 //	 | allname EQU func leftsma varlist leftbig lines rightbig {
@@ -228,6 +223,9 @@ supernum : allname DOT allname {
  			}
  		| expr LE expr {
  				$$ = new le_node($1, $3);
+ 			}
+ 		| expr EE expr {
+ 				$$ = new ee_node($1, $3);
  			}
  		| leftsma expr rightsma {
  				$$ = $2;

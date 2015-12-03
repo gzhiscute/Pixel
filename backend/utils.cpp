@@ -565,6 +565,16 @@ int le_node::evaluate() {
 	return num;
 }
 
+ee_node::ee_node(exp_node *L, exp_node *R) : operator_node(L, R) {}
+
+int ee_node::evaluate() {
+	int leftnum, rightnum;
+	leftnum = left->evaluate();
+	rightnum = right->evaluate();
+	num = (leftnum == rightnum);
+	return num;
+}
+
 while_node::while_node(exp_node *_left, lines_node *_right) {
 	left = _left;
 	right = _right;
@@ -590,4 +600,35 @@ void while_node::evaluate() {
 	vars.clear();
 	for (std::map<std::string, BaseType *>::iterator varIter = after.begin(); varIter != after.end(); ++varIter) 
 		vars.insert(*varIter);
+}
+
+if_else_node::if_else_node(exp_node *_left, lines_node *_tr, lines_node *_fr) {
+	left = _left;
+	true_right = _tr;
+	false_right = _fr;
+}
+
+void if_else_node::evaluate() {
+	std::map<std::string, BaseType *> before;
+	before.clear();
+	for (std::map<std::string, BaseType *>::iterator varIter = vars.begin(); varIter != vars.end(); ++varIter)
+		before.insert(*varIter);
+
+	if (left->evaluate())
+		true_right->evaluate();
+	else
+		false_right->evaluate();
+
+	std::map<std::string, BaseType *> after;
+	after.clear();
+	std::map<std::string, BaseType *>::iterator var;
+	for (std::map<std::string, BaseType *>::iterator varIter = vars.begin(); varIter != vars.end(); ++varIter) {
+		var = before.find(varIter->first);
+		if (var != before.end())
+			after.insert(*varIter);
+	}
+	vars.clear();
+	for (std::map<std::string, BaseType *>::iterator varIter = after.begin(); varIter != after.end(); ++varIter) 
+		vars.insert(*varIter);
+
 }

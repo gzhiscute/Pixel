@@ -244,6 +244,12 @@ class  le_node : public operator_node {
 		 int evaluate();
 };
 
+class ee_node : public operator_node {
+	public:
+		ee_node(exp_node *L, exp_node *R);
+		int evaluate();
+};
+
 // allname dot vara EQU number
 class equ_stn_node : public line_node {
 	protected:
@@ -279,6 +285,16 @@ class while_node : public line_node {
 		lines_node *right;
 
 		while_node(exp_node *_left, lines_node *_right);
+		void evaluate();
+};
+
+class if_else_node : public line_node {
+	public:
+		exp_node *left;
+		lines_node *true_right;
+		lines_node *false_right;
+
+		if_else_node(exp_node *_left, lines_node *_tr, lines_node *_fr);
 		void evaluate();
 };
 
