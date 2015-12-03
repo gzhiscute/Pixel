@@ -83,7 +83,7 @@ line	: newline {printf("newline\n"); }
 				$$ = new def_node(GetName($1), tmp_var);
 			}
 	| allname EQU FALSE { 
-			tmp_var = new iBOOL("bool", 1);
+			tmp_var = new iBOOL("bool", 0);
 			$$ = new def_node(GetName($1), tmp_var);
 		}
 	| allname EQU number {

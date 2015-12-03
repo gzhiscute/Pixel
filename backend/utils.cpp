@@ -449,6 +449,8 @@ int field_node::evaluate() {
 		printf("no such name\n");
 		return -1;
 	}
+	if (var->second->type == "int" || var->second->type == "bool")
+		return var->second->GetVal();
 	return var->second->GetField(var_name);
 }
 
@@ -470,7 +472,7 @@ int int_node::evaluate() {
 		printf("no such name\n");
 		return -1;
 	}
-	if (var->second->type != "int") {
+	if ((var->second->type != "int") && (var->second->type != "bool")) {
 		printf("invalid name\n");
 		return -1;
 	}

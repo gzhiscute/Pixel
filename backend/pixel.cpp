@@ -1560,7 +1560,7 @@ yyreduce:
   case 7:
 #line 85 "pixel.y"
     { 
-			tmp_var = new iBOOL("bool", 1);
+			tmp_var = new iBOOL("bool", 0);
 			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str)), tmp_var);
 		;}
     break;
