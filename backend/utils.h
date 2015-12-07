@@ -298,4 +298,20 @@ class if_else_node : public line_node {
 		void evaluate();
 };
 
+class def_func : public line_node {
+	public:
+		std::vector<std::pair<std::string, std::string> > params;
+		lines_node *right;
+		def_func(std::string _name, std::vector<std::pair<std::string, std::string> > _params, lines_node *_right);
+};
+std::map<std::string, def_func *> funcs;
+
+class call_node : public line_node {
+	public:
+		std::string node_name;
+		std::vector<std::string> params;
+		call_node(std::string _name, std::vector<std::string> _params);
+		void evaluate();
+};
+
 #endif /* __COMPILER_PIXEL_BACKEND__ */	

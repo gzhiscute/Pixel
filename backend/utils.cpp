@@ -59,6 +59,12 @@ void DeletMulDef(std::string node_name)
 		vars.erase(p);
 }
 
+void DeletMulFunc(std::string node_name) {
+	std::map<std::string, def_func *>::iterator p = funcs.find(node_name);
+	if (p != funcs.end())
+		funcs.erase(p);
+}
+
 void BaseType::SetBaseVars(const std::string& _type, char *_color) {
 	type = _type;
 	if (_color != NULL) cname = _color;
@@ -336,6 +342,15 @@ def_node::def_node(std::string _name, BaseType *_base_type) {
 void def_node::evaluate() {
 	DeletMulDef(node_name);
 	vars.insert(std::pair<std::string, BaseType *>(node_name, base_type));
+}
+
+def_func::def_func(std::string _name, std::vector<std::pair<std::string, std::string> > _params, lines_node *_right) {
+	DeletMulFunc(_name);
+	params.clear();
+	for (std::vector<std::pair<std::string, std::string> >::iterator iter = _params.begin(); iter != _params.end(); ++iter) 
+		params.push_back(*iter);
+	right = _right;
+	funcs.insert(std::pair<std::string, def_func *>(_name, this));
 }
 
 draw_node::draw_node(std::string _name) {
@@ -632,5 +647,47 @@ void if_else_node::evaluate() {
 	vars.clear();
 	for (std::map<std::string, BaseType *>::iterator varIter = after.begin(); varIter != after.end(); ++varIter) 
 		vars.insert(*varIter);
+}
 
+call_node::call_node(std::string _name, std::vector<std::string> _params) {
+	node_name = _name;
+	params.clear();
+	for (std::vector<std::string>::iterator iter = _params.begin(); iter != _params.end(); ++iter)
+		params.push_back(*iter);
+}
+
+void call_node::evaluate() {
+	std::map<std::string, def_func *>::iterator p = funcs.find(node_name);
+	if (p == funcs.end()) return;
+	def_func *func = p->second;
+
+	if (func->params.size() != params.size()) return;
+	for (int i = params.size()-1; i >= 0; --i) {
+		std::map<std::string, BaseType *>::iterator btp = vars.find(params[i]);
+		if (btp == vars.end()) return;
+		if (func->params[i].first != btp->second->type) return;
+	}
+
+	std::map<std::string, BaseType *> before;
+	before.clear();
+	for (std::map<std::string, BaseType *>::iterator varIter = vars.begin(); varIter != vars.end(); ++varIter) 
+		before.insert(*varIter);
+	for (int i = params.size()-1; i >= 0; --i) {
+		std::map<std::string, BaseType *>::iterator btp = vars.find(params[i]);
+		vars.insert(std::pair<std::string, BaseType *>(func->params[i].second, btp->second));
+	}
+
+	func->right->evaluate();
+
+	std::map<std::string, BaseType *> after;
+	after.clear();
+	std::map<std::string, BaseType *>::iterator var;
+	for (std::map<std::string, BaseType *>::iterator varIter = vars.begin(); varIter != vars.end(); ++varIter) {
+		var = before.find(varIter->first);
+		if (var != before.end())
+			after.insert(*varIter);			
+	}
+	vars.clear();
+	for (std::map<std::string, BaseType *>::iterator varIter = after.begin(); varIter != after.end(); ++varIter)
+		vars.insert(*varIter);
 }
