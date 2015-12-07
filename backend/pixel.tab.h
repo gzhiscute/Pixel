@@ -140,9 +140,12 @@ typedef union YYSTYPE
 	exp_node *expnode;
 	std::pair<int, std::pair<int, int> > *childpair;
 	std::map<int, std::pair<int, int> > *binvect;
+	std::vector<std::pair<std::string, std::string> > *varpairVect;
+	std::pair<std::string, std::string> *varPair;
+	std::vector<std::string> *parampairVect;
 }
 /* Line 1529 of yacc.c.  */
-#line 146 "pixel.tab.h"
+#line 149 "pixel.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

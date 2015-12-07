@@ -10,6 +10,7 @@
 
 std::string ans;
 std::map<std::string, BaseType *> vars;
+std::map<std::string, def_func *> funcs;
 
 int StringToInt(std::string s) {
 	if (!s.compare("x"))

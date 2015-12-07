@@ -34,6 +34,9 @@
 	exp_node *expnode;
 	std::pair<int, std::pair<int, int> > *childpair;
 	std::map<int, std::pair<int, int> > *binvect;
+	std::vector<std::pair<std::string, std::string> > *varpairVect;
+	std::pair<std::string, std::string> *varPair;
+	std::vector<std::string> *parampairVect;
 };
 
  //%parse-param {void *Buff} 
@@ -43,7 +46,6 @@
 %token <bstp> INT BOOL POINT LINE circle rect tree
 %token color text IF ELSE WHILE CONTINUE BREAK newline
 %token draw backgroud func TRUE FALSE call EQU DOT
-%token varlist paramlist singlevar
 %right GT GE LT LE EE/*> >= < <= ==*/
 %left PLUS MINUS
 %left TIMES DIVIDE
@@ -53,6 +55,9 @@
 %type <childpair> treenode
 %type <binvect> bintree
 %type <expnode>  supernum expr
+%type <varpairVect> varlist
+%type <varPair> singlevar
+%type <parampairVect> paramlist
 
 %start input
 
@@ -150,61 +155,85 @@ line	: newline {printf("newline\n"); }
 	 		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
 	 	}
 	| allname EQU func leftsma varlist leftbig lines rightbig {
+			printf("define a func!\n");
+			$$ = new def_func(GetName($1), *($5), $7);
 
 	 	}
 	| call allname leftsma paramlist {
-
+			printf("call a func\n");
+			$$ = new call_node(GetName($2), *($4));
 	 	}
 	;
 
 paramlist : allname comma paramlist {
-
+			$$ = $3;
+			$$->push_back(GetName($1));
 		}
 	| allname rightsma {
-
+			$$ = new std::vector<std::string>;
+			$$->push_back(GetName($1));
+			printf("a new paramlist!\n");
 		}
 	| rightsma {
-
+			$$ = new std::vector<std::string>;
+			printf("empty paramlist!\n");
 		}
 	;
 
 varlist : singlevar comma varlist {
-
+			$$ = $3;
+			$$->push_back(*($1));
 		}
 	| singlevar rightsma {
-
+			$$ = new std::vector<std::pair<std::string, std::string> >;
+			$$->push_back(*($1));
+			printf("a new varlist!\n");
 		}
 	| rightsma {
-
+			$$ = new std::vector<std::pair<std::string, std::string> >;
+			printf("empty varlist!\n");
 		}
 	;
 
 singlevar : INT allname {
-
+			$$ = new std::pair<std::string, std::string>;
+			$$->first = "int";
+			$$->second = GetName($2);
 		}
 	| BOOL allname {
-
+			$$ = new std::pair<std::string, std::string>;
+			$$->first = "bool";
+			$$->second = GetName($2);
 		}
 	| POINT allname {
-
+			$$ = new std::pair<std::string, std::string>;
+			$$->first = "point";
+			$$->second = GetName($2);
 		}
 	| circle allname {
-
+			$$ = new std::pair<std::string, std::string>;
+			$$->first = "circle";
+			$$->second = GetName($2);
 		}
 	| rect allname {
-
+			$$ = new std::pair<std::string, std::string>;
+			$$->first = "rect";
+			$$->second = GetName($2);
 		}
 	| LINE allname {
-
+			$$ = new std::pair<std::string, std::string>;
+			$$->first = "line";
+			$$->second = GetName($2);
 		}
 	| color allname {
-
+			$$ = new std::pair<std::string, std::string>;
+			$$->first = "color";
+			$$->second = GetName($2);
 		}
 	| tree allname {
-
-		}
-	| func allname {
-
+			$$ = new std::pair<std::string, std::string>;
+			$$->first = "tree";
+			$$->second = GetName($2);
 		}
 	;
 

@@ -304,7 +304,6 @@ class def_func : public line_node {
 		lines_node *right;
 		def_func(std::string _name, std::vector<std::pair<std::string, std::string> > _params, lines_node *_right);
 };
-std::map<std::string, def_func *> funcs;
 
 class call_node : public line_node {
 	public:
