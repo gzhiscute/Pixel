@@ -43,6 +43,7 @@
 %token <bstp> INT BOOL POINT LINE circle rect tree
 %token color text IF ELSE WHILE CONTINUE BREAK newline
 %token draw backgroud func TRUE FALSE call EQU DOT
+%token varlist paramlist singlevar
 %right GT GE LT LE EE/*> >= < <= ==*/
 %left PLUS MINUS
 %left TIMES DIVIDE
@@ -62,7 +63,6 @@ input	: lines {
 				root = $$;
 				printf("input\n. root is 0x%x", root);
 			}
-//	| func name leftsma defargs rightsma leftbig lines rightbig
 	;
  
 lines : line lines {
@@ -149,14 +149,63 @@ line	: newline {printf("newline\n"); }
 	| allname DOT allname EQU expr {
 	 		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
 	 	}
-//	 | allname EQU func leftsma varlist leftbig lines rightbig {
-//
-//	 	}
-//	 | call allname leftsma paramlist {
-//
-//	 	}
+	| allname EQU func leftsma varlist leftbig lines rightbig {
 
-/*	| call name leftsma callargs rightsma { //printf("define a function call"); } */
+	 	}
+	| call allname leftsma paramlist {
+
+	 	}
+	;
+
+paramlist : allname comma paramlist {
+
+		}
+	| allname rightsma {
+
+		}
+	| rightsma {
+
+		}
+	;
+
+varlist : singlevar comma varlist {
+
+		}
+	| singlevar rightsma {
+
+		}
+	| rightsma {
+
+		}
+	;
+
+singlevar : INT allname {
+
+		}
+	| BOOL allname {
+
+		}
+	| POINT allname {
+
+		}
+	| circle allname {
+
+		}
+	| rect allname {
+
+		}
+	| LINE allname {
+
+		}
+	| color allname {
+
+		}
+	| tree allname {
+
+		}
+	| func allname {
+
+		}
 	;
 
 /* bintree is the sequence of parameters */
