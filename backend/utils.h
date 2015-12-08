@@ -1,3 +1,11 @@
+/* 
+* utils.h
+* This is our team's AST utils header for Pixel Language
+* Written by Li Qian and Guo ZiHan
+* Part of the backend server
+* 2015 Fall Semester -- Compiling Practice
+*/
+
 #ifndef __COMPILER_PIXEL_BACKEND__
 #define __COMPILER_PIXEL_BACKEND__
 
@@ -9,7 +17,7 @@
 
 #define TreeR 10
 #define TreeBottomLength 60 /* The length between two bottom nodes. */
-#define TreeYLength 30 /* The length between two layers. */
+#define TreeYLength 30 		/* The length between two layers. */
 
 int StringToInt(std::string s);
 

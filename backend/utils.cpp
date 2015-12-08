@@ -1,3 +1,11 @@
+/* 
+* utils.cpp
+* This is our team's AST utils implemenetations for Pixel Language
+* Written by Li Qian and Guo ZiHan
+* Part of the backend server
+* 2015 Fall Semester -- Compiling Practice
+*/
+
 #ifndef __COMPILER_PIXEL_BACKEND__
 	#include "utils.h"
 #endif
@@ -359,8 +367,6 @@ draw_node::draw_node(std::string _name) {
 }
 
 void draw_node::evaluate() {
-	printf("In draw_node\n");
-
 	std::map<std::string, BaseType *>::iterator var;
 	var = vars.find(node_name);
 	if (var == vars.end()) {
