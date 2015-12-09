@@ -30,7 +30,7 @@ DocCommentHighlightRules.getTagRule = function(start) {
 DocCommentHighlightRules.getStartRule = function(start) {
     return {
         token : "comment.doc", // doc comment
-        regex : "\\/\\*(?=\\*)",
+        regex : "#",
         next  : start
     };
 };
@@ -38,7 +38,7 @@ DocCommentHighlightRules.getStartRule = function(start) {
 DocCommentHighlightRules.getEndRule = function (start) {
     return {
         token : "comment.doc", // closing comment
-        regex : "\\*\\/",
+        regex : "#",
         next  : start
     };
 };
@@ -63,7 +63,7 @@ var pixelHighlightRules = function() {
     );
     
     var storageType = (
-        "point|line|circle|rect|color|tree"
+        "point|line|circle|rect|color|tree|x|y|x1|y1|r|R|G|B"
     );
 
     var storageModifiers = (
@@ -99,7 +99,7 @@ var pixelHighlightRules = function() {
             DocCommentHighlightRules.getStartRule("doc-start"),
             {
                 token : "comment", // multi line comment
-                regex : "\\#",
+                regex : "#",
                 next : "comment"
             }, {
                 token : "string", // single line
