@@ -12,13 +12,13 @@
 	<div id="image">
 		<button id="run" type="button">Run!</button>
 		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="450">
-			<!--<circle cx="150" cy="80" r="50" stroke="black" stroke-width="2" fill="gray"/>-->
 		</svg>
 	</div>
 	<script>
 		var editor = ace.edit("editor");
 		editor.setTheme("ace/theme/monokai");
-		// editor.getSession().setMode("ace/mode/javascript");
+		editor.setHighlightActiveLine(false);
+		editor.getSession().setMode("ace/mode/pixel");
 	</script>
 	</body>
 </html>

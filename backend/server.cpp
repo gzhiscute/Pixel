@@ -68,7 +68,7 @@ std::string UrlDecode(const std::string& szToDecode)
 	return result;
 }
 
-#define BUF_SIZE 4096
+#define BUF_SIZE 40960
 char buf[BUF_SIZE];
 int main() {
 	WSADATA wsa;
@@ -95,27 +95,45 @@ int main() {
 		len = recv(clientfd, buf, BUF_SIZE, 0);
 		buf[len] = 0;
 		//puts(buf);
-		char *header = "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n";
+		const char *header = "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n";
 		send(clientfd, header, strlen(header), 0);
 		char *s = strstr(buf, "\r\n\r\n");
-		if (s >= 0 && s + 9 - buf < len) {
-			s += 9;
-			std::string k(s);
-			k = UrlDecode(k);
-			strcpy(s, k.c_str());
-			//ans = (char *)malloc(10000);
-			// code is stored in the string s
-			ans = "";
-			printf("the s is: %s", s);
-			vars.clear();
-			funcs.clear();
-			yyparse(s);
-			printf("the root is: 0x%x", root);
-			root->evaluate();
-			len = ans.length();
-			printf("%s\n", ans.c_str());
-			send(clientfd, ans.c_str(), len, 0);
-			//free(ans);
+		if (s && s[4]) {
+			s += 4;
+			std::map<std::string, std::string> args;
+			while (*s) {
+				char *eq = strchr(s, '=');
+				*eq = 0;
+				std::string name = s;
+				s = eq + 1;
+				char *token = strchr(s, '&');
+				if (token) {
+					*token = 0;
+					args[name] = s;
+					s = token + 1;
+				} else {
+					args[name] = s;
+					break;
+				}
+			}
+			if (args.count(std::string("code"))) {
+				std::string k = args[std::string("code")];
+				k = UrlDecode(k);
+				strcpy(s, k.c_str());
+				//ans = (char *)malloc(10000);
+				// code is stored in the string s
+				ans = "";
+				printf("the s is: %s\n", s);
+				vars.clear();
+				funcs.clear();
+				yyparse(s);
+				printf("the root is: 0x%lx", root);
+				root->evaluate();
+				len = ans.length();
+				printf("%s\n", ans.c_str());
+				send(clientfd, ans.c_str(), len, 0);
+				//free(ans);
+			}
 		}
 		closesocket(clientfd);
 	}
