@@ -9,6 +9,8 @@
 extern lines_node *root;
 extern int yyparse(void *);
 extern std::string ans;
+extern std::map<std::string, BaseType *> vars;
+extern std::map<std::string, def_func *> funcs;
 
 SOCKET soc;
 SOCKET init_soc(int port) {
@@ -105,6 +107,8 @@ int main() {
 			// code is stored in the string s
 			ans = "";
 			printf("the s is: %s", s);
+			vars.clear();
+			funcs.clear();
 			yyparse(s);
 			printf("the root is: 0x%x", root);
 			root->evaluate();
