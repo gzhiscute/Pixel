@@ -119,5 +119,7 @@ function () {
 }
 );
 function showSvg(s) {
-	$("svg").html(s);
+	start = s.search('<');
+	svgcode = start == -1 ? '' : s.substr(start + 1);
+	$("svg").html(svgcode);
 }
