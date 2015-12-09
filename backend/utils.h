@@ -308,9 +308,11 @@ class if_else_node : public line_node {
 
 class def_func : public line_node {
 	public:
+		std::string func_name;
 		std::vector<std::pair<std::string, std::string> > params;
 		lines_node *right;
 		def_func(std::string _name, std::vector<std::pair<std::string, std::string> > _params, lines_node *_right);
+		void evaluate();
 };
 
 class call_node : public line_node {

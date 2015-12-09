@@ -354,12 +354,17 @@ void def_node::evaluate() {
 }
 
 def_func::def_func(std::string _name, std::vector<std::pair<std::string, std::string> > _params, lines_node *_right) {
-	DeletMulFunc(_name);
+	func_name = _name;
 	params.clear();
 	for (std::vector<std::pair<std::string, std::string> >::iterator iter = _params.begin(); iter != _params.end(); ++iter) 
 		params.push_back(*iter);
 	right = _right;
-	funcs.insert(std::pair<std::string, def_func *>(_name, this));
+	
+}
+
+void def_func::evaluate() {
+	DeletMulFunc(func_name);
+	funcs.insert(std::pair<std::string, def_func *>(func_name, this));
 }
 
 draw_node::draw_node(std::string _name) {
@@ -684,6 +689,11 @@ void call_node::evaluate() {
 		vars.insert(std::pair<std::string, BaseType *>(func->params[i].second, btp->second));
 	}
 
+	std::map<std::string, def_func *> before_func;
+	before_func.clear();
+	for (std::map<std::string, def_func *>::iterator funcIter = funcs.begin(); funcIter != funcs.end(); ++funcIter) 
+		before_func.insert(*funcIter);
+
 	func->right->evaluate();
 
 	std::map<std::string, BaseType *> after;
@@ -697,4 +707,18 @@ void call_node::evaluate() {
 	vars.clear();
 	for (std::map<std::string, BaseType *>::iterator varIter = after.begin(); varIter != after.end(); ++varIter)
 		vars.insert(*varIter);
+
+
+	std::map<std::string, def_func *> after_func;
+	after_func.clear();
+	std::map<std::string, def_func *>::iterator funcvar;
+	for (std::map<std::string, def_func *>::iterator funcIter = funcs.begin(); funcIter != funcs.end(); ++funcIter) {
+		funcvar = before_func.find(funcIter->first);
+		if (funcvar != before_func.end())
+			after_func.insert(*funcIter);			
+	}
+	funcs.clear();
+	for (std::map<std::string, def_func *>::iterator funcIter = after_func.begin(); funcIter != after_func.end(); ++funcIter)
+		funcs.insert(*funcIter);
+
 }
