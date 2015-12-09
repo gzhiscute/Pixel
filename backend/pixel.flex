@@ -19,8 +19,8 @@ ws		{delim}+
 letter	[A-Za-z]
 digit	[0-9]
 number  {digit}+
-allname	({letter}|_)({digit}|{letter}|_)*  /* legal name must start with letter or underline */
-cmt 	"#"[^#]*"#" 	/* we use #...comment...# as comment */
+allname	({letter}|_)({digit}|{letter}|_)* 
+cmt 	"#"[^#]*"#" 
 
 %%
 {ws}	{/* no action and no return */}

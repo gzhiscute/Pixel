@@ -49,37 +49,33 @@
      rect = 265,
      tree = 266,
      color = 267,
-     text = 268,
-     IF = 269,
-     ELSE = 270,
-     WHILE = 271,
-     CONTINUE = 272,
-     BREAK = 273,
-     newline = 274,
-     draw = 275,
-     backgroud = 276,
-     func = 277,
-     TRUE = 278,
-     FALSE = 279,
-     call = 280,
-     EQU = 281,
-     DOT = 282,
-     EE = 283,
-     LE = 284,
-     LT = 285,
-     GE = 286,
-     GT = 287,
-     MINUS = 288,
-     PLUS = 289,
-     DIVIDE = 290,
-     TIMES = 291,
-     leftsma = 292,
-     rightsma = 293,
-     leftbig = 294,
-     rightbig = 295,
-     OR = 296,
-     AND = 297,
-     comma = 298
+     TRUE = 268,
+     FALSE = 269,
+     IF = 270,
+     ELSE = 271,
+     WHILE = 272,
+     draw = 273,
+     func = 274,
+     call = 275,
+     leftsma = 276,
+     rightsma = 277,
+     leftbig = 278,
+     rightbig = 279,
+     comma = 280,
+     newline = 281,
+     OR = 282,
+     AND = 283,
+     EQU = 284,
+     DOT = 285,
+     EE = 286,
+     LE = 287,
+     LT = 288,
+     GE = 289,
+     GT = 290,
+     MINUS = 291,
+     PLUS = 292,
+     DIVIDE = 293,
+     TIMES = 294
    };
 #endif
 /* Tokens.  */
@@ -93,44 +89,40 @@
 #define rect 265
 #define tree 266
 #define color 267
-#define text 268
-#define IF 269
-#define ELSE 270
-#define WHILE 271
-#define CONTINUE 272
-#define BREAK 273
-#define newline 274
-#define draw 275
-#define backgroud 276
-#define func 277
-#define TRUE 278
-#define FALSE 279
-#define call 280
-#define EQU 281
-#define DOT 282
-#define EE 283
-#define LE 284
-#define LT 285
-#define GE 286
-#define GT 287
-#define MINUS 288
-#define PLUS 289
-#define DIVIDE 290
-#define TIMES 291
-#define leftsma 292
-#define rightsma 293
-#define leftbig 294
-#define rightbig 295
-#define OR 296
-#define AND 297
-#define comma 298
+#define TRUE 268
+#define FALSE 269
+#define IF 270
+#define ELSE 271
+#define WHILE 272
+#define draw 273
+#define func 274
+#define call 275
+#define leftsma 276
+#define rightsma 277
+#define leftbig 278
+#define rightbig 279
+#define comma 280
+#define newline 281
+#define OR 282
+#define AND 283
+#define EQU 284
+#define DOT 285
+#define EE 286
+#define LE 287
+#define LT 288
+#define GE 289
+#define GT 290
+#define MINUS 291
+#define PLUS 292
+#define DIVIDE 293
+#define TIMES 294
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 28 "pixel.y"
+#line 44 "pixel.y"
 {
 	int num;
 	char *str;
@@ -145,7 +137,7 @@ typedef union YYSTYPE
 	std::vector<std::string> *parampairVect;
 }
 /* Line 1529 of yacc.c.  */
-#line 149 "pixel.tab.h"
+#line 141 "pixel.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
