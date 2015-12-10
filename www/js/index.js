@@ -141,5 +141,6 @@ function showSvg(s) {
 		$('#log_content').html(msg);
 	}
 	svgcode = start == -1 ? '' : s.substr(start);
-	$('#image>svg').html(svgcode);
+	if (svgcode)
+		$('#image>svg').html(svgcode);
 }
