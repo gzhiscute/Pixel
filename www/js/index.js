@@ -1,6 +1,10 @@
 $(document).ready(
 function () {
-	$('svg').mousedown(
+	var editor = ace.edit("editor");
+	editor.setTheme("ace/theme/monokai");
+	editor.setHighlightActiveLine(false);
+	editor.getSession().setMode("ace/mode/pixel");
+	$('#image>svg').mousedown(
 		function (event) {
 			var startX = event.pageX + $(window).width() - $('#image').offset().left - $('#image').width();
 			var startY = event.pageY + $(window).height() - $('#image').offset().top - $('#image').height();
@@ -17,7 +21,7 @@ function () {
 			);
 		}
 	);
-	$('#image #left').mousedown(
+	$('#image>#left').mousedown(
 		function (event) {
 			var startW = event.pageX + $('#image').width();
 			$(document).mousemove(
@@ -35,7 +39,7 @@ function () {
 			);
 		}
 	);
-	$('#image #right').mousedown(
+	$('#image>#right').mousedown(
 		function (event) {
 			var startW = event.pageX - $('#image').width();
 			var startX = event.pageX + $(window).width() - $('#image').offset().left - $('#image').width();
@@ -54,7 +58,7 @@ function () {
 			);
 		}
 	);
-	$('#image #top').mousedown(
+	$('#image>#top').mousedown(
 		function (event) {
 			var startH = event.pageY + $('#image').height();
 			$(document).mousemove(
@@ -72,7 +76,7 @@ function () {
 			);
 		}
 	);
-	$('#image #bottom').mousedown(
+	$('#image>#bottom').mousedown(
 		function (event) {
 			var startH = event.pageY - $('#image').height();
 			var startY = event.pageY + $(window).height() - $('#image').offset().top - $('#image').height();
@@ -107,19 +111,35 @@ function () {
 			},
 			cache: false,
 			success: function (data) {showSvg(data);},
-			error: function () {},
+			error: function (a, b) {
+				showSvg("Network connection timed out.");
+			},
 			complete: function () {aid = null;}
 		});
 	}
 	editor.getSession().on("change", function(e) {
 		if (tid)
 			window.clearTimeout(tid);
-		tid = window.setTimeout(run, 500);
+		tid = window.setTimeout(run, e.lines.length <= 1 ? 500 : 50);
 	});
 }
 );
 function showSvg(s) {
-	start = s.search('<');
+	start = s.indexOf('<');
+	if (start == 0) {
+		$('#log_content').css("background-color", "rgb(200, 234, 200)");
+		$('#log_content').html("<div><span>success.</span></div>");
+	} else {
+		$('#log_content').css("background-color", "rgb(234, 200, 200)");
+		msg = (start == -1 ? s : s.substr(0, start))
+				.trim()
+				.split('\n')
+				.join('</span></div><div><span>');
+		msg = "<div><span>" +
+				(msg ? msg : "Compile error.") +
+				"</span></div>";
+		$('#log_content').html(msg);
+	}
 	svgcode = start == -1 ? '' : s.substr(start);
-	$("svg").html(svgcode);
+	$('#image>svg').html(svgcode);
 }

@@ -59,7 +59,7 @@ var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 var pixelHighlightRules = function() {
 
     var keywordControls = (
-        "draw|while|if|else|break|continue|func"
+        "draw|while|if|else|break|continue|func|call"
     );
     
     var storageType = (

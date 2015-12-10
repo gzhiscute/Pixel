@@ -2,8 +2,55 @@
 	position: absolute;
 	top: 0;
 	right: 0;
+	bottom: 16px;
+	left: 0;
+	transition: bottom 500ms;
+	-moz-transition: bottom 500ms;
+	-webkit-transition: bottom 500ms;
+	-o-transition: bottom 500ms;
+}
+
+#log {
+	z-index: 99;
+	background-color: rgb(200, 234, 200);
+	position: absolute;
+	width: 100%;
+	height: 16px;
 	bottom: 0;
 	left: 0;
+	right: 0;
+	font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+	transition: height 500ms;
+	-moz-transition: height 500ms;
+	-webkit-transition: height 500ms;
+	-o-transition: height 500ms;
+}
+#log:hover {
+	height: 30%;
+}
+#log:hover+#editor {
+	bottom: 30%;
+}
+#log:hover>#log_content {
+	overflow: auto;
+}
+#log_head {
+	height: 100%;
+	float: left;
+	vertical-align: top;
+	padding-left: 8px;
+	padding-right: 8px;
+	background-color: rgb(200, 200, 200);
+}
+#log_content {
+	height: 100%;
+	vertical-align: top;
+	padding-left: 10px;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	word-wrap: break-word;
+	word-break: normal;
 }
 
 #image {
@@ -13,54 +60,54 @@
 	height: 450px;
 	width: 300px;
 	right: 50px;
-	bottom: 50px;
+	bottom: 100px;
 	opacity: 0.2;
 }
 #image:hover {
 	opacity: 1;
 }
-#image svg {
+#image>svg {
 	height: 100%;
 	width: 100%;
 }
 
-#image #left {
+#image>#left {
 	background-color: transparent;
 	position: absolute;
 	height: 100%;
 	width: 5px;
 	left: -5px;
 }
-#image #left:hover {
+#image>#left:hover {
 	cursor: w-resize;
 }
-#image #right {
+#image>#right {
 	background-color: transparent;
 	position: absolute;
 	height: 100%;
 	width: 5px;
 	right: -5px;
 }
-#image #right:hover {
+#image>#right:hover {
 	cursor: e-resize;
 }
-#image #top {
+#image>#top {
 	background-color: transparent;
 	position: absolute;
 	width: 100%;
 	height: 5px;
 	top: -5px;
 }
-#image #top:hover {
+#image>#top:hover {
 	cursor: n-resize;
 }
-#image #bottom {
+#image>#bottom {
 	background-color: transparent;
 	position: absolute;
 	width: 100%;
 	height: 5px;
 	bottom: -5px;
 }
-#image #bottom:hover {
+#image>#bottom:hover {
 	cursor: s-resize;
 }

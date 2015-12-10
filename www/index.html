@@ -8,7 +8,6 @@
 	<script src="js/index.js"></script>
 </head>
 <body>
-	<div id="editor"></div>
 	<div id="image">
 		<div id="left"></div>
 		<div id="right"></div>
@@ -17,11 +16,14 @@
 		<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
 		</svg>
 	</div>
-	<script>
-		var editor = ace.edit("editor");
-		editor.setTheme("ace/theme/monokai");
-		editor.setHighlightActiveLine(false);
-		editor.getSession().setMode("ace/mode/pixel");
-	</script>
-	</body>
+	<div id="log">
+		<div id="log_head">
+			<span>&gt;</span>
+		</div>
+		<div id="log_content">
+			<div><span>success.</span></div>
+		</div>
+	</div>
+	<div id="editor"></div>
+</body>
 </html>
