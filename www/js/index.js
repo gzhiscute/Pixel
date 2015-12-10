@@ -4,6 +4,7 @@ function () {
 	editor.setTheme("ace/theme/monokai");
 	editor.setHighlightActiveLine(false);
 	editor.getSession().setMode("ace/mode/pixel");
+	editor.getSession().setUseSoftTabs(false);
 	$('#image>svg').mousedown(
 		function (event) {
 			var startX = event.pageX + $(window).width() - $('#image').offset().left - $('#image').width();
