@@ -141,7 +141,15 @@ int main() {
 				funcs.clear();
 				yyparse(s);
 				printf("the root is: 0x%lx", root);
-				root->evaluate();
+				if (root) {
+					root->evaluate();
+					delete root;
+					root = NULL;					
+				}
+				else {
+					ans = "error! cannot run!";
+				}
+
 				len = ans.length();
 				//printf("%s\n", ans.c_str());
 				send(clientfd, ans.c_str(), len, 0);
