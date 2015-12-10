@@ -1,10 +1,13 @@
 /* 
-* utils.cpp
-* This is our team's AST utils implemenetations for Pixel Language
-* Written by Li Qian and Guo ZiHan
-* Part of the backend server
-* 2015 Fall Semester -- Compiling Practice
-*/
+ * Project: utils.cpp
+ * Author: Li Qian and Guo ZiHan
+ * Data: 2015-12-10
+ * Description:
+ * This is our team's AST utils implemenetations for Pixel Language
+ * Written by Li Qian and Guo ZiHan
+ * Part of the backend server
+ * 2015 Fall Semester -- Compiling Practice
+ */
 
 #ifndef __COMPILER_PIXEL_BACKEND__
 	#include "utils.h"
@@ -17,6 +20,7 @@
 #include <time.h>
 
 std::string ans;
+std::string errors;
 std::map<std::string, BaseType *> vars;
 std::map<std::string, def_func *> funcs;
 int TreeBottomLength = 60; /* The length between two bottom nodes. */
@@ -104,6 +108,14 @@ iINT::iINT(const std::string& _type, int _val) {
 	val = _val;
 }
 
+void iINT::drawsvg() {
+	char *tmp;
+	tmp = (char*)calloc(256, sizeof(char));
+	sprintf(tmp, "ERROR: can't print a INT.\n");
+	ans += tmp;
+	free(tmp);
+}
+
 void iINT::ChangeField(std::string var_name, int right) {
 	switch (StringToInt(var_name)) {
 		case 5 : val = right; break;
@@ -114,6 +126,14 @@ void iINT::ChangeField(std::string var_name, int right) {
 iBOOL::iBOOL(const std::string& _type, int _val) {
 	BaseType::SetBaseVars(_type, NULL);
 	val = _val;
+}
+
+void iBOOL::drawsvg() {
+	char *tmp;
+	tmp = (char*)calloc(256, sizeof(char));
+	sprintf(tmp, "ERROR: can't print a BOOL.\n");
+	ans += tmp;
+	free(tmp);
 }
 
 void iBOOL::ChangeField(std::string var_name, int right) {
@@ -130,7 +150,6 @@ iPOINT::iPOINT(const std::string& _type, int _x, int _y, char *_color) {
 }
 
 void iPOINT::drawsvg() {
-	//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, x, y, BaseType::r, BaseType::g, BaseType::b);
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
 	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, BaseType::r, BaseType::g, BaseType::b);	
@@ -168,7 +187,6 @@ iLINE::iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_
 }
 
 void iLINE::drawsvg() {
-	//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>\n</svg>\n", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
 	sprintf(tmp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>", x, y, x1, y1, BaseType::r, BaseType::g, BaseType::b);
@@ -209,7 +227,6 @@ iCIRCLE::iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color)
 }
 
 void iCIRCLE::drawsvg() {
-	//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x, y, r, BaseType::r, BaseType::g, BaseType::b);
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
 	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, r, BaseType::r, BaseType::g, BaseType::b);
@@ -248,7 +265,6 @@ iRECT::iRECT(const std::string& _type, int _x, int _y, int _w, int _h, char *_co
 }
 
 void iRECT::drawsvg() {
-	//printf("<?xml version=\"1.0\" standalone=\"yes\"?>\n<svg width=\"100%%\" height=\"100%%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>\n</svg>\n", x/2, y/2, w, h, BaseType::r, BaseType::g, BaseType::b);
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
 	sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x-w/2, y-h/2, w, h, BaseType::r, BaseType::g, BaseType::b);

@@ -1,10 +1,13 @@
 /* 
-* utils.h
-* This is our team's AST utils header for Pixel Language
-* Written by Li Qian and Guo ZiHan
-* Part of the backend server
-* 2015 Fall Semester -- Compiling Practice
-*/
+ * Project: utils.h
+ * Author: Li Qian and Guo ZiHan
+ * Data: 2015-12-10
+ * Description:
+ * This is our team's AST utils header for Pixel Language
+ * Written by Li Qian and Guo ZiHan
+ * Part of the backend server
+ * 2015 Fall Semester -- Compiling Practice
+ */
 
 #ifndef __COMPILER_PIXEL_BACKEND__
 #define __COMPILER_PIXEL_BACKEND__
@@ -15,10 +18,20 @@
 #include <vector>
 #include <set>
 
+// Radius of tree node.
 #define TreeR 10
 
+// Transfer strings (like "x", "int") to corresponding integer for switch statements.
 int StringToInt(std::string s);
 
+// Base class for various types.
+// type: varible's type.
+// cname: varible's name.
+// r, g, b: color parameters.
+// Get method: Get the value of member varibles.
+// Set method: Easy way to set the value for member varibles.
+// drawsvg: draw shapes.
+// Change method: Recognize different member varibles and change the value of member varibles.
 class BaseType{
 	public:
 		std::string type;
@@ -41,31 +54,32 @@ class BaseType{
 		virtual int GetH() {}
 };
 
+// Type Int
+// val: varible value.
 class iINT : public BaseType {
 	protected:
 		int val;
 	public:
 		iINT(const std::string& _type, int _val);
-		void drawsvg() {
-			//printf("ERROR: can't draw a INT.\n");
-		}
+		void drawsvg();
 		void ChangeField(std::string var_name, int right);
 		int GetVal() { return val; }
 };
 
-
+// Type BOOL
+// val: varible value.
 class iBOOL : public BaseType {
 	protected:
 		int val;
 	public:
 		iBOOL(const std::string& _type, int _val);
-		void drawsvg() {
-			//printf("ERROR: can't draw a BOOL.\n");
-		}
+		void drawsvg();
 		void ChangeField(std::string var_name, int right);
 		int GetVal() { return val; }
 };
 
+// Type POINT
+// x, y: horizontal and vertical coordinates of point.
 class iPOINT : public BaseType {
 	protected:
 		int x, y;
@@ -79,6 +93,9 @@ class iPOINT : public BaseType {
 		int GetY() { return y; }
 };
 
+// Type LINE
+// x, y: horizontal and vertical coordinates of start point.
+// x1, y1: horizontal and vertical coordinates of end point.
 class iLINE : public BaseType {
 	protected:
 		int x, y, x1, y1;
@@ -94,6 +111,9 @@ class iLINE : public BaseType {
 		int GetY1() { return y1; }
 };
 
+// Type CIRCLE
+// x, y: horizontal and vertical coordinates of center point.
+// r: radius of circle.
 class iCIRCLE : public BaseType {
 	protected:
 		int x, y, r;
@@ -107,7 +127,10 @@ class iCIRCLE : public BaseType {
 		int GetY() { return y; }
 		int GetR() { return r; }
 };
-		
+	
+// Type RECTANGLE
+// x, y: horizontal and vertical coordinates of left upper corner.
+// w, h: width and height length of this rectangle.
 class iRECT : public BaseType {
 	protected:
 		int x, y, w, h;
@@ -123,6 +146,12 @@ class iRECT : public BaseType {
 		int GetH() { return h; }
 };
 
+// Type TREE
+// binroot: root of tree.
+// treex, treey: horizontal and vertical coordinates of root.
+// nodes: nodes of tree. format: <nodei, pair<nodei's left son, nodei's right son> >.
+// CalcDep: calc the depth of tree.
+// DrawTree: draw a tree from the root.
 class iTREE : public BaseType {
 	public:
 		int binroot, treex, treey;
@@ -134,11 +163,13 @@ class iTREE : public BaseType {
 		void DrawTree(int p, int x, int y, int dep);
 };
 
+// Class for line in pixel.y.
 class line_node {
 	public:
 		virtual void evaluate() {}
 };
 
+// Class for definition statements.
 class def_node : public line_node {
 	protected:
 		std::string node_name;
@@ -148,6 +179,7 @@ class def_node : public line_node {
 		void evaluate();
 };
 
+// Class for draw statement.
 class draw_node : public line_node {
 	protected:
 		std::string node_name;
@@ -156,7 +188,7 @@ class draw_node : public line_node {
 		void evaluate();
 };
 
-// allname EQU allname
+// Class for "allname EQU allname" statement.
 class equ_sts_node : public line_node {
 	protected:
 		std::string left;
@@ -166,12 +198,15 @@ class equ_sts_node : public line_node {
 		void evaluate();
 };
 
+// Class for expression statement.
+// num is the return value of expressions.
 class exp_node {
 	public:
 		int num;
 		virtual int evaluate() = 0;
 };
 
+// Base class for operation statement.
 class operator_node : public exp_node {
 	public:
 		exp_node *left;
@@ -256,7 +291,7 @@ class ee_node : public operator_node {
 		int evaluate();
 };
 
-// allname dot vara EQU number
+// Class for "allname dot vara EQU number" statement.
 class equ_stn_node : public line_node {
 	protected:
 		std::string left;
@@ -267,7 +302,7 @@ class equ_stn_node : public line_node {
 		void evaluate();
 };
 
-// allname dot colorstr EQU allname
+// Class for "allname dot colorstr EQU allname" statment.
 class equ_cts_node : public line_node {
 	protected:
 		std::string left;
@@ -277,6 +312,7 @@ class equ_cts_node : public line_node {
 		void evaluate();
 };
 
+// Class for lines in pixel.y.
 class lines_node {
 	public:
 		std::list<line_node *> *cmdlines;
@@ -285,6 +321,7 @@ class lines_node {
 		void evaluate();
 };
 
+// Class for while statement.
 class while_node : public line_node {
 	public:
 		exp_node *left;
@@ -294,6 +331,7 @@ class while_node : public line_node {
 		void evaluate();
 };
 
+// Class for if-else statement.
 class if_else_node : public line_node {
 	public:
 		exp_node *left;
@@ -304,15 +342,21 @@ class if_else_node : public line_node {
 		void evaluate();
 };
 
+// Class for function definition.
+// right is the contents of a function.
 class def_func : public line_node {
 	public:
 		std::string func_name;
 		std::vector<std::pair<std::string, std::string> > params;
 		lines_node *right;
-		def_func(std::string _name, std::vector<std::pair<std::string, std::string> > _params, lines_node *_right);
+		def_func(std::string _name, 
+			 std::vector<std::pair<std::string, std::string> > _params, 
+			 lines_node *_right);
 		void evaluate();
 };
 
+// Class for calling a function.
+// node_name is the function name.
 class call_node : public line_node {
 	public:
 		std::string node_name;
