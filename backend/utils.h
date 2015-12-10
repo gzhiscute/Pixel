@@ -21,9 +21,6 @@
 // Radius of tree node.
 #define TreeR 10
 
-// Transfer strings (like "x", "int") to corresponding integer for switch statements.
-int StringToInt(std::string s);
-
 // Base class for various types.
 // type: varible's type.
 // cname: varible's name.
@@ -356,10 +353,6 @@ class def_func : public line_node {
 };
 
 // Class for calling a function.
-// node_name is the function name.
-class call_node : public line_node {
-	public:
-		std::string node_name;
 		std::vector<std::string> params;
 		call_node(std::string _name, std::vector<std::string> _params);
 		void evaluate();

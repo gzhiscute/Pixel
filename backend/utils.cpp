@@ -19,15 +19,24 @@
 #include <cstdlib>
 #include <time.h>
 
+// ans: ans string which is transmitted to server.
+// errors: error string which is transmitted to server.
+// vars: varibles.
+// funcs: functions.
+// TreeBottomLength: the length between two bottom nodes of tree.
+// DrawWidth: the width of display window.
+// DrawHeight: the height of display window.
+// TreeYLength: the height between two layers of tree.
 std::string ans;
 std::string errors;
 std::map<std::string, BaseType *> vars;
 std::map<std::string, def_func *> funcs;
-int TreeBottomLength = 60; /* The length between two bottom nodes. */
+int TreeBottomLength = 60;
 int DrawWidth = 240;
 int DrawHeight = 500;
-int TreeYLength = 30; 		/* The length between two layers. */
+int TreeYLength = 30;
 
+// Transfer strings (like "x", "int") to corresponding integer for switch statements.
 int StringToInt(std::string s) {
 	if (!s.compare("x"))
 		return 0;
@@ -68,7 +77,7 @@ int StringToInt(std::string s) {
 	return -1;
 }
 
-
+// Delete multiple definitions in vars.
 void DeletMulDef(std::string node_name)
 {
 	std::map<std::string, BaseType *>::iterator p = vars.find(node_name);
@@ -76,6 +85,7 @@ void DeletMulDef(std::string node_name)
 		vars.erase(p);
 }
 
+// Delete multiple definitions in funcs.
 void DeletMulFunc(std::string node_name) {
 	std::map<std::string, def_func *>::iterator p = funcs.find(node_name);
 	if (p != funcs.end())
@@ -94,12 +104,16 @@ void BaseType::SetColor(int _r, int _g, int _b) {
 }
 
 void BaseType::ChangeField(std::string var_name, int right) {
-	// only color could be the basetype
 	switch (StringToInt(var_name)) {
 		case 15 : r = right; break;
 		case 16	: g = right; break;
 		case 17 : b = right; break;
-		default : return;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			errors += tmp;
+			free(tmp);
 	}
 }
 
@@ -112,14 +126,19 @@ void iINT::drawsvg() {
 	char *tmp;
 	tmp = (char*)calloc(256, sizeof(char));
 	sprintf(tmp, "ERROR: can't print a INT.\n");
-	ans += tmp;
+	errors += tmp;
 	free(tmp);
 }
 
 void iINT::ChangeField(std::string var_name, int right) {
 	switch (StringToInt(var_name)) {
 		case 5 : val = right; break;
-		default : return;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			errors += tmp;
+			free(tmp);
 	}
 }
 
@@ -132,14 +151,19 @@ void iBOOL::drawsvg() {
 	char *tmp;
 	tmp = (char*)calloc(256, sizeof(char));
 	sprintf(tmp, "ERROR: can't print a BOOL.\n");
-	ans += tmp;
+	errors += tmp;
 	free(tmp);
 }
 
 void iBOOL::ChangeField(std::string var_name, int right) {
 	switch (StringToInt(var_name)) {
 		case 5 : val = right; break;
-		default : return;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			errors += tmp;
+			free(tmp);
 	}
 }
 
@@ -161,7 +185,12 @@ void iPOINT::ChangeField(std::string var_name, int right) {
 	switch (StringToInt(var_name)) {
 		case 0 : x = right; break;
 		case 1 : y = right; break;
-		default : return;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			errors += tmp;
+			free(tmp);
 	}
 }
 
@@ -173,8 +202,13 @@ int iPOINT::GetField(std::string var_name) {
 	switch (StringToInt(var_name)) {
 		case 0 : return this->x;
 		case 1 : return this->y;
-		default : printf("invalid field!\n");
-				return -1;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			errors += tmp;
+			free(tmp);
+			return -1;
 	}
 }
 
@@ -200,7 +234,12 @@ void iLINE::ChangeField(std::string var_name, int right) {
 		case 1 : y = right; break;
 		case 2 : x1 = right; break;
 		case 3 : y1 = right; break;
-		default : return;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			errors += tmp;
+			free(tmp);
 	}
 }
 
@@ -214,8 +253,13 @@ int iLINE::GetField(std::string var_name) {
 		case 1 : return this->y;
 		case 2 : return this->x1;
 		case 3 : return this->y1;
-		default : printf("invalid field!\n");
-				return -1;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			errors += tmp;
+			free(tmp);
+			return -1;
 	}
 }
 
@@ -239,7 +283,12 @@ void iCIRCLE::ChangeField(std::string var_name, int right) {
 		case 0 : x = right; break;
 		case 1 : y = right; break;
 		case 4 : r = right; break;
-		default : return;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			errors += tmp;
+			free(tmp);
 	}
 }
 void iCIRCLE::ChangeColor(std::string colorstr) {
@@ -251,8 +300,13 @@ int iCIRCLE::GetField(std::string var_name) {
 		case 0 : return this->x;
 		case 1 : return this->y;
 		case 4 : return this->r;
-		default : printf("invalid field!\n");
-				return -1;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			errors += tmp;
+			free(tmp);
+			return -1;
 	}
 }
 
@@ -278,7 +332,12 @@ void iRECT::ChangeField(std::string var_name, int right) {
 		case 1 : y = right; break;
 		case 6 : w = right; break;
 		case 7 : h = right; break;
-		default : return;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			errors += tmp;
+			free(tmp);
 	}
 }
 
@@ -292,8 +351,13 @@ int iRECT::GetField(std::string var_name) {
 		case 1 : return this->y;
 		case 6 : return this->w;
 		case 7 : return this->h;
-		default : printf("invalid field!\n");
-				return -1;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			errors += tmp;
+			free(tmp);
+			return -1;
 	}
 }
 
@@ -305,11 +369,21 @@ iTREE::iTREE(const std::string& _type, int _rt, int _tx, int _ty) {
 }
 
 bool iTREE::CalcDep(int p, int *Max, int dep, std::set<int> *vis) {
+	// Checks if p has been visited.
 	std::set<int>::iterator vised = vis->find(p);
-	if (vised != vis->end()) return 0;
+	if (vised != vis->end()) {
+		char *tmp;
+		tmp = (char *)calloc(256, sizeof(char));
+		sprintf(tmp, "ERROR: there is a circle in tree.\n");
+		errors += tmp;
+		free(tmp);
+		return 0;
+	}
 	vis->insert(p);
 
+	// Calcs the max depth.
 	(*Max) = std::max((*Max), dep);
+	// Finds p from input.
 	std::map<int, std::pair<int, int> >::iterator node = nodes.find(p);
 	if (node == nodes.end()) return 1;
 	if (node->second.first) 
@@ -322,30 +396,37 @@ bool iTREE::CalcDep(int p, int *Max, int dep, std::set<int> *vis) {
 }
 
 void iTREE::DrawTree(int p, int x, int y, int dep) {
-	
 	int xlength = 0;
+	// Finds p from input.
 	std::map<int, std::pair<int, int> >::iterator node = nodes.find(p);
 	if (node != nodes.end()) {
+		// Calcs x coordinate of node.
 		if (node->second.first || node->second.second)
 			xlength = TreeBottomLength*(1<<dep)/2;
 
+		// Draws left line of node.
 		if (node->second.first) {
-			BaseType *line1 = new iLINE("LINE", x, y, x-xlength, y+TreeYLength, NULL);
+			BaseType *line1 = new iLINE("LINE", x, y, x-xlength, 
+						    y+TreeYLength, NULL);
 			line1->SetColor(0, 0, 0);
 			line1->drawsvg();
 			DrawTree(node->second.first, x-xlength, y+TreeYLength, dep-1);
 		}
+		// Draws right line of node.
 		if (node->second.second) {
-			BaseType *line2 = new iLINE("LINE", x, y, x+xlength, y+TreeYLength, NULL);
+			BaseType *line2 = new iLINE("LINE", x, y, x+xlength, 
+						    y+TreeYLength, NULL);
 			line2->SetColor(0, 0, 0);
 			line2->drawsvg();
 			DrawTree(node->second.second, x+xlength, y+TreeYLength, dep-1);
 		}
 	}
 
+	// Creates a circle instance and draw node.
 	BaseType *cir = new iCIRCLE("CIRCLE", x, y, TreeR, NULL);
 	cir->SetColor(rand()%256, rand()%256, rand()%256);
 	cir->drawsvg();
+	// Prints node number.
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
 	sprintf(tmp, "<text x=\"%d\" y=\"%d\" font-family=\"Times New Roman\" font-size=\"12\" fill=\"white\">%d</text>", x-4, y+4, p);
@@ -375,13 +456,15 @@ void def_node::evaluate() {
 	vars.insert(std::pair<std::string, BaseType *>(node_name, base_type));
 }
 
-def_func::def_func(std::string _name, std::vector<std::pair<std::string, std::string> > _params, lines_node *_right) {
+def_func::def_func(std::string _name, 
+		   std::vector<std::pair<std::string, std::string> > _params, 
+		   lines_node *_right) {
 	func_name = _name;
 	params.clear();
-	for (std::vector<std::pair<std::string, std::string> >::iterator iter = _params.begin(); iter != _params.end(); ++iter) 
+	for (std::vector<std::pair<std::string, std::string> >::iterator iter = _params.begin();
+	     iter != _params.end(); ++iter) 
 		params.push_back(*iter);
 	right = _right;
-	
 }
 
 void def_func::evaluate() {
@@ -397,7 +480,11 @@ void draw_node::evaluate() {
 	std::map<std::string, BaseType *>::iterator var;
 	var = vars.find(node_name);
 	if (var == vars.end()) {
-		//printf("Can't draw %s: variable doesn't exist.\n", name);
+		char *tmp;
+		tmp = (char *)calloc(256, sizeof(char));
+		sprintf(tmp, "ERROR: can't draw %s, variable doesn't exist.\n", node_name);
+		errors += tmp;
+		free(tmp);
 		return;
 	}
 
@@ -405,7 +492,12 @@ void draw_node::evaluate() {
 		std::map<std::string, BaseType *>::iterator _color;
 		_color = vars.find(var->second->cname);
 		if (_color == vars.end()) {
-			//std::cout << "Can't find color variable " << var->second->color << "." << std::endl;
+			char *tmp;
+			tmp = (char *)calloc(256, sizeof(char));
+			sprintf(tmp, "ERROR: can't draw %s, color variable doesn't exist.\n", 
+				node_name);
+			errors += tmp;
+			free(tmp);
 			return;
 		}
 		var->second->SetColor(_color->second->r, _color->second->g, _color->second->b);
@@ -420,7 +512,14 @@ equ_sts_node::equ_sts_node(std::string _left, std::string _right) {
 
 void equ_sts_node::evaluate() {
 	std::map<std::string, BaseType *>::iterator var = vars.find(right);
-	if (var == vars.end()) return;
+	if (var == vars.end()) {
+		char *tmp;
+		tmp = (char *)calloc(256, sizeof(char));
+		sprintf("ERROR: %s doesn't exist.\n", right);
+		errors += tmp;
+		free(tmp);
+		return;
+	}
 	
 	BaseType *p;
 	switch (StringToInt(var->second->type)) {
@@ -432,15 +531,24 @@ void equ_sts_node::evaluate() {
 			p = new iPOINT("point", var->second->GetX(), var->second->GetY(), NULL);
 			break;
 		case 11 :
-			p = new iLINE("line", var->second->GetX(), var->second->GetY(), var->second->GetX1(), var->second->GetY1(), NULL);
+			p = new iLINE("line", var->second->GetX(), var->second->GetY(), 
+				      var->second->GetX1(), var->second->GetY1(), NULL);
 			break;
 		case 12 :
-			p = new iCIRCLE("circle", var->second->GetX(), var->second->GetY(), var->second->GetR(), NULL);
+			p = new iCIRCLE("circle", var->second->GetX(), var->second->GetY(), 
+				        var->second->GetR(), NULL);
 			break;
 		case 13 :
-			p = new iRECT("rect", var->second->GetX(), var->second->GetY(), var->second->GetW(), var->second->GetH(), NULL);
+			p = new iRECT("rect", var->second->GetX(), var->second->GetY(), 
+				      var->second->GetW(), var->second->GetH(), NULL);
 			break;
-		default : return;
+		default : 
+			char *tmp;
+			tmp = (char *)calloc(256, sizeof(char));
+			sprintf("ERROR: variable type is invalid.\n");
+			errors += tmp;
+			free(tmp);
+			return;
 	}
 	p->cname = var->second->cname;
 	vars.insert(std::pair<std::string, BaseType *>(left, p));
@@ -454,7 +562,14 @@ equ_stn_node::equ_stn_node(std::string _left, std::string _var_name, exp_node *_
 
 void equ_stn_node::evaluate() {
 	std::map<std::string, BaseType *>::iterator var = vars.find(left);
-	if (var == vars.end()) return;
+	if (var == vars.end()) {
+		char *tmp;
+		tmp = (char *)calloc(256, sizeof(char));
+		sprintf("ERROR: %s doesn't exist.\n", left);
+		errors += tmp;
+		free(tmp);
+		return;
+	}
 	int ret = right->evaluate();
 	var->second->ChangeField(var_name, ret);
 }
@@ -466,7 +581,14 @@ equ_cts_node::equ_cts_node(std::string _left, std::string _right) {
 
 void equ_cts_node::evaluate() {
 	std::map<std::string, BaseType *>::iterator var = vars.find(left);
-	if (var == vars.end()) return;
+	if (var == vars.end()) {
+		char *tmp;
+		tmp = (char *)calloc(256, sizeof(char));
+		sprintf("ERROR: %s doesn't exist.\n", left);
+		errors += tmp;
+		free(tmp);
+		return;
+	}
 	var->second->ChangeColor(right);
 }
 
@@ -478,7 +600,6 @@ void lines_node::evaluate() {
 	std::list<line_node *>::iterator lineIter;
 	for (lineIter = cmdlines->begin(); lineIter != cmdlines->end(); lineIter++) {
 		(*lineIter)->evaluate();
-		//printf("~~%s\n", ans.c_str());
 	}
 }
 
@@ -495,7 +616,11 @@ field_node::field_node(std::string _left, std::string _var_name) {
 int field_node::evaluate() {
 	std::map<std::string, BaseType *>::iterator var = vars.find(left);
 	if (var == vars.end()) {
-		printf("no such name\n");
+		char *tmp;
+		tmp = (char *)calloc(256, sizeof(char));
+		sprintf(tmp, "ERROR: %s doesn't exist.\n", left);
+		errors += tmp;
+		free(tmp);
 		return -1;
 	}
 	if (var->second->type == "int" || var->second->type == "bool")
@@ -518,11 +643,19 @@ int_node::int_node(std::string _var_name) {
 int int_node::evaluate() {
 	std::map<std::string, BaseType *>::iterator var = vars.find(var_name);
 	if (var == vars.end()) {
-		printf("no such name\n");
+		char *tmp;
+		tmp = (char *)calloc(256, sizeof(char));
+		sprintf(tmp, "ERROR: %s doesn't exist.\n", var_name);
+		errors += tmp;
+		free(tmp);
 		return -1;
 	}
 	if ((var->second->type != "int") && (var->second->type != "bool")) {
-		printf("invalid name\n");
+		char *tmp;
+		tmp = (char *)calloc(256, sizeof(char));
+		sprintf(tmp, "%s is not an interger or a boolean.\n", var_name);
+		errors += tmp;
+		free(tmp);
 		return -1;
 	}
 	return var->second->GetVal();
