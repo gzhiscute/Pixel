@@ -57,7 +57,6 @@ rect	{return rect;}
 color	{return color;}
 draw	{return draw;}
 func	{return func;}
-call	{return call;}
 tree	{return tree;}
 "."		{return DOT;}
 {number}	{yylval.num = atoi(yytext); return number;}

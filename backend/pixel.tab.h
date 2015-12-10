@@ -56,26 +56,25 @@
      WHILE = 272,
      draw = 273,
      func = 274,
-     call = 275,
-     leftsma = 276,
-     rightsma = 277,
-     leftbig = 278,
-     rightbig = 279,
-     comma = 280,
-     newline = 281,
-     OR = 282,
-     AND = 283,
-     EQU = 284,
-     DOT = 285,
-     EE = 286,
-     LE = 287,
-     LT = 288,
-     GE = 289,
-     GT = 290,
-     MINUS = 291,
-     PLUS = 292,
-     DIVIDE = 293,
-     TIMES = 294
+     leftsma = 275,
+     rightsma = 276,
+     leftbig = 277,
+     rightbig = 278,
+     comma = 279,
+     newline = 280,
+     OR = 281,
+     AND = 282,
+     EQU = 283,
+     DOT = 284,
+     EE = 285,
+     LE = 286,
+     LT = 287,
+     GE = 288,
+     GT = 289,
+     MINUS = 290,
+     PLUS = 291,
+     DIVIDE = 292,
+     TIMES = 293
    };
 #endif
 /* Tokens.  */
@@ -96,33 +95,32 @@
 #define WHILE 272
 #define draw 273
 #define func 274
-#define call 275
-#define leftsma 276
-#define rightsma 277
-#define leftbig 278
-#define rightbig 279
-#define comma 280
-#define newline 281
-#define OR 282
-#define AND 283
-#define EQU 284
-#define DOT 285
-#define EE 286
-#define LE 287
-#define LT 288
-#define GE 289
-#define GT 290
-#define MINUS 291
-#define PLUS 292
-#define DIVIDE 293
-#define TIMES 294
+#define leftsma 275
+#define rightsma 276
+#define leftbig 277
+#define rightbig 278
+#define comma 279
+#define newline 280
+#define OR 281
+#define AND 282
+#define EQU 283
+#define DOT 284
+#define EE 285
+#define LE 286
+#define LT 287
+#define GE 288
+#define GT 289
+#define MINUS 290
+#define PLUS 291
+#define DIVIDE 292
+#define TIMES 293
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 44 "pixel.y"
+#line 47 "pixel.y"
 {
 	int num;
 	char *str;
@@ -137,7 +135,7 @@ typedef union YYSTYPE
 	std::vector<std::string> *parampairVect;
 }
 /* Line 1529 of yacc.c.  */
-#line 141 "pixel.tab.h"
+#line 139 "pixel.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
