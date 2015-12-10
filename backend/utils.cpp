@@ -35,6 +35,7 @@ int TreeBottomLength = 60;
 int DrawWidth = 240;
 int DrawHeight = 500;
 int TreeYLength = 30;
+extern int lineno;
 
 // Transfer strings (like "x", "int") to corresponding integer for switch statements.
 int StringToInt(std::string s) {
@@ -111,7 +112,8 @@ void BaseType::ChangeField(std::string var_name, int right) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", lineno, 
+				var_name.c_str());
 			errors += tmp;
 			free(tmp);
 	}
@@ -125,7 +127,7 @@ iINT::iINT(const std::string& _type, int _val) {
 void iINT::drawsvg() {
 	char *tmp;
 	tmp = (char*)calloc(256, sizeof(char));
-	sprintf(tmp, "ERROR: can't print a INT.\n");
+	sprintf(tmp, "[ERROR] line %d: can't print a INT.\n", lineno);
 	errors += tmp;
 	free(tmp);
 }
@@ -136,7 +138,8 @@ void iINT::ChangeField(std::string var_name, int right) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", lineno, 
+				var_name.c_str());
 			errors += tmp;
 			free(tmp);
 	}
@@ -150,7 +153,7 @@ iBOOL::iBOOL(const std::string& _type, int _val) {
 void iBOOL::drawsvg() {
 	char *tmp;
 	tmp = (char*)calloc(256, sizeof(char));
-	sprintf(tmp, "ERROR: can't print a BOOL.\n");
+	sprintf(tmp, "[ERROR] line %d: can't print a BOOL.\n", lineno);
 	errors += tmp;
 	free(tmp);
 }
@@ -161,7 +164,8 @@ void iBOOL::ChangeField(std::string var_name, int right) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", lineno, 
+				var_name.c_str());
 			errors += tmp;
 			free(tmp);
 	}
@@ -188,7 +192,8 @@ void iPOINT::ChangeField(std::string var_name, int right) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", lineno, 
+				var_name.c_str());
 			errors += tmp;
 			free(tmp);
 	}
@@ -205,7 +210,8 @@ int iPOINT::GetField(std::string var_name) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", lineno, 
+				var_name.c_str());
 			errors += tmp;
 			free(tmp);
 			return -1;
@@ -237,7 +243,8 @@ void iLINE::ChangeField(std::string var_name, int right) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", lineno, 
+				var_name.c_str());
 			errors += tmp;
 			free(tmp);
 	}
@@ -256,7 +263,8 @@ int iLINE::GetField(std::string var_name) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", lineno, 
+				var_name.c_str());
 			errors += tmp;
 			free(tmp);
 			return -1;
@@ -273,7 +281,8 @@ iCIRCLE::iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color)
 void iCIRCLE::drawsvg() {
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, r, BaseType::r, BaseType::g, BaseType::b);
+	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>",
+		x, y, r, BaseType::r, BaseType::g, BaseType::b);
 	ans += tmp;
 	free(tmp);
 }
@@ -286,11 +295,13 @@ void iCIRCLE::ChangeField(std::string var_name, int right) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", lineno, 
+				var_name.c_str());
 			errors += tmp;
 			free(tmp);
 	}
 }
+
 void iCIRCLE::ChangeColor(std::string colorstr) {
 	this->cname = colorstr;
 }
@@ -303,7 +314,7 @@ int iCIRCLE::GetField(std::string var_name) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			sprintf(tmp, "ERROR: %s is invalid.\n", var_name);
 			errors += tmp;
 			free(tmp);
 			return -1;
@@ -335,7 +346,8 @@ void iRECT::ChangeField(std::string var_name, int right) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", lineno, 
+				var_name.c_str());
 			errors += tmp;
 			free(tmp);
 	}
@@ -354,7 +366,8 @@ int iRECT::GetField(std::string var_name) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "ERROR: %s is incorrect.\n", var_name);
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", lineno, 
+				var_name.c_str());
 			errors += tmp;
 			free(tmp);
 			return -1;
@@ -374,7 +387,7 @@ bool iTREE::CalcDep(int p, int *Max, int dep, std::set<int> *vis) {
 	if (vised != vis->end()) {
 		char *tmp;
 		tmp = (char *)calloc(256, sizeof(char));
-		sprintf(tmp, "ERROR: there is a circle in tree.\n");
+		sprintf(tmp, "[ERROR] line %d: there is a circle in tree.\n", lineno);
 		errors += tmp;
 		free(tmp);
 		return 0;
@@ -404,7 +417,7 @@ void iTREE::DrawTree(int p, int x, int y, int dep) {
 		if (node->second.first || node->second.second)
 			xlength = TreeBottomLength*(1<<dep)/2;
 
-		// Draws left line of node.
+		// Draws line which connects node and its left son.
 		if (node->second.first) {
 			BaseType *line1 = new iLINE("LINE", x, y, x-xlength, 
 						    y+TreeYLength, NULL);
@@ -412,7 +425,7 @@ void iTREE::DrawTree(int p, int x, int y, int dep) {
 			line1->drawsvg();
 			DrawTree(node->second.first, x-xlength, y+TreeYLength, dep-1);
 		}
-		// Draws right line of node.
+		// Draws line which connects node and its right son.
 		if (node->second.second) {
 			BaseType *line2 = new iLINE("LINE", x, y, x+xlength, 
 						    y+TreeYLength, NULL);
@@ -482,7 +495,8 @@ void draw_node::evaluate() {
 	if (var == vars.end()) {
 		char *tmp;
 		tmp = (char *)calloc(256, sizeof(char));
-		sprintf(tmp, "ERROR: can't draw %s, variable doesn't exist.\n", node_name);
+		sprintf(tmp, "[ERROR] line %d: can't draw %s, variable doesn't exist.\n", 
+			lineno, node_name.c_str());
 		errors += tmp;
 		free(tmp);
 		return;
@@ -767,7 +781,8 @@ while_node::while_node(exp_node *_left, lines_node *_right) {
 void while_node::evaluate() {
 	std::map<std::string, BaseType *> before;
 	before.clear();
-	for (std::map<std::string, BaseType *>::iterator varIter = vars.begin(); varIter != vars.end(); ++varIter)
+	for (std::map<std::string, BaseType *>::iterator varIter = vars.begin(); 
+	     varIter != vars.end(); ++varIter)
 		before.insert(*varIter);
 	
 	while (left->evaluate()) 
