@@ -4,6 +4,7 @@
 #include <string.h>
 #include "parse.h"
 #include "utils.h"
+#include <stdlib.h>
 #include <string>
 
 extern lines_node *root;
@@ -11,6 +12,9 @@ extern int yyparse(void *);
 extern std::string ans;
 extern std::map<std::string, BaseType *> vars;
 extern std::map<std::string, def_func *> funcs;
+extern int TreeBottomLength; /* The length between two bottom nodes. */
+extern int DrawWidth;
+extern int DrawHeight;
 
 SOCKET soc;
 SOCKET init_soc(int port) {
@@ -122,6 +126,15 @@ int main() {
 				strcpy(s, k.c_str());
 				//ans = (char *)malloc(10000);
 				// code is stored in the string s
+				char tmpstr[100];
+				k = args[std::string("width")];
+				k = UrlDecode(k);
+				DrawWidth = strtol(k.c_str(), 0, 10);
+
+				k = args[std::string("height")];
+				k = UrlDecode(k);
+				DrawHeight = strtol(k.c_str(), 0, 10);
+
 				ans = "";
 				printf("the s is: %s\n", s);
 				vars.clear();
@@ -130,7 +143,7 @@ int main() {
 				printf("the root is: 0x%lx", root);
 				root->evaluate();
 				len = ans.length();
-				printf("%s\n", ans.c_str());
+				//printf("%s\n", ans.c_str());
 				send(clientfd, ans.c_str(), len, 0);
 				//free(ans);
 			}

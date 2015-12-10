@@ -19,6 +19,9 @@
 std::string ans;
 std::map<std::string, BaseType *> vars;
 std::map<std::string, def_func *> funcs;
+int TreeBottomLength = 60; /* The length between two bottom nodes. */
+int DrawWidth = 240;
+int DrawHeight = 500;
 
 int StringToInt(std::string s) {
 	if (!s.compare("x"))
@@ -340,6 +343,7 @@ void iTREE::drawsvg() {
 	if (!CalcDep(binroot, &Max, 0, &vis)) {
 		return;
 	}
+	TreeBottomLength = DrawWidth / ((1<<Max)-1) - 5;
 	DrawTree(binroot, TreeBottomLength*((1<<Max)-1)/2+treex, treey, Max-1);
 }
 

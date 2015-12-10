@@ -16,7 +16,6 @@
 #include <set>
 
 #define TreeR 10
-#define TreeBottomLength 60 /* The length between two bottom nodes. */
 #define TreeYLength 30 		/* The length between two layers. */
 
 int StringToInt(std::string s);
