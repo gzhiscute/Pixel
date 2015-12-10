@@ -353,6 +353,7 @@ class def_func : public line_node {
 };
 
 // Class for calling a function.
+class call_node : public line_node {
 		std::vector<std::string> params;
 		call_node(std::string _name, std::vector<std::string> _params);
 		void evaluate();
