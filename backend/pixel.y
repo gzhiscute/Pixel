@@ -1,10 +1,13 @@
 /* 
-* pixel.y
-* This is our team's parser for Pixel Language
-* Written by Li Qian and Guo ZiHan
-* Part of the backend server
-* 2015 Fall Semester -- Compiling Practice
-*/
+ * Project: pixel.y
+ * Author: Li Qian and Guo ZiHan
+ * Data: 2015-12-10
+ * Description:
+ * This is our team's parser for Pixel Language
+ * Written by Li Qian and Guo ZiHan
+ * Part of the backend server
+ * 2015 Fall Semester -- Compiling Practice
+ */
 
 %{
 	#include <cstdio>
