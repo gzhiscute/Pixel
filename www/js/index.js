@@ -113,8 +113,8 @@ function () {
 	}
 	editor.getSession().on("change", function(e) {
 		if (tid)
-			window.clearTimeout(id);
-		tid = window.setTimeout(run, 500);
+			window.clearTimeout(tid);
+		tid = window.setTimeout(run, 1000);
 	});
 }
 );
