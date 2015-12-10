@@ -114,12 +114,12 @@ function () {
 	editor.getSession().on("change", function(e) {
 		if (tid)
 			window.clearTimeout(tid);
-		tid = window.setTimeout(run, 1000);
+		tid = window.setTimeout(run, 500);
 	});
 }
 );
 function showSvg(s) {
 	start = s.search('<');
-	svgcode = start == -1 ? '' : s.substr(start + 1);
+	svgcode = start == -1 ? '' : s.substr(start);
 	$("svg").html(svgcode);
 }
