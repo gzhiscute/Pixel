@@ -22,6 +22,7 @@ std::map<std::string, def_func *> funcs;
 int TreeBottomLength = 60; /* The length between two bottom nodes. */
 int DrawWidth = 240;
 int DrawHeight = 500;
+int TreeYLength = 30; 		/* The length between two layers. */
 
 int StringToInt(std::string s) {
 	if (!s.compare("x"))
@@ -331,7 +332,7 @@ void iTREE::DrawTree(int p, int x, int y, int dep) {
 	cir->drawsvg();
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<text x=\"%d\" y=\"%d\" font-family=\"Times New Roman\" font-size=\"14\" fill=\"white\">%d</text>", x-2, y+1, p);
+	sprintf(tmp, "<text x=\"%d\" y=\"%d\" font-family=\"Times New Roman\" font-size=\"12\" fill=\"white\">%d</text>", x-4, y+4, p);
 	ans += tmp;
 	free(tmp);
 }
@@ -343,7 +344,8 @@ void iTREE::drawsvg() {
 	if (!CalcDep(binroot, &Max, 0, &vis)) {
 		return;
 	}
-	TreeBottomLength = DrawWidth / ((1<<Max)-1) - 5;
+	TreeBottomLength = DrawWidth / ((1<<Max));
+	TreeYLength = (DrawHeight - treey) / Max - 10;
 	DrawTree(binroot, TreeBottomLength*((1<<Max)-1)/2+treex, treey, Max-1);
 }
 

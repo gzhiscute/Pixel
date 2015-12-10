@@ -16,7 +16,6 @@
 #include <set>
 
 #define TreeR 10
-#define TreeYLength 30 		/* The length between two layers. */
 
 int StringToInt(std::string s);
 
