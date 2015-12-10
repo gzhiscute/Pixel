@@ -67,7 +67,7 @@
 %token <bstp> INT BOOL POINT LINE circle rect tree color /* these are BaseTypes */
 %token TRUE FALSE		/* bool values */
 %token IF ELSE WHILE 	/* for branch*/
-%token draw func call 	/* for the functions */
+%token draw func 	/* for the functions */
 %token leftsma rightsma leftbig rightbig comma newline /* useful things... */
 %token OR AND EQU DOT	/* some operations */
 
@@ -215,12 +215,12 @@ line : newline {
 			$$ = new def_func(GetName($1), *($5), $7);
 
 	 	}
-	| call allname leftsma paramlist {
+	| allname leftsma paramlist {
 			/* call a function
-			* eg. call foo(a, b, c, ...)
+			* eg. foo(a, b, c, ...)
 			*/
 			//printf("call a func\n");
-			$$ = new call_node(GetName($2), *($4));
+			$$ = new call_node(GetName($1), *($3));
 	 	}
 	;
 
