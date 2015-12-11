@@ -111,9 +111,9 @@ function () {
 				code: editor.getValue()
 			},
 			cache: false,
-			success: function (data) {showSvg(data);},
+			success: function (data) {showSvg(data, true);},
 			error: function (a, b) {
-				showSvg("Network connection timed out.");
+				showSvg("Network connection timed out.", false);
 			},
 			complete: function () {aid = null;}
 		});
@@ -125,7 +125,7 @@ function () {
 	});
 }
 );
-function showSvg(s) {
+function showSvg(s, refresh) {
 	start = s.indexOf('<');
 	if (start == 0) {
 		$('#log_content').css("background-color", "rgb(200, 234, 200)");
@@ -141,6 +141,8 @@ function showSvg(s) {
 				"</span></div>";
 		$('#log_content').html(msg);
 	}
-	svgcode = start == -1 ? '' : s.substr(start);
-	$('#image>svg').html(svgcode);
+	if (refresh) {
+		svgcode = start == -1 ? '' : s.substr(start);
+		$('#image>svg').html(svgcode);
+	}
 }

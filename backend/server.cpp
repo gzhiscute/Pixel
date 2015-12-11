@@ -74,7 +74,95 @@ std::string UrlDecode(const std::string& szToDecode)
 }
 
 #define BUF_SIZE 40960
-char buf[BUF_SIZE];
+
+void server(int clientfd) {
+	char buf[BUF_SIZE + 1];
+	int blen = 0;
+	buf[0] = 0;
+	char *s;
+	do {
+		int nl = recv(clientfd, buf + blen, BUF_SIZE, 0);
+		if (nl < 0)
+			return;
+		blen += nl;
+		buf[blen] = 0;
+	} while (!(s = strstr(buf, "\r\n\r\n")));
+	*s = 0;
+	s += 4;
+	blen -= (s - buf);
+	
+	char *l = strstr(buf, "\r\nContent-Length:");
+	if (!l)
+		return;
+	l += 17;
+	int len;
+	if (sscanf(l, "%d", &len) != 1 || len <= 0)
+		return;
+	s[len] = 0;
+	while (blen < len) {
+		int nl = recv(clientfd, s + blen, len - blen, 0);
+		if (nl < 0)
+			return;
+		blen += nl;
+	}
+	//puts(s);
+	const char *header = "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n";
+	send(clientfd, header, strlen(header), 0);
+	std::map<std::string, std::string> args;
+	while (*s) {
+		char *eq = strchr(s, '=');
+		*eq = 0;
+		std::string name = s;
+		s = eq + 1;
+		char *token = strchr(s, '&');
+		if (token) {
+			*token = 0;
+			args[name] = s;
+			s = token + 1;
+		} else {
+			args[name] = s;
+			break;
+		}
+	}
+	if (args.count(std::string("code"))) {
+		std::string k = args[std::string("code")];
+		k = UrlDecode(k);
+		strcpy(s, k.c_str());
+		//ans = (char *)malloc(10000);
+		// code is stored in the string s
+		char tmpstr[100];
+		k = args[std::string("width")];
+		k = UrlDecode(k);
+		DrawWidth = strtol(k.c_str(), 0, 10);
+
+		k = args[std::string("height")];
+		k = UrlDecode(k);
+		DrawHeight = strtol(k.c_str(), 0, 10);
+
+		ans = "";
+		printf("the s is: %s\n", s);
+		vars.clear();
+		funcs.clear();
+		yylineno = 0;
+		yyparse(s);
+		printf("the root is: 0x%lx", root);
+		if (root) {
+			root->evaluate();
+			delete root;
+			root = NULL;					
+		}
+		else {
+			ans = "error! cannot run!";
+		}
+
+		len = ans.length();
+		//printf("%s\n", ans.c_str());
+		send(clientfd, ans.c_str(), len, 0);
+		//free(ans);
+	}
+}
+
+
 int main() {
 	WSADATA wsa;
 	if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)CtrlHandler, TRUE)) {
@@ -93,71 +181,10 @@ int main() {
 		struct sockaddr clientaddr;
 		int addrlen = sizeof clientaddr;
 		SOCKET clientfd;
-		int len;
 		do clientfd = accept(soc, &clientaddr, &addrlen);
 		while (clientfd < 0);
 		//TODO: thread
-		len = recv(clientfd, buf, BUF_SIZE, 0);
-		buf[len] = 0;
-		//puts(buf);
-		const char *header = "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n";
-		send(clientfd, header, strlen(header), 0);
-		char *s = strstr(buf, "\r\n\r\n");
-		if (s && s[4]) {
-			s += 4;
-			std::map<std::string, std::string> args;
-			while (*s) {
-				char *eq = strchr(s, '=');
-				*eq = 0;
-				std::string name = s;
-				s = eq + 1;
-				char *token = strchr(s, '&');
-				if (token) {
-					*token = 0;
-					args[name] = s;
-					s = token + 1;
-				} else {
-					args[name] = s;
-					break;
-				}
-			}
-			if (args.count(std::string("code"))) {
-				std::string k = args[std::string("code")];
-				k = UrlDecode(k);
-				strcpy(s, k.c_str());
-				//ans = (char *)malloc(10000);
-				// code is stored in the string s
-				char tmpstr[100];
-				k = args[std::string("width")];
-				k = UrlDecode(k);
-				DrawWidth = strtol(k.c_str(), 0, 10);
-
-				k = args[std::string("height")];
-				k = UrlDecode(k);
-				DrawHeight = strtol(k.c_str(), 0, 10);
-
-				ans = "";
-				printf("the s is: %s\n", s);
-				vars.clear();
-				funcs.clear();
-				yylineno = 0;
-				yyparse(s);
-				printf("the root is: 0x%lx", root);
-				if (root) {
-					root->evaluate();
-					delete root;
-					root = NULL;					
-				}
-				else {
-					ans = "error! cannot run!";
-				}
-
-				len = ans.length();
-				//printf("%s\n", ans.c_str());
-				send(clientfd, ans.c_str(), len, 0);
-				//free(ans);
-			}
-		}
+		server(clientfd);
 		closesocket(clientfd);
 	}
 	return 0;
