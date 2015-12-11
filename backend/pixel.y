@@ -33,6 +33,7 @@
 
 	extern	std::map<std::string, BaseType *> vars;	 /* save all the variables */
 	extern int yylineno;
+	extern std::string errors;
 
 	static	char* GetName(char *nname);		  /* get the variable name */
 
@@ -398,7 +399,12 @@ char *GetName(char *nname) {
 
 void yyerror(/*void *a, */const char *msg)
 {
-	fprintf(stderr, "Error at line %d, %s\n", yylineno, msg);
+	char *tmp;
+	tmp = (char*)calloc(256, sizeof(char));
+	sprintf(tmp, "[ERROR] line %d: %s\n", yylineno, msg);
+	errors += tmp;
+	free(tmp);
+	//fprintf(stderr, "Error at line %d, %s\n", yylineno, msg);
 }
 
 int main()

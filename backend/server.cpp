@@ -10,6 +10,7 @@
 extern lines_node *root;
 extern int yyparse(void *);
 extern std::string ans;
+extern std::string errors;
 extern std::map<std::string, BaseType *> vars;
 extern std::map<std::string, def_func *> funcs;
 extern int TreeBottomLength; /* The length between two bottom nodes. */
@@ -140,6 +141,7 @@ void server(int clientfd) {
 		DrawHeight = strtol(k.c_str(), 0, 10);
 
 		ans = "";
+		errors = "";
 		printf("the s is: %s\n", s);
 		vars.clear();
 		funcs.clear();
@@ -154,7 +156,7 @@ void server(int clientfd) {
 		else {
 			ans = "error! cannot run!";
 		}
-
+		ans = errors + ans;
 		len = ans.length();
 		//printf("%s\n", ans.c_str());
 		send(clientfd, ans.c_str(), len, 0);

@@ -171,6 +171,7 @@
 
 	extern	std::map<std::string, BaseType *> vars;	 /* save all the variables */
 	extern int yylineno;
+	extern std::string errors;
 
 	static	char* GetName(char *nname);		  /* get the variable name */
 
@@ -197,7 +198,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 48 "pixel.y"
+#line 49 "pixel.y"
 {
 	int num;
 	char *str;
@@ -212,7 +213,7 @@ typedef union YYSTYPE
 	std::vector<std::string> *parampairVect;
 }
 /* Line 193 of yacc.c.  */
-#line 216 "pixel.cpp"
+#line 217 "pixel.cpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -225,7 +226,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 229 "pixel.cpp"
+#line 230 "pixel.cpp"
 
 #ifdef short
 # undef short
@@ -541,12 +542,12 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    96,    96,   104,   110,   119,   123,   128,   133,   138,
-     143,   148,   153,   158,   166,   172,   180,   188,   195,   199,
-     203,   207,   211,   219,   229,   233,   238,   246,   250,   255,
-     262,   267,   272,   277,   282,   287,   292,   297,   307,   312,
-     322,   333,   336,   339,   347,   350,   353,   356,   359,   362,
-     365,   368,   371,   374,   377
+       0,    97,    97,   105,   111,   120,   124,   129,   134,   139,
+     144,   149,   154,   159,   167,   173,   181,   189,   196,   200,
+     204,   208,   212,   220,   230,   234,   239,   247,   251,   256,
+     263,   268,   273,   278,   283,   288,   293,   298,   308,   313,
+     323,   334,   337,   340,   348,   351,   354,   357,   360,   363,
+     366,   369,   372,   375,   378
 };
 #endif
 
@@ -1304,7 +1305,7 @@ yyparse ()
 #endif
 #endif
 {
-  yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
+  
   int yystate;
   int yyn;
   int yyresult;
@@ -1549,7 +1550,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 96 "pixel.y"
+#line 97 "pixel.y"
     { 
 			(yyval.lsnode) = (yyvsp[(1) - (1)].lsnode); 
 			root = (yyval.lsnode);
@@ -1558,7 +1559,7 @@ yyreduce:
     break;
 
   case 3:
-#line 104 "pixel.y"
+#line 105 "pixel.y"
     {
 			/* the normal lines */
 			(yyvsp[(2) - (2)].lsnode)->cmdlines->push_front((yyvsp[(1) - (2)].lnode));
@@ -1568,7 +1569,7 @@ yyreduce:
     break;
 
   case 4:
-#line 110 "pixel.y"
+#line 111 "pixel.y"
     {
 			/* empty string mark the end */
 			tmp_line = new std::list<line_node *>;
@@ -1578,7 +1579,7 @@ yyreduce:
     break;
 
   case 5:
-#line 119 "pixel.y"
+#line 120 "pixel.y"
     {
 			/* do nothing */
 			printf("newline\n"); 
@@ -1586,7 +1587,7 @@ yyreduce:
     break;
 
   case 6:
-#line 123 "pixel.y"
+#line 124 "pixel.y"
     { 
 			/* Bool type define, and value is TRUE. eg. a = true */
 			tmp_var = new iBOOL("bool", 1);
@@ -1595,7 +1596,7 @@ yyreduce:
     break;
 
   case 7:
-#line 128 "pixel.y"
+#line 129 "pixel.y"
     {
 			/* Bool type define, and value is FALSE. eg. a = false */
 			tmp_var = new iBOOL("bool", 0);
@@ -1604,7 +1605,7 @@ yyreduce:
     break;
 
   case 8:
-#line 133 "pixel.y"
+#line 134 "pixel.y"
     {
 			/* int type define. eg. a = number */
 			tmp_var = new iINT("int", (yyvsp[(3) - (3)].num));
@@ -1613,7 +1614,7 @@ yyreduce:
     break;
 
   case 9:
-#line 138 "pixel.y"
+#line 139 "pixel.y"
     { 
 			/* point type define. eg. a = point(x, y, color_name) */
 			tmp_var = new iPOINT("point", (yyvsp[(5) - (10)].num), (yyvsp[(7) - (10)].num), GetName((yyvsp[(9) - (10)].str)));
@@ -1622,7 +1623,7 @@ yyreduce:
     break;
 
   case 10:
-#line 143 "pixel.y"
+#line 144 "pixel.y"
     { 
 			/* line type define. eg. a = line(x, y, x1, y1, color_name) */
 			tmp_var = new iLINE("line", (yyvsp[(5) - (14)].num), (yyvsp[(7) - (14)].num), (yyvsp[(9) - (14)].num), (yyvsp[(11) - (14)].num), GetName((yyvsp[(13) - (14)].str)));
@@ -1631,7 +1632,7 @@ yyreduce:
     break;
 
   case 11:
-#line 148 "pixel.y"
+#line 149 "pixel.y"
     { 
 			/* circle type define. eg. a = circle(x, y, r, color_name) */
 			tmp_var = new iCIRCLE("circle", (yyvsp[(5) - (12)].num), (yyvsp[(7) - (12)].num), (yyvsp[(9) - (12)].num), GetName((yyvsp[(11) - (12)].str)));
@@ -1640,7 +1641,7 @@ yyreduce:
     break;
 
   case 12:
-#line 153 "pixel.y"
+#line 154 "pixel.y"
     {
 	 		/* rectangle type define. eg. a = rect(x, y, w, h, color_name) */
 	 		tmp_var = new iRECT("rect", (yyvsp[(5) - (14)].num), (yyvsp[(7) - (14)].num), (yyvsp[(9) - (14)].num), (yyvsp[(11) - (14)].num), GetName((yyvsp[(13) - (14)].str)));
@@ -1649,7 +1650,7 @@ yyreduce:
     break;
 
   case 13:
-#line 158 "pixel.y"
+#line 159 "pixel.y"
     { 
 			/* color type define. eg. yellow = color(r, g, b) */
 			tmp_var = new BaseType;
@@ -1661,7 +1662,7 @@ yyreduce:
     break;
 
   case 14:
-#line 166 "pixel.y"
+#line 167 "pixel.y"
     {
 			/* tree type define. eg. a = tree(rootnum, (a, r, l)(r, r1, l1)...) */
 			tmp_tree = new iTREE("tree", (yyvsp[(5) - (7)].num), TreeR, TreeR);
@@ -1671,7 +1672,7 @@ yyreduce:
     break;
 
   case 15:
-#line 172 "pixel.y"
+#line 173 "pixel.y"
     {
 			/* tree type define version 2. define the position
 			* eg. a = tree(rootnum, x, y, (a, r, l)(r, r1, l1)...) 
@@ -1683,7 +1684,7 @@ yyreduce:
     break;
 
   case 16:
-#line 180 "pixel.y"
+#line 181 "pixel.y"
     { 
 			/* if-else expression define
 			* eg. if (expr) {...} else {...}
@@ -1695,7 +1696,7 @@ yyreduce:
     break;
 
   case 17:
-#line 188 "pixel.y"
+#line 189 "pixel.y"
     { 
 			/* while loop define
 			* eg. while (expr) {...}
@@ -1706,7 +1707,7 @@ yyreduce:
     break;
 
   case 18:
-#line 195 "pixel.y"
+#line 196 "pixel.y"
     { 
 			/* draw an object variable */
 			(yyval.lnode) = new draw_node(GetName((yyvsp[(2) - (2)].str)));
@@ -1714,7 +1715,7 @@ yyreduce:
     break;
 
   case 19:
-#line 199 "pixel.y"
+#line 200 "pixel.y"
     {
 			/* variable copy assignment. eg. a = b */
 			(yyval.lnode) = new equ_sts_node(GetName((yyvsp[(1) - (3)].str)), GetName((yyvsp[(3) - (3)].str)));
@@ -1722,7 +1723,7 @@ yyreduce:
     break;
 
   case 20:
-#line 203 "pixel.y"
+#line 204 "pixel.y"
     {
 			/* change the color assignment. eg. a.color = blue */
 			(yyval.lnode) = new equ_cts_node(GetName((yyvsp[(1) - (5)].str)), GetName((yyvsp[(5) - (5)].str)));
@@ -1730,7 +1731,7 @@ yyreduce:
     break;
 
   case 21:
-#line 207 "pixel.y"
+#line 208 "pixel.y"
     {
 			/* change the fields of variable. eg. a.x = expr */
 	 		(yyval.lnode) = new equ_stn_node(GetName((yyvsp[(1) - (5)].str)), GetName((yyvsp[(3) - (5)].str)), (yyvsp[(5) - (5)].expnode));
@@ -1738,7 +1739,7 @@ yyreduce:
     break;
 
   case 22:
-#line 211 "pixel.y"
+#line 212 "pixel.y"
     {
 			/* define a function
 			* eg. foo = func(int a, point b, ... ) {...}
@@ -1750,7 +1751,7 @@ yyreduce:
     break;
 
   case 23:
-#line 219 "pixel.y"
+#line 220 "pixel.y"
     {
 			/* call a function
 			* eg. foo(a, b, c, ...)
@@ -1761,7 +1762,7 @@ yyreduce:
     break;
 
   case 24:
-#line 229 "pixel.y"
+#line 230 "pixel.y"
     {
 			(yyval.parampairVect) = (yyvsp[(3) - (3)].parampairVect);
 			(yyval.parampairVect)->push_back(GetName((yyvsp[(1) - (3)].str)));
@@ -1769,7 +1770,7 @@ yyreduce:
     break;
 
   case 25:
-#line 233 "pixel.y"
+#line 234 "pixel.y"
     {
 			(yyval.parampairVect) = new std::vector<std::string>;
 			(yyval.parampairVect)->push_back(GetName((yyvsp[(1) - (2)].str)));
@@ -1778,7 +1779,7 @@ yyreduce:
     break;
 
   case 26:
-#line 238 "pixel.y"
+#line 239 "pixel.y"
     {
 			(yyval.parampairVect) = new std::vector<std::string>;
 			//printf("empty paramlist!\n");
@@ -1786,7 +1787,7 @@ yyreduce:
     break;
 
   case 27:
-#line 246 "pixel.y"
+#line 247 "pixel.y"
     {
 			(yyval.varpairVect) = (yyvsp[(3) - (3)].varpairVect);
 			(yyval.varpairVect)->push_back(*((yyvsp[(1) - (3)].varPair)));
@@ -1794,7 +1795,7 @@ yyreduce:
     break;
 
   case 28:
-#line 250 "pixel.y"
+#line 251 "pixel.y"
     {
 			(yyval.varpairVect) = new std::vector<std::pair<std::string, std::string> >;
 			(yyval.varpairVect)->push_back(*((yyvsp[(1) - (2)].varPair)));
@@ -1803,7 +1804,7 @@ yyreduce:
     break;
 
   case 29:
-#line 255 "pixel.y"
+#line 256 "pixel.y"
     {
 			(yyval.varpairVect) = new std::vector<std::pair<std::string, std::string> >;
 			printf("empty varlist!\n");
@@ -1811,7 +1812,7 @@ yyreduce:
     break;
 
   case 30:
-#line 262 "pixel.y"
+#line 263 "pixel.y"
     {
 			(yyval.varPair) = new std::pair<std::string, std::string>;
 			(yyval.varPair)->first = "int";
@@ -1820,7 +1821,7 @@ yyreduce:
     break;
 
   case 31:
-#line 267 "pixel.y"
+#line 268 "pixel.y"
     {
 			(yyval.varPair) = new std::pair<std::string, std::string>;
 			(yyval.varPair)->first = "bool";
@@ -1829,7 +1830,7 @@ yyreduce:
     break;
 
   case 32:
-#line 272 "pixel.y"
+#line 273 "pixel.y"
     {
 			(yyval.varPair) = new std::pair<std::string, std::string>;
 			(yyval.varPair)->first = "point";
@@ -1838,7 +1839,7 @@ yyreduce:
     break;
 
   case 33:
-#line 277 "pixel.y"
+#line 278 "pixel.y"
     {
 			(yyval.varPair) = new std::pair<std::string, std::string>;
 			(yyval.varPair)->first = "circle";
@@ -1847,7 +1848,7 @@ yyreduce:
     break;
 
   case 34:
-#line 282 "pixel.y"
+#line 283 "pixel.y"
     {
 			(yyval.varPair) = new std::pair<std::string, std::string>;
 			(yyval.varPair)->first = "rect";
@@ -1856,7 +1857,7 @@ yyreduce:
     break;
 
   case 35:
-#line 287 "pixel.y"
+#line 288 "pixel.y"
     {
 			(yyval.varPair) = new std::pair<std::string, std::string>;
 			(yyval.varPair)->first = "line";
@@ -1865,7 +1866,7 @@ yyreduce:
     break;
 
   case 36:
-#line 292 "pixel.y"
+#line 293 "pixel.y"
     {
 			(yyval.varPair) = new std::pair<std::string, std::string>;
 			(yyval.varPair)->first = "color";
@@ -1874,7 +1875,7 @@ yyreduce:
     break;
 
   case 37:
-#line 297 "pixel.y"
+#line 298 "pixel.y"
     {
 			(yyval.varPair) = new std::pair<std::string, std::string>;
 			(yyval.varPair)->first = "tree";
@@ -1883,7 +1884,7 @@ yyreduce:
     break;
 
   case 38:
-#line 307 "pixel.y"
+#line 308 "pixel.y"
     {
 				(yyvsp[(2) - (2)].binvect)->insert(*(yyvsp[(1) - (2)].childpair));
 				(yyval.binvect) = (yyvsp[(2) - (2)].binvect);
@@ -1892,7 +1893,7 @@ yyreduce:
     break;
 
   case 39:
-#line 312 "pixel.y"
+#line 313 "pixel.y"
     {
 				//printf("empty bintree\n");
 				tmp_map = new std::map<int, std::pair<int, int> > ;	/* empty string*/
@@ -1901,7 +1902,7 @@ yyreduce:
     break;
 
   case 40:
-#line 322 "pixel.y"
+#line 323 "pixel.y"
     {
 				(yyval.childpair) = new std::pair<int, std::pair<int, int> >;
 				(yyval.childpair)->first = (yyvsp[(2) - (7)].num);
@@ -1911,98 +1912,98 @@ yyreduce:
     break;
 
   case 41:
-#line 333 "pixel.y"
+#line 334 "pixel.y"
     {
 				(yyval.expnode) = new field_node(GetName((yyvsp[(1) - (3)].str)), GetName((yyvsp[(3) - (3)].str)));
 			;}
     break;
 
   case 42:
-#line 336 "pixel.y"
+#line 337 "pixel.y"
     {
  				(yyval.expnode) = new number_node((yyvsp[(1) - (1)].num));
  			;}
     break;
 
   case 43:
-#line 339 "pixel.y"
+#line 340 "pixel.y"
     {
  				(yyval.expnode) = new int_node(GetName((yyvsp[(1) - (1)].str)));
  			;}
     break;
 
   case 44:
-#line 347 "pixel.y"
+#line 348 "pixel.y"
     {
  				(yyval.expnode) = new plus_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 45:
-#line 350 "pixel.y"
+#line 351 "pixel.y"
     {
  				(yyval.expnode) = new minus_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 46:
-#line 353 "pixel.y"
+#line 354 "pixel.y"
     {
  				(yyval.expnode) = new times_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 47:
-#line 356 "pixel.y"
+#line 357 "pixel.y"
     {
  				(yyval.expnode) = new divide_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 48:
-#line 359 "pixel.y"
+#line 360 "pixel.y"
     {
  				(yyval.expnode) = new gt_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 49:
-#line 362 "pixel.y"
+#line 363 "pixel.y"
     {
  				(yyval.expnode) = new ge_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 50:
-#line 365 "pixel.y"
+#line 366 "pixel.y"
     {
  				(yyval.expnode) = new lt_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 51:
-#line 368 "pixel.y"
+#line 369 "pixel.y"
     {
  				(yyval.expnode) = new le_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 52:
-#line 371 "pixel.y"
+#line 372 "pixel.y"
     {
  				(yyval.expnode) = new ee_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 53:
-#line 374 "pixel.y"
+#line 375 "pixel.y"
     {
  				(yyval.expnode) = (yyvsp[(2) - (3)].expnode);
  			;}
     break;
 
   case 54:
-#line 377 "pixel.y"
+#line 378 "pixel.y"
     {
  				(yyval.expnode) = (yyvsp[(1) - (1)].expnode);
  			;}
@@ -2010,7 +2011,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 2014 "pixel.cpp"
+#line 2015 "pixel.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2224,7 +2225,7 @@ yyreturn:
 }
 
 
-#line 382 "pixel.y"
+#line 383 "pixel.y"
 
 
 /* GetName - could get a variable name from the whole string */
@@ -2244,10 +2245,25 @@ char *GetName(char *nname) {
 
 void yyerror(/*void *a, */const char *msg)
 {
-	fprintf(stderr, "Error at line %d, %s\n", yylineno, msg);
+	char *tmp;
+	tmp = (char*)calloc(256, sizeof(char));
+	sprintf(tmp, "[ERROR] line %d: %s\n", yylineno, msg);
+	errors += tmp;
+	free(tmp);
+	//fprintf(stderr, "Error at line %d, %s\n", yylineno, msg);
 }
 
+int main()
+{ 
+	//yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
+	// char buffer[100];
+	// while(1) {
+	// 	yyparse(buffer); 
+	// 	root->evaluate();		 
+	// }
 
+	//return 0;
+}
 
 
 
