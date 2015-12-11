@@ -32,6 +32,7 @@
 	static	std::pair<int, std::pair<int, int> > *tmp_pair;
 
 	extern	std::map<std::string, BaseType *> vars;	 /* save all the variables */
+	extern int yylineno;
 
 	static	char* GetName(char *nname);		  /* get the variable name */
 
@@ -397,6 +398,7 @@ char *GetName(char *nname) {
 
 void yyerror(/*void *a, */const char *msg)
 {
+	fprintf(stderr, "Error at line %d, %s\n", yylineno, msg);
 }
 
 int main()

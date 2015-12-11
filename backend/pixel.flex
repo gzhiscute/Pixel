@@ -6,6 +6,7 @@
 * 2015 Fall Semester -- Compiling Practice
 */
 %option noyywrap
+%option yylineno
 
 %{
 #include <stdio.h>

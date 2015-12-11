@@ -15,6 +15,7 @@ extern std::map<std::string, def_func *> funcs;
 extern int TreeBottomLength; /* The length between two bottom nodes. */
 extern int DrawWidth;
 extern int DrawHeight;
+extern int yylineno;
 
 SOCKET soc;
 SOCKET init_soc(int port) {
@@ -139,6 +140,7 @@ int main() {
 				printf("the s is: %s\n", s);
 				vars.clear();
 				funcs.clear();
+				yylineno = 0;
 				yyparse(s);
 				printf("the root is: 0x%lx", root);
 				if (root) {
