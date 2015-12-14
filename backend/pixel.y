@@ -124,37 +124,37 @@ line : newline {
 	| allname EQU TRUE { 
 			/* Bool type define, and value is TRUE. eg. a = true */
 			tmp_var = new iBOOL("bool", 1);
-			$$ = new def_node(GetName($1), tmp_var);
+			$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
 	| allname EQU FALSE {
 			/* Bool type define, and value is FALSE. eg. a = false */
 			tmp_var = new iBOOL("bool", 0);
-			$$ = new def_node(GetName($1), tmp_var);
+			$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
 	| allname EQU number {
 			/* int type define. eg. a = number */
 			tmp_var = new iINT("int", $3);
-			$$ = new def_node(GetName($1), tmp_var);
+			$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
 	| allname EQU POINT leftsma number comma number comma allname rightsma { 
 			/* point type define. eg. a = point(x, y, color_name) */
 			tmp_var = new iPOINT("point", $5, $7, GetName($9));
-			$$ = new def_node(GetName($1), tmp_var);
+			$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
 	| allname EQU LINE leftsma number comma number comma number comma number comma allname rightsma { 
 			/* line type define. eg. a = line(x, y, x1, y1, color_name) */
 			tmp_var = new iLINE("line", $5, $7, $9, $11, GetName($13));
-			$$ = new def_node(GetName($1), tmp_var);
+			$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
 	| allname EQU circle leftsma number comma number comma number comma allname rightsma { 
 			/* circle type define. eg. a = circle(x, y, r, color_name) */
 			tmp_var = new iCIRCLE("circle", $5, $7, $9, GetName($11));
-			$$ = new def_node(GetName($1), tmp_var);
+			$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
 	| allname EQU rect leftsma number comma number comma number comma number comma allname rightsma {
 	 		/* rectangle type define. eg. a = rect(x, y, w, h, color_name) */
 	 		tmp_var = new iRECT("rect", $5, $7, $9, $11, GetName($13));
-	 		$$ = new def_node(GetName($1), tmp_var);
+	 		$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
 	| allname EQU color leftsma number comma number comma number rightsma { 
 			/* color type define. eg. yellow = color(r, g, b) */
@@ -162,13 +162,13 @@ line : newline {
 			tmp_var->type = "color";
 			tmp_var->cname = GetName($1);
 			tmp_var->SetColor($5, $7, $9);
-			$$ = new def_node(GetName($1), tmp_var);
+			$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
 	| allname EQU tree leftsma number comma bintree /*rightsma in bintree*/ {
 			/* tree type define. eg. a = tree(rootnum, (a, r, l)(r, r1, l1)...) */
 			tmp_tree = new iTREE("tree", $5, TreeR, TreeR);
 			tmp_tree->nodes = *tmp_map;
-			$$ = new def_node(GetName($1), tmp_tree);
+			$$ = new def_node(yylineno, GetName($1), tmp_tree);
 		}
 	| allname EQU tree leftsma number comma number comma number comma bintree {
 			/* tree type define version 2. define the position
@@ -176,7 +176,7 @@ line : newline {
 			*/
 			tmp_tree = new iTREE("tree", $5, $7, $9);
 			tmp_tree->nodes = *tmp_map;
-			$$ = new def_node(GetName($1), tmp_tree);
+			$$ = new def_node(yylineno, GetName($1), tmp_tree);
 		}
 	| IF leftsma expr rightsma leftbig lines rightbig ELSE leftbig lines rightbig { 
 			/* if-else expression define
@@ -184,37 +184,37 @@ line : newline {
 			* must contain if and else!
 			*/
 			//printf("define a IF-ELSE statement, the value of expr\n");
-			$$ = new if_else_node($3, $6, $10);
+			$$ = new if_else_node(yylineno, $3, $6, $10);
 		}
 	| WHILE leftsma expr rightsma leftbig lines rightbig { 
 			/* while loop define
 			* eg. while (expr) {...}
 			*/
 			//printf("define a while statement, the value of expr\n");
-			$$ = new while_node($3, $6);
+			$$ = new while_node(yylineno, $3, $6);
 		}
 	| draw allname { 
 			/* draw an object variable */
-			$$ = new draw_node(GetName($2));
+			$$ = new draw_node(yylineno, GetName($2));
 		}
 	| allname EQU allname {
 			/* variable copy assignment. eg. a = b */
-			$$ = new equ_sts_node(GetName($1), GetName($3));
+			$$ = new equ_sts_node(yylineno, GetName($1), GetName($3));
 		}
 	| allname DOT color EQU allname {
 			/* change the color assignment. eg. a.color = blue */
-			$$ = new equ_cts_node(GetName($1), GetName($5));
+			$$ = new equ_cts_node(yylineno, GetName($1), GetName($5));
 		}
 	| allname DOT allname EQU expr {
 			/* change the fields of variable. eg. a.x = expr */
-	 		$$ = new equ_stn_node(GetName($1), GetName($3), $5);
+	 		$$ = new equ_stn_node(yylineno, GetName($1), GetName($3), $5);
 	 	}
 	| allname EQU func leftsma varlist leftbig lines rightbig {
 			/* define a function
 			* eg. foo = func(int a, point b, ... ) {...}
 			*/
 			//printf("define a func!\n");
-			$$ = new def_func(GetName($1), *($5), $7);
+			$$ = new def_func(yylineno, GetName($1), *($5), $7);
 
 	 	}
 	| allname leftsma paramlist {
@@ -222,7 +222,7 @@ line : newline {
 			* eg. foo(a, b, c, ...)
 			*/
 			//printf("call a func\n");
-			$$ = new call_node(GetName($1), *($3));
+			$$ = new call_node(yylineno, GetName($1), *($3));
 	 	}
 	;
 
@@ -332,13 +332,13 @@ treenode : leftsma number comma number comma number rightsma {
 * eg. a.x , 100 , dd(dd must be an int/bool type)
 */
 supernum : allname DOT allname {
-				$$ = new field_node(GetName($1), GetName($3));
+				$$ = new field_node(yylineno, GetName($1), GetName($3));
 			} 
  		| number {
- 				$$ = new number_node($1);
+ 				$$ = new number_node(yylineno, $1);
  			} 
  		| allname {
- 				$$ = new int_node(GetName($1));
+ 				$$ = new int_node(yylineno, GetName($1));
  			}
  		;
 
@@ -346,31 +346,31 @@ supernum : allname DOT allname {
 * now we support + - * / > >= < <= == operatiions
 */
 expr : expr PLUS expr {
- 				$$ = new plus_node($1, $3);
+ 				$$ = new plus_node(yylineno, $1, $3);
  			}
  		| expr MINUS expr {
- 				$$ = new minus_node($1, $3);
+ 				$$ = new minus_node(yylineno, $1, $3);
  			}
  		| expr TIMES expr {
- 				$$ = new times_node($1, $3);
+ 				$$ = new times_node(yylineno, $1, $3);
  			}
  		| expr DIVIDE expr {
- 				$$ = new divide_node($1, $3);
+ 				$$ = new divide_node(yylineno, $1, $3);
  			}
  		| expr GT expr {
- 				$$ = new gt_node($1, $3);
+ 				$$ = new gt_node(yylineno, $1, $3);
  			}
  		| expr GE expr {
- 				$$ = new ge_node($1, $3);
+ 				$$ = new ge_node(yylineno, $1, $3);
  			}
  		| expr LT expr {
- 				$$ = new lt_node($1, $3);
+ 				$$ = new lt_node(yylineno, $1, $3);
  			}
  		| expr LE expr {
- 				$$ = new le_node($1, $3);
+ 				$$ = new le_node(yylineno, $1, $3);
  			}
  		| expr EE expr {
- 				$$ = new ee_node($1, $3);
+ 				$$ = new ee_node(yylineno, $1, $3);
  			}
  		| leftsma expr rightsma {
  				$$ = $2;

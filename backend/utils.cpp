@@ -35,7 +35,7 @@ int TreeBottomLength = 60;
 int DrawWidth = 240;
 int DrawHeight = 500;
 int TreeYLength = 30;
-extern int lineno;
+extern int yylineno;
 
 // Transfer strings (like "x", "int") to corresponding integer for switch
 // statements.

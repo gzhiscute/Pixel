@@ -1305,7 +1305,7 @@ yyparse ()
 #endif
 #endif
 {
-  
+  yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
   int yystate;
   int yyn;
   int yyresult;
@@ -1591,7 +1591,7 @@ yyreduce:
     { 
 			/* Bool type define, and value is TRUE. eg. a = true */
 			tmp_var = new iBOOL("bool", 1);
-			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str)), tmp_var);
+			(yyval.lnode) = new def_node(yylineno, GetName((yyvsp[(1) - (3)].str)), tmp_var);
 		;}
     break;
 
@@ -1600,7 +1600,7 @@ yyreduce:
     {
 			/* Bool type define, and value is FALSE. eg. a = false */
 			tmp_var = new iBOOL("bool", 0);
-			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str)), tmp_var);
+			(yyval.lnode) = new def_node(yylineno, GetName((yyvsp[(1) - (3)].str)), tmp_var);
 		;}
     break;
 
@@ -1609,7 +1609,7 @@ yyreduce:
     {
 			/* int type define. eg. a = number */
 			tmp_var = new iINT("int", (yyvsp[(3) - (3)].num));
-			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (3)].str)), tmp_var);
+			(yyval.lnode) = new def_node(yylineno, GetName((yyvsp[(1) - (3)].str)), tmp_var);
 		;}
     break;
 
@@ -1618,7 +1618,7 @@ yyreduce:
     { 
 			/* point type define. eg. a = point(x, y, color_name) */
 			tmp_var = new iPOINT("point", (yyvsp[(5) - (10)].num), (yyvsp[(7) - (10)].num), GetName((yyvsp[(9) - (10)].str)));
-			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (10)].str)), tmp_var);
+			(yyval.lnode) = new def_node(yylineno, GetName((yyvsp[(1) - (10)].str)), tmp_var);
 		;}
     break;
 
@@ -1627,7 +1627,7 @@ yyreduce:
     { 
 			/* line type define. eg. a = line(x, y, x1, y1, color_name) */
 			tmp_var = new iLINE("line", (yyvsp[(5) - (14)].num), (yyvsp[(7) - (14)].num), (yyvsp[(9) - (14)].num), (yyvsp[(11) - (14)].num), GetName((yyvsp[(13) - (14)].str)));
-			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (14)].str)), tmp_var);
+			(yyval.lnode) = new def_node(yylineno, GetName((yyvsp[(1) - (14)].str)), tmp_var);
 		;}
     break;
 
@@ -1636,7 +1636,7 @@ yyreduce:
     { 
 			/* circle type define. eg. a = circle(x, y, r, color_name) */
 			tmp_var = new iCIRCLE("circle", (yyvsp[(5) - (12)].num), (yyvsp[(7) - (12)].num), (yyvsp[(9) - (12)].num), GetName((yyvsp[(11) - (12)].str)));
-			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (12)].str)), tmp_var);
+			(yyval.lnode) = new def_node(yylineno, GetName((yyvsp[(1) - (12)].str)), tmp_var);
 		;}
     break;
 
@@ -1645,7 +1645,7 @@ yyreduce:
     {
 	 		/* rectangle type define. eg. a = rect(x, y, w, h, color_name) */
 	 		tmp_var = new iRECT("rect", (yyvsp[(5) - (14)].num), (yyvsp[(7) - (14)].num), (yyvsp[(9) - (14)].num), (yyvsp[(11) - (14)].num), GetName((yyvsp[(13) - (14)].str)));
-	 		(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (14)].str)), tmp_var);
+	 		(yyval.lnode) = new def_node(yylineno, GetName((yyvsp[(1) - (14)].str)), tmp_var);
 		;}
     break;
 
@@ -1657,7 +1657,7 @@ yyreduce:
 			tmp_var->type = "color";
 			tmp_var->cname = GetName((yyvsp[(1) - (10)].str));
 			tmp_var->SetColor((yyvsp[(5) - (10)].num), (yyvsp[(7) - (10)].num), (yyvsp[(9) - (10)].num));
-			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (10)].str)), tmp_var);
+			(yyval.lnode) = new def_node(yylineno, GetName((yyvsp[(1) - (10)].str)), tmp_var);
 		;}
     break;
 
@@ -1667,7 +1667,7 @@ yyreduce:
 			/* tree type define. eg. a = tree(rootnum, (a, r, l)(r, r1, l1)...) */
 			tmp_tree = new iTREE("tree", (yyvsp[(5) - (7)].num), TreeR, TreeR);
 			tmp_tree->nodes = *tmp_map;
-			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (7)].str)), tmp_tree);
+			(yyval.lnode) = new def_node(yylineno, GetName((yyvsp[(1) - (7)].str)), tmp_tree);
 		;}
     break;
 
@@ -1679,7 +1679,7 @@ yyreduce:
 			*/
 			tmp_tree = new iTREE("tree", (yyvsp[(5) - (11)].num), (yyvsp[(7) - (11)].num), (yyvsp[(9) - (11)].num));
 			tmp_tree->nodes = *tmp_map;
-			(yyval.lnode) = new def_node(GetName((yyvsp[(1) - (11)].str)), tmp_tree);
+			(yyval.lnode) = new def_node(yylineno, GetName((yyvsp[(1) - (11)].str)), tmp_tree);
 		;}
     break;
 
@@ -1691,7 +1691,7 @@ yyreduce:
 			* must contain if and else!
 			*/
 			//printf("define a IF-ELSE statement, the value of expr\n");
-			(yyval.lnode) = new if_else_node((yyvsp[(3) - (11)].expnode), (yyvsp[(6) - (11)].lsnode), (yyvsp[(10) - (11)].lsnode));
+			(yyval.lnode) = new if_else_node(yylineno, (yyvsp[(3) - (11)].expnode), (yyvsp[(6) - (11)].lsnode), (yyvsp[(10) - (11)].lsnode));
 		;}
     break;
 
@@ -1702,7 +1702,7 @@ yyreduce:
 			* eg. while (expr) {...}
 			*/
 			//printf("define a while statement, the value of expr\n");
-			(yyval.lnode) = new while_node((yyvsp[(3) - (7)].expnode), (yyvsp[(6) - (7)].lsnode));
+			(yyval.lnode) = new while_node(yylineno, (yyvsp[(3) - (7)].expnode), (yyvsp[(6) - (7)].lsnode));
 		;}
     break;
 
@@ -1710,7 +1710,7 @@ yyreduce:
 #line 196 "pixel.y"
     { 
 			/* draw an object variable */
-			(yyval.lnode) = new draw_node(GetName((yyvsp[(2) - (2)].str)));
+			(yyval.lnode) = new draw_node(yylineno, GetName((yyvsp[(2) - (2)].str)));
 		;}
     break;
 
@@ -1718,7 +1718,7 @@ yyreduce:
 #line 200 "pixel.y"
     {
 			/* variable copy assignment. eg. a = b */
-			(yyval.lnode) = new equ_sts_node(GetName((yyvsp[(1) - (3)].str)), GetName((yyvsp[(3) - (3)].str)));
+			(yyval.lnode) = new equ_sts_node(yylineno, GetName((yyvsp[(1) - (3)].str)), GetName((yyvsp[(3) - (3)].str)));
 		;}
     break;
 
@@ -1726,7 +1726,7 @@ yyreduce:
 #line 204 "pixel.y"
     {
 			/* change the color assignment. eg. a.color = blue */
-			(yyval.lnode) = new equ_cts_node(GetName((yyvsp[(1) - (5)].str)), GetName((yyvsp[(5) - (5)].str)));
+			(yyval.lnode) = new equ_cts_node(yylineno, GetName((yyvsp[(1) - (5)].str)), GetName((yyvsp[(5) - (5)].str)));
 		;}
     break;
 
@@ -1734,7 +1734,7 @@ yyreduce:
 #line 208 "pixel.y"
     {
 			/* change the fields of variable. eg. a.x = expr */
-	 		(yyval.lnode) = new equ_stn_node(GetName((yyvsp[(1) - (5)].str)), GetName((yyvsp[(3) - (5)].str)), (yyvsp[(5) - (5)].expnode));
+	 		(yyval.lnode) = new equ_stn_node(yylineno, GetName((yyvsp[(1) - (5)].str)), GetName((yyvsp[(3) - (5)].str)), (yyvsp[(5) - (5)].expnode));
 	 	;}
     break;
 
@@ -1745,7 +1745,7 @@ yyreduce:
 			* eg. foo = func(int a, point b, ... ) {...}
 			*/
 			//printf("define a func!\n");
-			(yyval.lnode) = new def_func(GetName((yyvsp[(1) - (8)].str)), *((yyvsp[(5) - (8)].varpairVect)), (yyvsp[(7) - (8)].lsnode));
+			(yyval.lnode) = new def_func(yylineno, GetName((yyvsp[(1) - (8)].str)), *((yyvsp[(5) - (8)].varpairVect)), (yyvsp[(7) - (8)].lsnode));
 
 	 	;}
     break;
@@ -1757,7 +1757,7 @@ yyreduce:
 			* eg. foo(a, b, c, ...)
 			*/
 			//printf("call a func\n");
-			(yyval.lnode) = new call_node(GetName((yyvsp[(1) - (3)].str)), *((yyvsp[(3) - (3)].parampairVect)));
+			(yyval.lnode) = new call_node(yylineno, GetName((yyvsp[(1) - (3)].str)), *((yyvsp[(3) - (3)].parampairVect)));
 	 	;}
     break;
 
@@ -1914,84 +1914,84 @@ yyreduce:
   case 41:
 #line 334 "pixel.y"
     {
-				(yyval.expnode) = new field_node(GetName((yyvsp[(1) - (3)].str)), GetName((yyvsp[(3) - (3)].str)));
+				(yyval.expnode) = new field_node(yylineno, GetName((yyvsp[(1) - (3)].str)), GetName((yyvsp[(3) - (3)].str)));
 			;}
     break;
 
   case 42:
 #line 337 "pixel.y"
     {
- 				(yyval.expnode) = new number_node((yyvsp[(1) - (1)].num));
+ 				(yyval.expnode) = new number_node(yylineno, (yyvsp[(1) - (1)].num));
  			;}
     break;
 
   case 43:
 #line 340 "pixel.y"
     {
- 				(yyval.expnode) = new int_node(GetName((yyvsp[(1) - (1)].str)));
+ 				(yyval.expnode) = new int_node(yylineno, GetName((yyvsp[(1) - (1)].str)));
  			;}
     break;
 
   case 44:
 #line 348 "pixel.y"
     {
- 				(yyval.expnode) = new plus_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
+ 				(yyval.expnode) = new plus_node(yylineno, (yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 45:
 #line 351 "pixel.y"
     {
- 				(yyval.expnode) = new minus_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
+ 				(yyval.expnode) = new minus_node(yylineno, (yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 46:
 #line 354 "pixel.y"
     {
- 				(yyval.expnode) = new times_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
+ 				(yyval.expnode) = new times_node(yylineno, (yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 47:
 #line 357 "pixel.y"
     {
- 				(yyval.expnode) = new divide_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
+ 				(yyval.expnode) = new divide_node(yylineno, (yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 48:
 #line 360 "pixel.y"
     {
- 				(yyval.expnode) = new gt_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
+ 				(yyval.expnode) = new gt_node(yylineno, (yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 49:
 #line 363 "pixel.y"
     {
- 				(yyval.expnode) = new ge_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
+ 				(yyval.expnode) = new ge_node(yylineno, (yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 50:
 #line 366 "pixel.y"
     {
- 				(yyval.expnode) = new lt_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
+ 				(yyval.expnode) = new lt_node(yylineno, (yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 51:
 #line 369 "pixel.y"
     {
- 				(yyval.expnode) = new le_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
+ 				(yyval.expnode) = new le_node(yylineno, (yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
   case 52:
 #line 372 "pixel.y"
     {
- 				(yyval.expnode) = new ee_node((yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
+ 				(yyval.expnode) = new ee_node(yylineno, (yyvsp[(1) - (3)].expnode), (yyvsp[(3) - (3)].expnode));
  			;}
     break;
 
@@ -2253,17 +2253,7 @@ void yyerror(/*void *a, */const char *msg)
 	//fprintf(stderr, "Error at line %d, %s\n", yylineno, msg);
 }
 
-int main()
-{ 
-	//yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
-	// char buffer[100];
-	// while(1) {
-	// 	yyparse(buffer); 
-	// 	root->evaluate();		 
-	// }
 
-	//return 0;
-}
 
 
 
