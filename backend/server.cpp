@@ -158,7 +158,7 @@ void server(int clientfd) {
 		}
 		ans = errors + ans;
 		len = ans.length();
-		//printf("%s\n", ans.c_str());
+		printf("%s\n", ans.c_str());
 		send(clientfd, ans.c_str(), len, 0);
 		//free(ans);
 	}
