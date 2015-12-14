@@ -145,7 +145,7 @@ void server(int clientfd) {
 		printf("the s is: %s\n", s);
 		vars.clear();
 		funcs.clear();
-		yylineno = 0;
+		yylineno = 1;
 		yyparse(s);
 		printf("the root is: 0x%lx", root);
 		if (root) {
@@ -158,7 +158,7 @@ void server(int clientfd) {
 		}
 		ans = errors + ans;
 		len = ans.length();
-		printf("%s\n", ans.c_str());
+		//printf("%s\n", ans.c_str());
 		send(clientfd, ans.c_str(), len, 0);
 		//free(ans);
 	}
