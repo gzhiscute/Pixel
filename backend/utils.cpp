@@ -181,8 +181,7 @@ iPOINT::iPOINT(const std::string& _type, int _x, int _y, char *_color) {
 void iPOINT::drawsvg(int _pos) {
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:",
-			"rgb(%d,%d,%d)\"/>", x, y, BaseType::r, BaseType::g, BaseType::b);
+	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, BaseType::r, BaseType::g, BaseType::b);
 	ans += tmp;
 	free(tmp);
 }
@@ -232,8 +231,7 @@ iLINE::iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1,
 void iLINE::drawsvg(int _pos) {
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"",
-			"stroke:rgb(%d,%d,%d);stroke-width:2\"/>", x, y, x1, y1, 
+	sprintf(tmp,"<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>", x, y, x1, y1, 
 			BaseType::r, BaseType::g, BaseType::b);
 	ans += tmp;
 	free(tmp);
@@ -287,8 +285,7 @@ iCIRCLE::iCIRCLE(const std::string& _type, int _x, int _y, int _r,
 void iCIRCLE::drawsvg(int _pos) {
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb",
-			"(%d,%d,%d)\"/>",x, y, r, BaseType::r, BaseType::g, BaseType::b);
+	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>",x, y, r, BaseType::r, BaseType::g, BaseType::b);
 	ans += tmp;
 	free(tmp);
 }
@@ -340,8 +337,7 @@ iRECT::iRECT(const std::string& _type, int _x, int _y, int _w, int _h,
 void iRECT::drawsvg(int _pos) {
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"",
-			"fill:rgb(%d,%d,%d)\"/>", x-w/2, y-h/2, w, h, BaseType::r, 
+	sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x-w/2, y-h/2, w, h, BaseType::r, 
 			BaseType::g, BaseType::b);
 	ans += tmp;
 	free(tmp);
@@ -454,8 +450,7 @@ void iTREE::DrawTree(int p, int x, int y, int dep, int _pos) {
 	// Prints node number.
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<text x=\"%d\" y=\"%d\" font-family=\"Times New Roman\" ",
-			"font-size=\"12\" fill=\"white\">%d</text>", x-4, y+4, p);
+	sprintf(tmp, "<text x=\"%d\" y=\"%d\" font-family=\"Times New Roman\" font-size=\"12\" fill=\"white\">%d</text>", x-4, y+4, p);
 	ans += tmp;
 	free(tmp);
 }
@@ -512,8 +507,7 @@ void draw_node::evaluate() {
 	if (var == vars.end()) {
 		char *tmp;
 		tmp = (char *)calloc(256, sizeof(char));
-		sprintf(tmp, "[ERROR] line %d: can't draw %s, variable doesn't",
-				" exist.\n", pos, node_name.c_str());
+		sprintf(tmp, "[ERROR] line %d: can't draw %s, variable doesn't exist.\n", pos, node_name.c_str());
 		errors += tmp;
 		free(tmp);
 		return;
@@ -525,8 +519,7 @@ void draw_node::evaluate() {
 		if (_color == vars.end()) {
 			char *tmp;
 			tmp = (char *)calloc(256, sizeof(char));
-			sprintf(tmp, "[ERROR] lint %d: can't draw %s, color variable ",
-					"doesn't exist.\n", pos, node_name.c_str());
+			sprintf(tmp, "[ERROR] lint %d: can't draw %s, color variable doesn't exist.\n", pos, node_name.c_str());
 			errors += tmp;
 			free(tmp);
 			return;
