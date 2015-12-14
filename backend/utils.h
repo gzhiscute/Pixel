@@ -37,10 +37,10 @@ class BaseType{
 		BaseType() {type = cname = "", r = g = b = 0; }
 		void SetColor(int _r, int _g, int _b);
 		void SetBaseVars(const std::string& _type, char *_color);
-		virtual void drawsvg() {}
-		virtual void ChangeField(std::string var_name, int right);
+		virtual void drawsvg(int _pos) {}
+		virtual void ChangeField(std::string var_name, int right, int _pos);
 		virtual void ChangeColor(std::string colorstr) {}
-		virtual int GetField(std::string var_name) {}
+		virtual int GetField(std::string var_name, int _pos) {}
 		virtual int GetVal() {}
 		virtual int GetX() {}
 		virtual int GetY() {}
@@ -58,8 +58,8 @@ class iINT : public BaseType {
 		int val;
 	public:
 		iINT(const std::string& _type, int _val);
-		void drawsvg();
-		void ChangeField(std::string var_name, int right);
+		void drawsvg(int _pos);
+		void ChangeField(std::string var_name, int right, int _pos);
 		int GetVal() { return val; }
 };
 
@@ -70,8 +70,8 @@ class iBOOL : public BaseType {
 		int val;
 	public:
 		iBOOL(const std::string& _type, int _val);
-		void drawsvg();
-		void ChangeField(std::string var_name, int right);
+		void drawsvg(int _pos);
+		void ChangeField(std::string var_name, int right, int _pos);
 		int GetVal() { return val; }
 };
 
@@ -82,10 +82,10 @@ class iPOINT : public BaseType {
 		int x, y;
 	public:
 		iPOINT(const std::string& _type, int _x, int _y, char *_color);
-		void drawsvg();
-		void ChangeField(std::string var_name, int right);
+		void drawsvg(int _pos);
+		void ChangeField(std::string var_name, int right, int _pos);
 		void ChangeColor(std::string colorstr);
-		int GetField(std::string var_name);
+		int GetField(std::string var_name, int _pos);
 		int GetX() { return x; }
 		int GetY() { return y; }
 };
@@ -97,11 +97,12 @@ class iLINE : public BaseType {
 	protected:
 		int x, y, x1, y1;
 	public:
-		iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, char *_color);
-		void drawsvg(); 
-		void ChangeField(std::string var_name, int right);
+		iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1, 
+		      char *_color);
+		void drawsvg(int _pos); 
+		void ChangeField(std::string var_name, int right, int _pos);
 		void ChangeColor(std::string colorstr);
-		int GetField(std::string var_name);
+		int GetField(std::string var_name, int _pos);
 		int GetX() { return x; }
 		int GetY() { return y; }
 		int GetX1() { return x1; }
@@ -116,10 +117,10 @@ class iCIRCLE : public BaseType {
 		int x, y, r;
 	public:
 		iCIRCLE(const std::string& _type, int _x, int _y, int _r, char *_color);
-		void drawsvg();
-		void ChangeField(std::string var_name, int right);
+		void drawsvg(int _pos);
+		void ChangeField(std::string var_name, int right, int _pos);
 		void ChangeColor(std::string colorstr);
-		int GetField(std::string var_name);
+		int GetField(std::string var_name, int _pos);
 		int GetX() { return x; }
 		int GetY() { return y; }
 		int GetR() { return r; }
@@ -133,10 +134,10 @@ class iRECT : public BaseType {
 		int x, y, w, h;
 	public:
 		iRECT(const std::string& _type, int _x, int _y, int _w, int _h, char *_color);
-		void drawsvg();
-		void ChangeField(std::string var_name, int right);
+		void drawsvg(int _pos);
+		void ChangeField(std::string var_name, int right, int _pos);
 		void ChangeColor(std::string colorstr);
-		int GetField(std::string var_name);
+		int GetField(std::string var_name, int _pos);
 		int GetX() { return x; }
 		int GetY() { return y; }
 		int GetW() { return w; }
@@ -153,16 +154,17 @@ class iTREE : public BaseType {
 	public:
 		int binroot, treex, treey;
 		std::map<int, std::pair<int, int> > nodes;
-		void drawsvg();
+		void drawsvg(int _pos);
 		iTREE(const std::string& _type, int _rt, int _tx, int _ty);
 	private:
-		bool CalcDep(int p, int *Max, int dep, std::set<int> *vis);
-		void DrawTree(int p, int x, int y, int dep);
+		bool CalcDep(int p, int *Max, int dep, std::set<int> *vis, int _pos);
+		void DrawTree(int p, int x, int y, int dep, int _pos);
 };
 
 // Class for line in pixel.y.
 class line_node {
 	public:
+		int pos;
 		virtual void evaluate() {}
 };
 
@@ -172,7 +174,7 @@ class def_node : public line_node {
 		std::string node_name;
 		BaseType *base_type;
 	public:
-		def_node(std::string node_name, BaseType *base_type);
+		def_node(int _pos, std::string node_name, BaseType *base_type);
 		void evaluate();
 };
 
@@ -181,7 +183,7 @@ class draw_node : public line_node {
 	protected:
 		std::string node_name;
 	public:
-		draw_node(std::string node_name);
+		draw_node(int _pos, std::string node_name);
 		void evaluate();
 };
 
@@ -191,7 +193,7 @@ class equ_sts_node : public line_node {
 		std::string left;
 		std::string right;
 	public:
-		equ_sts_node(std::string _left, std::string _right);
+		equ_sts_node(int _pos, std::string _left, std::string _right);
 		void evaluate();
 };
 
@@ -199,6 +201,7 @@ class equ_sts_node : public line_node {
 // num is the return value of expressions.
 class exp_node {
 	public:
+		int pos;
 		int num;
 		virtual int evaluate() = 0;
 };
@@ -208,7 +211,7 @@ class operator_node : public exp_node {
 	public:
 		exp_node *left;
 		exp_node *right;
-		operator_node(exp_node *L, exp_node *R);
+		operator_node(int _pos, exp_node *L, exp_node *R);
 };
 
 class field_node : public exp_node {
@@ -216,13 +219,13 @@ class field_node : public exp_node {
 		std::string left;
 		std::string var_name;
 	public:
-		field_node(std::string _left, std::string _var_name);
+		field_node(int _pos, std::string _left, std::string _var_name);
 		int evaluate();
 };
 
 class number_node : public exp_node {
 	public:
-		number_node(int _num);
+		number_node(int _pos, int _num);
 		int evaluate();
 };
 
@@ -230,61 +233,61 @@ class int_node : public exp_node {
 	protected:
 		std::string var_name;
 	public:
-		int_node(std::string _var_name);
+		int_node(int _pos, std::string _var_name);
 		int evaluate();
 };
 
 class plus_node : public operator_node {
 	public:
-		plus_node(exp_node *L, exp_node *R);
+		plus_node(int _pos, exp_node *L, exp_node *R);
 		int evaluate();
 };
 
 class minus_node : public operator_node {
 	public:
-		minus_node(exp_node *L, exp_node *R);
+		minus_node(int _pos, exp_node *L, exp_node *R);
 		int evaluate();
 };
 
 class times_node : public operator_node {
 	public:
-		times_node(exp_node *L, exp_node *R);
+		times_node(int _pos, exp_node *L, exp_node *R);
 		int evaluate();
 };
 
 class  divide_node : public operator_node {
 	public:
-		 divide_node(exp_node *L, exp_node *R);
+		 divide_node(int _pos, exp_node *L, exp_node *R);
 		 int evaluate();
 };
 
 class  gt_node : public operator_node {
 	public:
-		 gt_node(exp_node *L, exp_node *R);
+		 gt_node(int _pos, exp_node *L, exp_node *R);
 		 int evaluate();
 };
 
 class  ge_node : public operator_node {
 	public:
-		 ge_node(exp_node *L, exp_node *R);
+		 ge_node(int _pos, exp_node *L, exp_node *R);
 		 int evaluate();
 };
 
 class  lt_node : public operator_node {
 	public:
-		 lt_node(exp_node *L, exp_node *R);
+		 lt_node(int _pos, exp_node *L, exp_node *R);
 		 int evaluate();
 };
 
 class  le_node : public operator_node {
 	public:
-		 le_node(exp_node *L, exp_node *R);
+		 le_node(int _pos, exp_node *L, exp_node *R);
 		 int evaluate();
 };
 
 class ee_node : public operator_node {
 	public:
-		ee_node(exp_node *L, exp_node *R);
+		ee_node(int _pos, exp_node *L, exp_node *R);
 		int evaluate();
 };
 
@@ -295,7 +298,8 @@ class equ_stn_node : public line_node {
 		std::string var_name;
 		exp_node *right;
 	public:
-		equ_stn_node(std::string _left, std::string _var_name, exp_node *_right);
+		equ_stn_node(int _pos, std::string _left, std::string _var_name, 
+			     exp_node *_right);
 		void evaluate();
 };
 
@@ -305,7 +309,7 @@ class equ_cts_node : public line_node {
 		std::string left;
 		std::string right;
 	public:
-		equ_cts_node(std::string _left, std::string _right);
+		equ_cts_node(int _pos, std::string _left, std::string _right);
 		void evaluate();
 };
 
@@ -324,7 +328,7 @@ class while_node : public line_node {
 		exp_node *left;
 		lines_node *right;
 
-		while_node(exp_node *_left, lines_node *_right);
+		while_node(int _pos, exp_node *_left, lines_node *_right);
 		void evaluate();
 };
 
@@ -335,7 +339,7 @@ class if_else_node : public line_node {
 		lines_node *true_right;
 		lines_node *false_right;
 
-		if_else_node(exp_node *_left, lines_node *_tr, lines_node *_fr);
+		if_else_node(int _pos, exp_node *_left, lines_node *_tr, lines_node *_fr);
 		void evaluate();
 };
 
@@ -346,7 +350,7 @@ class def_func : public line_node {
 		std::string func_name;
 		std::vector<std::pair<std::string, std::string> > params;
 		lines_node *right;
-		def_func(std::string _name, 
+		def_func(int _pos, std::string _name, 
 			 std::vector<std::pair<std::string, std::string> > _params, 
 			 lines_node *_right);
 		void evaluate();
@@ -354,8 +358,10 @@ class def_func : public line_node {
 
 // Class for calling a function.
 class call_node : public line_node {
+	public:
+		std::string node_name;
 		std::vector<std::string> params;
-		call_node(std::string _name, std::vector<std::string> _params);
+		call_node(int _pos, std::string _name, std::vector<std::string> _params);
 		void evaluate();
 };
 
