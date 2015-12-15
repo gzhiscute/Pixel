@@ -2247,13 +2247,11 @@ void yyerror(/*void *a, */const char *msg)
 {
 	char *tmp;
 	tmp = (char*)calloc(256, sizeof(char));
-	sprintf(tmp, "[ERROR] line %d: %s\n", yylineno, msg);
+	sprintf(tmp, "[ERROR] line %d: %s\n", yylineno-1, msg);
 	errors += tmp;
 	free(tmp);
 	//fprintf(stderr, "Error at line %d, %s\n", yylineno, msg);
 }
-
-
 
 
 
