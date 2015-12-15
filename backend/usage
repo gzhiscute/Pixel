@@ -25,10 +25,11 @@ Define a variable and modify it:
 	COLOR:
 		define color: a = color(a.r, a.g, a.b)
 	TREE:
-		define tree: a = tree(a.root, (node1, node1.left, node1.right)(node2, node2.left, node2.right) ...)
-			     a = tree(a.root, a.root_x, a.root_y, (node1, node1.left, node1.right)(node2, node2.left, node2.right) ...)
+		define tree: a = tree(a.root, (node0, node0.left, node0.right)(node1, node1.left, node1.right)(node2, node2.left, node2.right) ...)
+			     a = tree(a.root, a.root_x, a.root_y, (node0, node0.left, node0.right)(node1, node1.left, node1.right)(node2, node2.left, node2.right) ...)
 	FUNCTION:
-		define function: a = func(varible list) {...}
+		define function: a = func(variable_type0 varible_name0, variable_type1 variable_name1, ...) {...}
+		use this function: a(variable_name0, variable_name1, ...)
 
 Varibles can be multiple defined, we'll keep the last one.
 e.g:
@@ -75,4 +76,4 @@ Equations:
 	a = b
 	now a is a point variable, whose value is (1,1,black)
 	
-	   
+
