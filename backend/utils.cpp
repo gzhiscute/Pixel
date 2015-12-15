@@ -337,8 +337,7 @@ iRECT::iRECT(const std::string& _type, int _x, int _y, int _w, int _h,
 void iRECT::drawsvg(int _pos) {
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x-w/2, y-h/2, w, h, BaseType::r, 
-			BaseType::g, BaseType::b);
+	sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x-w/2, y-h/2, w, h, BaseType::r, BaseType::g, BaseType::b);
 	ans += tmp;
 	free(tmp);
 }
@@ -823,9 +822,13 @@ void while_node::evaluate() {
 	for (std::map<std::string, BaseType *>::iterator varIter = vars.begin();
 	     varIter != vars.end(); ++varIter)
 		before.insert(*varIter);
-	
-	while (left->evaluate()) 
+
+	int C = 0;
+	while (left->evaluate()) {
+		++ C;
+		if (C > 5000) break;
 		right->evaluate();
+	}
 	
 	std::map<std::string, BaseType *> after;
 	after.clear();
