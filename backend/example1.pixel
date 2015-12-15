@@ -103,7 +103,7 @@ haha = func(int xx, int yy, int rr) {
 
 ax = 100
 bx = 300
-call foo(ax, bx)
+foo(ax, bx)
 
 
 }
@@ -112,7 +112,7 @@ a = 200
 b = 100
 d = 50
 
-call haha(a, b, d)
+haha(a, b, d)
 
 
 =============================
@@ -166,7 +166,7 @@ haha = func(int xx, int yy, int rr) {
 
     ax = 150
     bx = 200
-    call foo(ax, bx)
+    foo(ax, bx)
 
 }
 
@@ -174,11 +174,11 @@ a = 200
 b = 100
 d = 50
 
-call haha(a, b, d)
+haha(a, b, d)
 
 a.val = a - 130
 e = 20
-call haha(a, b, e)
+haha(a, b, e)
 
 
 

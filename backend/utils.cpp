@@ -462,8 +462,10 @@ void iTREE::drawsvg(int _pos) {
 	if (!CalcDep(binroot, &Max, 0, &vis, _pos)) {
 		return;
 	}
+	Max = std::max(Max, 1);
 	TreeBottomLength = DrawWidth / ((1<<Max));
 	TreeYLength = (DrawHeight - treey) / Max - 10;
+	TreeYLength = std::min(TreeYLength, 50);
 	DrawTree(binroot, TreeBottomLength*((1<<Max)-1)/2+treex, treey, Max-1, 
 		     _pos);
 }
