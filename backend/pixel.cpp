@@ -121,7 +121,7 @@
 #define ELSE 271
 #define WHILE 272
 #define draw 273
-#define func 274
+//#define func 274
 #define leftsma 275
 #define rightsma 276
 #define leftbig 277

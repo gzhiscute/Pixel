@@ -111,9 +111,9 @@ function () {
 				code: editor.getValue()
 			},
 			cache: false,
-			success: function (data) {showSvg(data, true);},
+			success: function (data) {showSvg(data);},
 			error: function (a, b) {
-				showSvg("Network connection timed out.", false);
+				showSvg("Network connection timed out.");
 			},
 			complete: function () {aid = null;}
 		});
@@ -130,6 +130,7 @@ function showSvg(s, refresh) {
 	if (start == 0) {
 		$('#log_content').css("background-color", "rgb(200, 234, 200)");
 		$('#log_content').html("<div><span>success.</span></div>");
+		$('#image>svg').html(s);
 	} else {
 		$('#log_content').css("background-color", "rgb(234, 200, 200)");
 		msg = (start == -1 ? s : s.substr(0, start))
@@ -140,9 +141,8 @@ function showSvg(s, refresh) {
 				(msg ? msg : "Compile error.") +
 				"</span></div>";
 		$('#log_content').html(msg);
-	}
-	if (refresh) {
-		svgcode = start == -1 ? '' : s.substr(start);
-		$('#image>svg').html(svgcode);
+		if (start != -1) {
+			$('#image>svg').html(s.substr(start));
+		}
 	}
 }
