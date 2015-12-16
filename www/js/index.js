@@ -125,9 +125,9 @@ function () {
 	});
 }
 );
-function showSvg(s, refresh) {
+function showSvg(s) {
 	start = s.indexOf('<');
-	if (start == 0) {
+	if (start == 0 || s.trim() == '') {
 		$('#log_content').css("background-color", "rgb(200, 234, 200)");
 		$('#log_content').html("<div><span>success.</span></div>");
 		$('#image>svg').html(s);
