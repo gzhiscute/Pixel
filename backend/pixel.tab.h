@@ -120,7 +120,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 49 "pixel.y"
+#line 55 "pixel.y"
 {
 	int num;
 	char *str;
@@ -133,9 +133,10 @@ typedef union YYSTYPE
 	std::vector<std::pair<std::string, std::string> > *varpairVect;
 	std::pair<std::string, std::string> *varPair;
 	std::vector<std::string> *parampairVect;
+	std::string *astring;
 }
 /* Line 1529 of yacc.c.  */
-#line 139 "pixel.tab.h"
+#line 140 "pixel.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
