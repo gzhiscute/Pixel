@@ -337,8 +337,7 @@ iRECT::iRECT(const std::string& _type, int _x, int _y, int _w, int _h,
 void iRECT::drawsvg(int _pos) {
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x-w/2, y-h/2, w, h, BaseType::r, 
-			BaseType::g, BaseType::b);
+	sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x-w/2, y-h/2, w, h, BaseType::r, BaseType::g, BaseType::b);
 	ans += tmp;
 	free(tmp);
 }
@@ -462,8 +461,10 @@ void iTREE::drawsvg(int _pos) {
 	if (!CalcDep(binroot, &Max, 0, &vis, _pos)) {
 		return;
 	}
+	Max = std::max(Max, 1);
 	TreeBottomLength = DrawWidth / ((1<<Max));
 	TreeYLength = (DrawHeight - treey) / Max - 10;
+	TreeYLength = std::min(TreeYLength, 50);
 	DrawTree(binroot, TreeBottomLength*((1<<Max)-1)/2+treex, treey, Max-1, 
 		     _pos);
 }
@@ -821,9 +822,13 @@ void while_node::evaluate() {
 	for (std::map<std::string, BaseType *>::iterator varIter = vars.begin();
 	     varIter != vars.end(); ++varIter)
 		before.insert(*varIter);
-	
-	while (left->evaluate()) 
+
+	int C = 0;
+	while (left->evaluate()) {
+		++ C;
+		if (C > 5000) break;
 		right->evaluate();
+	}
 	
 	std::map<std::string, BaseType *> after;
 	after.clear();

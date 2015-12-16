@@ -1,0 +1,79 @@
+Usage:
+
+Define a variable and modify it:
+	INT:
+		define int: a = 1
+		modify it: a = 2
+	BOOL:
+		define bool: a = TRUE
+		modify it: a = FALSE
+	POINT: 
+		define point: a = point(a.x, a.y, a.color)
+			e.g: a = point(1,1,black)
+		modify a.x (a.x is an int): a.x = 2
+		modify a.y: a.y = 2
+		modify a.color: a.color = red
+	LINE:
+		define line: a = line(a.x, a.y, a.x1, a.y1, a.color)
+			e.g: a = line(1,1,10,10,black)
+		modify a.x: a.x = 2
+		same as above: a.y = 2, a.x1 = 20, a.y1 = 20, a.color = red
+	CIRCLE:
+		define circle: a = circle(a.x, a.y, a.r, a.color)
+	RECTANGLE:
+		define rectangle: a = rect(a.x, a.y, a.w, a.h, a.color)
+	COLOR:
+		define color: a = color(a.r, a.g, a.b)
+	TREE:
+		define tree: a = tree(a.root, (node0, node0.left, node0.right)(node1, node1.left, node1.right)(node2, node2.left, node2.right) ...)
+			     a = tree(a.root, a.root_x, a.root_y, (node0, node0.left, node0.right)(node1, node1.left, node1.right)(node2, node2.left, node2.right) ...)
+	FUNCTION:
+		define function: a = func(variable_type0 varible_name0, variable_type1 variable_name1, ...) {...}
+		use this function: a(variable_name0, variable_name1, ...)
+
+Varibles can be multiple defined, we'll keep the last one.
+e.g:
+	a = 1
+	a = point(1,1,color_name)
+	now a is a point.
+
+Branch:
+	if (expr) {...} else {...}
+
+Loop:
+	while (expr) {...}
+
+Draw a shape:
+	draw variable_name
+	e.g:
+		a = point(1,1,black)
+		draw a
+
+Expressions:
+	PLUS:
+		expr = expr + expr
+		e.g: b = 1
+		     a = b + 1
+		     c = point(1,1,black)
+		     c.x = b + 1
+	MULTIPLE:
+		expr = expr * expr
+	DIVIDE:
+		expr = expr / expr (result is integer)
+	RELATIONS:
+		expr = expr < expr
+		expr = expr <= expr
+		expr = expr > expr
+		expr = expr >= expr
+		expr = expr == expr
+	MORE EXAMPLES:
+		a = 10
+		b = (a + 1) * (a / 2)
+		c = (a <= b) + (a >= b)
+
+Equations:
+	b = point(1,1,black)
+	a = b
+	now a is a point variable, whose value is (1,1,black)
+	
+

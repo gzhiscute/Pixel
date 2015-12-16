@@ -16,11 +16,13 @@
 	#include <string>
 	#include <map>
 	#include <vector>
+	#include <ctime>
 	#include "utils.h"  /*Header file for AST*/
 	#include "lex.yy.c" /* yylex file*/
 	
 	/* use YYPARSE_PARAM to receive parameter in yyparse*/
 	#define YYPARSE_PARAM parm
+	#define RANDNUM 26
 
 	/* the root of the abstract syntax tree */	
 	lines_node *root;
@@ -30,12 +32,16 @@
 	static	iTREE *tmp_tree;				  /*store the temporary tree*/
 	static	std::map<int, std::pair<int, int> > *tmp_map;
 	static	std::pair<int, std::pair<int, int> > *tmp_pair;
+	static 	std::string *tmp_varname;
 
 	extern	std::map<std::string, BaseType *> vars;	 /* save all the variables */
 	extern int yylineno;
 	extern std::string errors;
 
-	static	char* GetName(char *nname);		  /* get the variable name */
+	static char* GetName(char *nname);			/* get the variable name */
+	static std::string RandName();				/* generate random name*/
+
+	extern void DeletMulDef(std::string node_name);	/* delete multi definition */
 
 	void yyerror (/*void *a, */const char *msg);
 %}
@@ -58,6 +64,7 @@
 	std::vector<std::pair<std::string, std::string> > *varpairVect;
 	std::pair<std::string, std::string> *varPair;
 	std::vector<std::string> *parampairVect;
+	std::string *astring;
 };
 
 /* 
@@ -87,6 +94,7 @@
 %type <varpairVect> varlist 	/* func define variable list */
 %type <varPair> singlevar 		/* one single variable*/
 %type <parampairVect> paramlist /* function call parameters */
+%type <astring> anomyparam	anomycolor	/* the function parameters */
 
 /* start point is the "input" */
 %start input
@@ -136,24 +144,24 @@ line : newline {
 			tmp_var = new iINT("int", $3);
 			$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
-	| allname EQU POINT leftsma number comma number comma allname rightsma { 
+	| allname EQU POINT leftsma number comma number comma anomycolor rightsma { 
 			/* point type define. eg. a = point(x, y, color_name) */
-			tmp_var = new iPOINT("point", $5, $7, GetName($9));
+			tmp_var = new iPOINT("point", $5, $7, (char *)($9)->c_str());
 			$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
-	| allname EQU LINE leftsma number comma number comma number comma number comma allname rightsma { 
+	| allname EQU LINE leftsma number comma number comma number comma number comma anomycolor rightsma { 
 			/* line type define. eg. a = line(x, y, x1, y1, color_name) */
-			tmp_var = new iLINE("line", $5, $7, $9, $11, GetName($13));
+			tmp_var = new iLINE("line", $5, $7, $9, $11, (char *)($13)->c_str());
 			$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
-	| allname EQU circle leftsma number comma number comma number comma allname rightsma { 
+	| allname EQU circle leftsma number comma number comma number comma anomycolor rightsma { 
 			/* circle type define. eg. a = circle(x, y, r, color_name) */
-			tmp_var = new iCIRCLE("circle", $5, $7, $9, GetName($11));
+			tmp_var = new iCIRCLE("circle", $5, $7, $9, (char *)($11)->c_str());
 			$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
-	| allname EQU rect leftsma number comma number comma number comma number comma allname rightsma {
+	| allname EQU rect leftsma number comma number comma number comma number comma anomycolor rightsma {
 	 		/* rectangle type define. eg. a = rect(x, y, w, h, color_name) */
-	 		tmp_var = new iRECT("rect", $5, $7, $9, $11, GetName($13));
+	 		tmp_var = new iRECT("rect", $5, $7, $9, $11, (char *)($13)->c_str());
 	 		$$ = new def_node(yylineno, GetName($1), tmp_var);
 		}
 	| allname EQU color leftsma number comma number comma number rightsma { 
@@ -226,14 +234,112 @@ line : newline {
 	 	}
 	;
 
-/* paramlist - a function call's parameters */
-paramlist : allname comma paramlist {
-			$$ = $3;
-			$$->push_back(GetName($1));
+/* anomyparam - could be a name or construct function */
+anomycolor : allname {
+			$$ = new std::string(GetName($1));
 		}
-	| allname rightsma {
+	| color leftsma number comma number comma number rightsma { 
+			/* color type define. eg. yellow = color(r, g, b) */
+			tmp_var = new BaseType;
+			tmp_var->type = "color";
+			tmp_var->SetColor($3, $5, $7);
+			tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_var));
+			$$ = tmp_varname;
+		}
+	;
+
+anomyparam : anomycolor {
+			$$ = $1;
+		}
+	| TRUE { 
+			/* Bool type define, and value is TRUE. eg. a = true */
+			tmp_var = new iBOOL("bool", 1);
+			tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_var));
+			$$ = tmp_varname;
+		}
+	| FALSE {
+			/* Bool type define, and value is FALSE. eg. a = false */
+			tmp_var = new iBOOL("bool", 0);
+			tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_var));
+			$$ = tmp_varname;
+		}
+	| number {
+			/* int type define. eg. a = number */
+			tmp_var = new iINT("int", $1);
+			tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_var));
+			$$ = tmp_varname;
+		}
+	| POINT leftsma number comma number comma anomycolor rightsma { 
+			/* point type define. eg. a = point(x, y, color_name) */
+			tmp_var = new iPOINT("point", $3, $5, (char *)($7)->c_str());
+			tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_var));
+			$$ = tmp_varname;
+		}
+	| LINE leftsma number comma number comma number comma number comma anomycolor rightsma { 
+			/* line type define. eg. a = line(x, y, x1, y1, color_name) */
+			tmp_var = new iLINE("line", $3, $5, $7, $9, (char *)($11)->c_str());
+			tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_var));
+			$$ = tmp_varname;
+		}
+	| circle leftsma number comma number comma number comma anomycolor rightsma { 
+			/* circle type define. eg. a = circle(x, y, r, color_name) */
+			tmp_var = new iCIRCLE("circle", $3, $5, $7, (char *)($9)->c_str());
+			tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_var));
+			$$ = tmp_varname;
+		}
+	| rect leftsma number comma number comma number comma number comma anomycolor rightsma {
+	 		/* rectangle type define. eg. a = rect(x, y, w, h, color_name) */
+	 		tmp_var = new iRECT("rect", $3, $5, $7, $9, (char *)($11)->c_str());
+	 		tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_var));
+			$$ = tmp_varname;
+		}
+	| tree leftsma number comma bintree /*rightsma in bintree*/ {
+			/* tree type define. eg. a = tree(rootnum, (a, r, l)(r, r1, l1)...) */
+			tmp_tree = new iTREE("tree", $3, TreeR, TreeR);
+			tmp_tree->nodes = *tmp_map;
+			tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_tree));
+			$$ = tmp_varname;
+		}
+	| tree leftsma number comma number comma number comma bintree {
+			/* tree type define version 2. define the position
+			* eg. a = tree(rootnum, x, y, (a, r, l)(r, r1, l1)...) 
+			*/
+			tmp_tree = new iTREE("tree", $3, $5, $7);
+			tmp_tree->nodes = *tmp_map;
+			tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_tree));
+			$$ = tmp_varname;
+		}
+	;
+
+
+/* paramlist - a function call's parameters */
+paramlist : anomyparam comma paramlist {
+			$$ = $3;
+			$$->push_back(*($1));
+		}
+	| anomyparam rightsma {
 			$$ = new std::vector<std::string>;
-			$$->push_back(GetName($1));
+			$$->push_back(*($1));
 			//printf("a new paramlist!\n");
 		}
 	| rightsma {
@@ -397,6 +503,25 @@ char *GetName(char *nname) {
 	return nname;
 }
 
+std::string RandName() {
+	int len = RANDNUM;
+	char randname[RANDNUM];
+	int i;
+	for (i = 0; i < len; ++i)
+		randname[i] = 'A'+rand()%26;
+	randname[i] = '\0';
+	std::string randans(randname);
+	randans += "__";
+
+	for (i = 0; i < len; ++i)
+		randname[i] = 'a'+rand()%26;
+	randname[i] = '\0';
+	randans += std::string(randname);
+	printf("the random name is : %s\n", randans.c_str());
+	return randans;
+}
+
+/* yyerror - output error information */
 void yyerror(/*void *a, */const char *msg)
 {
 	char *tmp;
@@ -409,6 +534,7 @@ void yyerror(/*void *a, */const char *msg)
 
 int main()
 { 
+	//srand(time(NULL));
 	//yy_switch_to_buffer(yy_scan_string((char *)YYPARSE_PARAM));
 	// char buffer[100];
 	// while(1) {
