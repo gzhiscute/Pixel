@@ -272,5 +272,32 @@ draw c
 
 ========================================
 
+# call func 2#
+c = circle(100, 100, 40, color(0,0,255))
+red = color(255, 0, 0)
+blue = color(0, 200, 200)
+draw c
+
+haha = func(int xx, int yy, int rr) {
+    c.x = xx
+    c.y = yy
+    c.r = rr
+    
+    if (xx == 30){
+        c.color = red
+    }
+    else{
+        c.color = blue
+    }
+    draw c
+}
+
+haha(200, 200, 40)
+pic = func(circle da) {
+    draw da
+}
+c.x = 120
+pic(c)
+pic(circle(200, 200, 10, color(0,255,0)))
 
 

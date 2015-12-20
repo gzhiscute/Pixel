@@ -209,9 +209,9 @@ line : newline {
 			/* variable copy assignment. eg. a = b */
 			$$ = new equ_sts_node(yylineno, GetName($1), GetName($3));
 		}
-	| allname DOT color EQU allname {
+	| allname DOT color EQU anomycolor {
 			/* change the color assignment. eg. a.color = blue */
-			$$ = new equ_cts_node(yylineno, GetName($1), GetName($5));
+			$$ = new equ_cts_node(yylineno, GetName($1), (char *)($5)->c_str());
 		}
 	| allname DOT allname EQU expr {
 			/* change the fields of variable. eg. a.x = expr */
