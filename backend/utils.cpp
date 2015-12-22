@@ -20,6 +20,7 @@
 #include <time.h>
 
 // ans: ans string which is transmitted to server.
+// bgans: the svg code for background color
 // errors: error string which is transmitted to server.
 // vars: varibles.
 // funcs: functions.
@@ -28,6 +29,7 @@
 // DrawHeight: the height of display window.
 // TreeYLength: the height between two layers of tree.
 std::string ans;
+std::string bgans;
 std::string errors;
 std::map<std::string, BaseType *> vars;
 std::map<std::string, def_func *> funcs;
@@ -520,7 +522,7 @@ void draw_node::evaluate() {
 		if (_color == vars.end()) {
 			char *tmp;
 			tmp = (char *)calloc(256, sizeof(char));
-			sprintf(tmp, "[ERROR] lint %d: can't draw %s, color variable doesn't exist.\n", pos, node_name.c_str());
+			sprintf(tmp, "[ERROR] line %d: can't draw %s, color variable doesn't exist.\n", pos, node_name.c_str());
 			errors += tmp;
 			free(tmp);
 			return;
@@ -529,6 +531,30 @@ void draw_node::evaluate() {
 				      		  _color->second->b);
 	}
 	var->second->drawsvg(pos);
+}
+
+back_node::back_node(int _pos, std::string _name) {
+	pos = _pos;
+	node_name = _name;
+}
+
+void back_node::evaluate() {
+	std::map<std::string, BaseType *>::iterator _color;
+	_color = vars.find(this->node_name);
+	if (_color == vars.end()) {
+		char *tmp;
+		tmp = (char *)calloc(256, sizeof(char));
+		sprintf(tmp, "[ERROR] line %d: can't change background to %s, color variable doesn't exist.\n", pos, node_name.c_str());
+		errors += tmp;
+		free(tmp);
+		return;
+	}
+	char *tmp;
+	tmp = (char *)calloc(256, sizeof(char));
+	sprintf(tmp, "<rect x=\"0\" y=\"0\" width=\"100%%\" height=\"100%%\" style=\"fill:rgb(%d,%d,%d)\"/>",
+		 _color->second->r, _color->second->g, _color->second->b);
+	bgans += tmp;
+	return;
 }
 
 equ_sts_node::equ_sts_node(int _pos, std::string _left, std::string _right) {
@@ -596,7 +622,7 @@ void equ_stn_node::evaluate() {
 	if (var == vars.end()) {
 		char *tmp;
 		tmp = (char *)calloc(256, sizeof(char));
-		sprintf(tmp, "[ERROR] lint %d: %s doesn't exist.\n", pos, 
+		sprintf(tmp, "[ERROR] line %d: %s doesn't exist.\n", pos, 
 				left.c_str());
 		errors += tmp;
 		free(tmp);
@@ -634,7 +660,8 @@ void lines_node::evaluate() {
 	std::list<line_node *>::iterator lineIter;
 	for (lineIter = cmdlines->begin(); lineIter != cmdlines->end(); 
 		 lineIter++) {
-		(*lineIter)->evaluate();
+		if (*lineIter)
+			(*lineIter)->evaluate();
 	}
 }
 
@@ -685,7 +712,7 @@ int int_node::evaluate() {
 	if (var == vars.end()) {
 		char *tmp;
 		tmp = (char *)calloc(256, sizeof(char));
-		sprintf(tmp, "[ERROR] lint %d: %s doesn't exist.\n", pos, 
+		sprintf(tmp, "[ERROR] line %d: %s doesn't exist.\n", pos, 
 				var_name.c_str());
 		errors += tmp;
 		free(tmp);

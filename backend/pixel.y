@@ -16,6 +16,7 @@
 	#include <string>
 	#include <map>
 	#include <vector>
+	#include <memory.h>
 	#include <ctime>
 	#include "utils.h"  /*Header file for AST*/
 	#include "lex.yy.c" /* yylex file*/
@@ -33,10 +34,12 @@
 	static	std::map<int, std::pair<int, int> > *tmp_map;
 	static	std::pair<int, std::pair<int, int> > *tmp_pair;
 	static 	std::string *tmp_varname;
+	static 	char tmpbuf[1000];
 
 	extern	std::map<std::string, BaseType *> vars;	 /* save all the variables */
 	extern int yylineno;
 	extern std::string errors;
+	extern std::string ans;
 
 	static char* GetName(char *nname);			/* get the variable name */
 	static std::string RandName();				/* generate random name*/
@@ -76,7 +79,7 @@
 %token <bstp> INT BOOL POINT LINE circle rect tree color /* these are BaseTypes */
 %token TRUE FALSE		/* bool values */
 %token IF ELSE WHILE 	/* for branch*/
-%token draw func 	/* for the functions */
+%token draw func background	/* for the functions */
 %token leftsma rightsma leftbig rightbig comma newline /* useful things... */
 %token OR AND EQU DOT	/* some operations */
 
@@ -201,9 +204,9 @@ line : newline {
 			//printf("define a while statement, the value of expr\n");
 			$$ = new while_node(yylineno, $3, $6);
 		}
-	| draw allname { 
+	| draw anomyparam { 
 			/* draw an object variable */
-			$$ = new draw_node(yylineno, GetName($2));
+			$$ = new draw_node(yylineno, (char *)($2)->c_str());
 		}
 	| allname EQU allname {
 			/* variable copy assignment. eg. a = b */
@@ -232,6 +235,13 @@ line : newline {
 			//printf("call a func\n");
 			$$ = new call_node(yylineno, GetName($1), *($3));
 	 	}
+	| background anomycolor {
+			/* change the background color
+			* eg. background color(r,g,b)
+			* or background red
+			*/
+			$$ = new back_node(yylineno, (char *)($2)->c_str());
+		}
 	;
 
 /* anomyparam - could be a name or construct function */

@@ -59,6 +59,7 @@ color	{return color;}
 draw	{return draw;}
 func	{return func;}
 tree	{return tree;}
+background {return background;}
 "."		{return DOT;}
 {number}	{yylval.num = atoi(yytext); return number;}
 {allname}		{yylval.str = (char *)yytext; return allname;}

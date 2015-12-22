@@ -187,6 +187,15 @@ class draw_node : public line_node {
 		void evaluate();
 };
 
+// Class for change background
+class back_node : public line_node {
+	protected:
+		std::string node_name;
+	public:
+		back_node(int _pos, std::string node_name);
+		void evaluate();
+};
+
 // Class for "allname EQU allname" statement.
 class equ_sts_node : public line_node {
 	protected:
