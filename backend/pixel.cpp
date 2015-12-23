@@ -117,35 +117,6 @@
 #define rect 265
 #define tree 266
 #define color 267
-<<<<<<< HEAD
-#define TRUE 268
-#define FALSE 269
-#define IF 270
-#define ELSE 271
-#define WHILE 272
-#define draw 273
-//#define func 274
-#define background 275
-#define leftsma 276
-#define rightsma 277
-#define leftbig 278
-#define rightbig 279
-#define comma 280
-#define newline 281
-#define OR 282
-#define AND 283
-#define EQU 284
-#define DOT 285
-#define EE 286
-#define LE 287
-#define LT 288
-#define GE 289
-#define GT 290
-#define MINUS 291
-#define PLUS 292
-#define DIVIDE 293
-#define TIMES 294
-=======
 #define polygon 268
 #define TRUE 269
 #define FALSE 270
@@ -153,7 +124,7 @@
 #define ELSE 272
 #define WHILE 273
 #define draw 274
-#define func 275
+//#define func 275
 #define background 276
 #define leftsma 277
 #define rightsma 278
@@ -174,7 +145,6 @@
 #define PLUS 293
 #define DIVIDE 294
 #define TIMES 295
->>>>>>> origin/master
 
 
 
