@@ -166,9 +166,11 @@ class iTREE : public BaseType {
 // points: the points of a polygon, in a verse order
 class iPOLYGON : public BaseType {
 	public:
-		int px, py;
+		int x, y;
 		std::vector<std::pair<int, int> > points;
 		iPOLYGON(const std::string& _type, int _px, int _py, char *_color);
+		void ChangeField(std::string var_name, int right, int _pos);
+		void ChangeColor(std::string colorstr);
 		void drawsvg(int _pos);
 };
 

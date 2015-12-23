@@ -383,8 +383,26 @@ int iRECT::GetField(std::string var_name, int _pos) {
 
 iPOLYGON::iPOLYGON(const std::string& _type, int _px, int _py, char *_color) {
 	BaseType::SetBaseVars(_type, _color);
-	px = _px;
-	py = _py;
+	this->x = _px;
+	this->y = _py;
+}
+
+void iPOLYGON::ChangeColor(std::string colorstr) {
+	this->cname = colorstr;
+}
+
+void iPOLYGON::ChangeField(std::string var_name, int right, int _pos) {
+	switch (StringToInt(var_name)) {
+		case 0 : x = right; break;
+		case 1 : y = right; break;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", _pos, 
+					var_name.c_str());
+			errors += tmp;
+			free(tmp);
+	}
 }
 
 void iPOLYGON::drawsvg(int _pos) {
@@ -397,7 +415,7 @@ void iPOLYGON::drawsvg(int _pos) {
 	ans += tmp;
 	std::vector<std::pair<int, int> >::iterator pt;
 	for (pt = points.begin(); pt != points.end(); ++pt) {
-		sprintf(tmp, "%d,%d ", pt->first + px, pt->second + py);
+		sprintf(tmp, "%d,%d ", pt->first + this->x, pt->second + this->y);
 		ans += tmp;
 	}
 	sprintf(tmp, "\" style=\"fill:rgb(%d,%d,%d);fill-rule:nonzero;\"/>", BaseType::r, BaseType::g, BaseType::b);

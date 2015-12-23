@@ -68,7 +68,7 @@
 	std::pair<int, std::pair<int, int> > *childpair;
 	std::map<int, std::pair<int, int> > *binvect;
 	std::pair<int, int>	*polysingle;
-	std::vector<std::pair<int, int> > *polyvect
+	std::vector<std::pair<int, int> > *polyvect;
 	std::vector<std::pair<std::string, std::string> > *varpairVect;
 	std::pair<std::string, std::string> *varPair;
 	std::vector<std::string> *parampairVect;
@@ -177,6 +177,7 @@ line : newline {
 	| allname EQU polygon leftsma anomycolor comma polypoints {
 			tmp_poly = new iPOLYGON("polygon", 0, 0, (char *)($5)->c_str());
 			tmp_poly->points = *tmp_polypoints;
+			printf("a new polygon!\n");
 			$$ = new def_node(yylineno, GetName($1), tmp_poly);
 		}
 	| allname EQU polygon leftsma number comma number comma anomycolor comma polypoints { 
@@ -487,8 +488,10 @@ polypoints : singlepoint polypoints {
 				$2->push_back(*$1);
 				$$ = $2;
 			}
-		| rightsma /*empty*/ {
-				$$ = new std::vector<std::pair<int, int> >;
+		| singlepoint rightsma /*empty*/ {
+				tmp_polypoints = new std::vector<std::pair<int, int> >;
+				$$ = tmp_polypoints;
+				$$->push_back(*$1);
 			}
 		;
 
