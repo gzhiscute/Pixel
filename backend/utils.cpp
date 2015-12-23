@@ -381,6 +381,50 @@ int iRECT::GetField(std::string var_name, int _pos) {
 	}
 }
 
+iPOLYGON::iPOLYGON(const std::string& _type, int _px, int _py, char *_color) {
+	BaseType::SetBaseVars(_type, _color);
+	this->x = _px;
+	this->y = _py;
+}
+
+void iPOLYGON::ChangeColor(std::string colorstr) {
+	this->cname = colorstr;
+}
+
+void iPOLYGON::ChangeField(std::string var_name, int right, int _pos) {
+	switch (StringToInt(var_name)) {
+		case 0 : x = right; break;
+		case 1 : y = right; break;
+		default : 
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", _pos, 
+					var_name.c_str());
+			errors += tmp;
+			free(tmp);
+	}
+}
+
+void iPOLYGON::drawsvg(int _pos) {
+	char *tmp;
+	tmp = (char *)calloc(256, sizeof(char));
+	// sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x-w/2, y-h/2, w, h, BaseType::r, BaseType::g, BaseType::b);
+	// ans += tmp;
+	// free(tmp);
+	sprintf(tmp, "<polygon points=\"");
+	ans += tmp;
+	std::vector<std::pair<int, int> >::iterator pt;
+	for (pt = points.begin(); pt != points.end(); ++pt) {
+		sprintf(tmp, "%d,%d ", pt->first + this->x, pt->second + this->y);
+		ans += tmp;
+	}
+	sprintf(tmp, "\" style=\"fill:rgb(%d,%d,%d);fill-rule:nonzero;\"/>", BaseType::r, BaseType::g, BaseType::b);
+	ans += tmp;
+	free(tmp);
+	return;
+}
+
+
 iTREE::iTREE(const std::string& _type, int _rt, int _tx, int _ty) {
 	BaseType::type = _type;
 	binroot = _rt;

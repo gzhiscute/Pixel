@@ -18,6 +18,7 @@
 	#include <vector>
 	#include <memory.h>
 	#include <ctime>
+	#include <list>
 	#include "utils.h"  /*Header file for AST*/
 	#include "lex.yy.c" /* yylex file*/
 	
@@ -31,7 +32,9 @@
 	static	std::list<line_node *> *tmp_line; /*store the temporary line*/	
 	static	BaseType *tmp_var;				  /*store the temporary variable*/
 	static	iTREE *tmp_tree;				  /*store the temporary tree*/
+	static	iPOLYGON *tmp_poly;				  /*store the temporary polygon*/
 	static	std::map<int, std::pair<int, int> > *tmp_map;
+	static	std::vector<std::pair<int, int> > *tmp_polypoints;
 	static	std::pair<int, std::pair<int, int> > *tmp_pair;
 	static 	std::string *tmp_varname;
 	static 	char tmpbuf[1000];
@@ -64,6 +67,8 @@
 	exp_node *expnode;
 	std::pair<int, std::pair<int, int> > *childpair;
 	std::map<int, std::pair<int, int> > *binvect;
+	std::pair<int, int>	*polysingle;
+	std::vector<std::pair<int, int> > *polyvect;
 	std::vector<std::pair<std::string, std::string> > *varpairVect;
 	std::pair<std::string, std::string> *varPair;
 	std::vector<std::string> *parampairVect;
@@ -76,7 +81,7 @@
 /* the terminate token */
 %token <str> allname	/* all the variable names */
 %token <num> number 	/* the numbers */
-%token <bstp> INT BOOL POINT LINE circle rect tree color /* these are BaseTypes */
+%token <bstp> INT BOOL POINT LINE circle rect tree color polygon /* these are BaseTypes */
 %token TRUE FALSE		/* bool values */
 %token IF ELSE WHILE 	/* for branch*/
 %token draw func background	/* for the functions */
@@ -92,7 +97,9 @@
 %type <lnode> line 				/* one single line */
 %type <lsnode> lines input		/* collection of lines */
 %type <childpair> treenode		/* one binary tree node */
+%type <polysingle> singlepoint	/* single point in polygon */
 %type <binvect> bintree 		/* represent the binary tree */
+%type <polyvect> polypoints		/* for polygon's points */
 %type <expnode>  supernum expr 	/* expressions */
 %type <varpairVect> varlist 	/* func define variable list */
 %type <varPair> singlevar 		/* one single variable*/
@@ -166,6 +173,17 @@ line : newline {
 	 		/* rectangle type define. eg. a = rect(x, y, w, h, color_name) */
 	 		tmp_var = new iRECT("rect", $5, $7, $9, $11, (char *)($13)->c_str());
 	 		$$ = new def_node(yylineno, GetName($1), tmp_var);
+		}
+	| allname EQU polygon leftsma anomycolor comma polypoints {
+			tmp_poly = new iPOLYGON("polygon", 0, 0, (char *)($5)->c_str());
+			tmp_poly->points = *tmp_polypoints;
+			printf("a new polygon!\n");
+			$$ = new def_node(yylineno, GetName($1), tmp_poly);
+		}
+	| allname EQU polygon leftsma number comma number comma anomycolor comma polypoints { 
+			tmp_poly = new iPOLYGON("polygon", $5, $7, (char *)($9)->c_str());
+			tmp_poly->points = *tmp_polypoints;
+			$$ = new def_node(yylineno, GetName($1), tmp_poly);
 		}
 	| allname EQU color leftsma number comma number comma number rightsma { 
 			/* color type define. eg. yellow = color(r, g, b) */
@@ -339,6 +357,22 @@ anomyparam : anomycolor {
 			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_tree));
 			$$ = tmp_varname;
 		}
+	| polygon leftsma anomycolor comma polypoints {
+			tmp_poly = new iPOLYGON("polygon", 0, 0, (char *)($3)->c_str());
+			tmp_poly->points = *tmp_polypoints;
+			tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_poly));
+			$$ = tmp_varname;
+		}
+	| polygon leftsma number comma number comma anomycolor comma polypoints { 
+			tmp_poly = new iPOLYGON("polygon", $3, $5, (char *)($7)->c_str());
+			tmp_poly->points = *tmp_polypoints;
+			tmp_varname = new std::string(RandName());
+			DeletMulDef(*tmp_varname);
+			vars.insert(std::pair<std::string, BaseType *>(*tmp_varname, tmp_poly));
+			$$ = tmp_varname;			
+		}
 	;
 
 
@@ -416,6 +450,11 @@ singlevar : INT allname {
 			$$->first = "tree";
 			$$->second = GetName($2);
 		}
+	| polygon allname {
+			$$ = new std::pair<std::string, std::string>;
+			$$->first = "polygon";
+			$$->second = GetName($2);
+		}
 	;
 
 /* bintree - input a sequence and transform to a tree 
@@ -443,6 +482,28 @@ treenode : leftsma number comma number comma number rightsma {
 				//printf("node is: (%d, %d, %d)\n", $2, $4, $6);
 			}
 		;
+
+/* polypoints - input a sequence of points */
+polypoints : singlepoint polypoints {
+				$2->push_back(*$1);
+				$$ = $2;
+			}
+		| singlepoint rightsma /*empty*/ {
+				tmp_polypoints = new std::vector<std::pair<int, int> >;
+				$$ = tmp_polypoints;
+				$$->push_back(*$1);
+			}
+		;
+
+/* singlepoint - one single point in a polygon */
+singlepoint : leftsma number comma number rightsma {
+				$$ = new std::pair<int, int>;
+				$$->first = $2;
+				$$->second = $4;
+			}
+		;
+
+
 
 /* supernum - collection of int type 
 * eg. a.x , 100 , dd(dd must be an int/bool type)

@@ -161,6 +161,19 @@ class iTREE : public BaseType {
 		void DrawTree(int p, int x, int y, int dep, int _pos);
 };
 
+// Type POLYGON
+// px, py: the offset of a polygon
+// points: the points of a polygon, in a verse order
+class iPOLYGON : public BaseType {
+	public:
+		int x, y;
+		std::vector<std::pair<int, int> > points;
+		iPOLYGON(const std::string& _type, int _px, int _py, char *_color);
+		void ChangeField(std::string var_name, int right, int _pos);
+		void ChangeColor(std::string colorstr);
+		void drawsvg(int _pos);
+};
+
 // Class for line in pixel.y.
 class line_node {
 	public:

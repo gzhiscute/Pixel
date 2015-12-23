@@ -11,8 +11,6 @@ Good luck!
 
 ### TODO List:
 * 添加源代码说明文档readme.txt
-* 写示例程序->做demo...?
-* 写Pixel语言使用手册
 * 准备最后展示
 
 * 后端要做的事：
@@ -28,8 +26,8 @@ Good luck!
 * 常量：
   TRUE, FALSE, 数字
 * 类型名：
-  point, line, circle, rect, color, tree
+  point, line, circle, rect, color, tree, polygon
 * 类型内部变量名：
   x, y, x1, y1, r
 * 其它：
-  draw, while, if, else, break, continue, func
+  draw, while, if, else, func, background
