@@ -6,6 +6,7 @@
 #include "utils.h"
 #include <stdlib.h>
 #include <string>
+#include <pthread.h>
 
 extern lines_node *root;
 extern int yyparse(void *);
@@ -38,7 +39,10 @@ SOCKET init_soc(int port) {
 	return soc;
 }
 
+HANDLE mutex = CreateMutex(NULL, FALSE, NULL);
+
 BOOL CtrlHandler(DWORD fdwCtrlType) {
+	CloseHandle(mutex);
 	closesocket(soc);
 	WSACleanup();
 	puts("Closed");
@@ -77,15 +81,20 @@ std::string UrlDecode(const std::string& szToDecode)
 
 #define BUF_SIZE 40960
 
-void server(int clientfd) {
+void *server(void *vargp) {
+	pthread_detach(pthread_self());
+	SOCKET clientfd = *(int *)vargp;
+	delete vargp;
 	char buf[BUF_SIZE + 1];
 	int blen = 0;
 	buf[0] = 0;
 	char *s;
 	do {
 		int nl = recv(clientfd, buf + blen, BUF_SIZE, 0);
-		if (nl < 0)
-			return;
+		if (nl < 0) {
+			closesocket(clientfd);
+			return NULL;
+		}
 		blen += nl;
 		buf[blen] = 0;
 	} while (!(s = strstr(buf, "\r\n\r\n")));
@@ -94,17 +103,23 @@ void server(int clientfd) {
 	blen -= (s - buf);
 	
 	char *l = strstr(buf, "\r\nContent-Length:");
-	if (!l)
-		return;
+	if (!l) {
+		closesocket(clientfd);
+		return NULL;
+	}
 	l += 17;
 	int len;
-	if (sscanf(l, "%d", &len) != 1 || len <= 0)
-		return;
+	if (sscanf(l, "%d", &len) != 1 || len <= 0) {
+		closesocket(clientfd);
+		return NULL;
+	}
 	s[len] = 0;
 	while (blen < len) {
 		int nl = recv(clientfd, s + blen, len - blen, 0);
-		if (nl < 0)
-			return;
+		if (nl < 0) {
+			closesocket(clientfd);
+			return NULL;
+		}
 		blen += nl;
 	}
 	//puts(s);
@@ -141,6 +156,7 @@ void server(int clientfd) {
 		k = UrlDecode(k);
 		DrawHeight = strtol(k.c_str(), 0, 10);
 
+		WaitForSingleObject(mutex, INFINITE);
 		ans = "";
 		errors = "";
 		bgans = "";
@@ -163,7 +179,10 @@ void server(int clientfd) {
 		//printf("%s\n", ans.c_str());
 		send(clientfd, ans.c_str(), len, 0);
 		//free(ans);
+		ReleaseMutex(mutex);
 	}
+	closesocket(clientfd);
+	return NULL;
 }
 
 
@@ -184,12 +203,11 @@ int main() {
 	while ("serve forever") {
 		struct sockaddr clientaddr;
 		int addrlen = sizeof clientaddr;
-		SOCKET clientfd;
-		do clientfd = accept(soc, &clientaddr, &addrlen);
-		while (clientfd < 0);
-		//TODO: thread
-		server(clientfd);
-		closesocket(clientfd);
+		SOCKET *clientfd = new SOCKET;
+		do *clientfd = accept(soc, &clientaddr, &addrlen);
+		while (*clientfd < 0);
+		pthread_t tid;
+		pthread_create(&tid, NULL, server, clientfd);
 	}
 	return 0;
 }

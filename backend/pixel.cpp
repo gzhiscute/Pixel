@@ -122,7 +122,7 @@
 #define ELSE 271
 #define WHILE 272
 #define draw 273
-#define func 274
+//#define func 274
 #define background 275
 #define leftsma 276
 #define rightsma 277

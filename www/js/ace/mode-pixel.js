@@ -63,7 +63,7 @@ var pixelHighlightRules = function() {
     );
     
     var storageType = (
-        "point|line|circle|rect|color|tree|x|y|x1|y1|r|R|G|B"
+        "point|line|circle|rect|color|tree|x|y|x1|y1|r|R|G|B|background|polygon"
     );
 
     var storageModifiers = (
