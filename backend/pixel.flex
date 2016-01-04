@@ -15,7 +15,7 @@
 %}
 
 /* regular definitions */
-delim	[ \t\n]
+delim	[ \t\n\r]
 ws		{delim}+
 letter	[A-Za-z]
 digit	[0-9]
@@ -41,7 +41,7 @@ cmt 	"#"[^#]*"#"
 "{"	{return leftbig;}
 "}"	{return rightbig;}
 ","	{return comma;}
-'\n'	{return newline;}
+'\r\n'	{return newline;}
 "||"	{return OR;}
 "&&"	{return AND;}
 int	{return INT;}
