@@ -300,4 +300,115 @@ c.x = 120
 pic(c)
 pic(circle(200, 200, 10, color(0,255,0)))
 
+=======================================
+#so many stars~#
+star = func (int xx, int yy) {
+    hehe = polygon(100,100,color(240, 0,0),(100,10)(10,78)(40,198)(160,198)(190,78))
+    hehe.x = xx
+    hehe.y = yy
+    draw hehe   
+    haha = polygon(100,100,color(122,233,233),(100,10)(40,198)(190,78)(10,78)(160,198))
+    haha.x = xx
+    haha.y = yy
+    draw haha
+    cyc = circle(200,210,40, color(230,255,0))
+    cyc.x = xx + 100
+    cyc.y = yy + 110
+    draw cyc
+}
+
+
+star(120,10)
+star(300,10)
+star(120,200)
+star(300,200)
+
+==========================================
+#cute baymax!! #
+
+a = circle(0, 0, 20, red)
+red = color(255, 0, 100)
+
+x = 150
+y = 150
+r = 100
+
+while (a.x < 400) {
+    
+    a.y = 0
+    while (a.y < 400) {
+        if ((a.x-x)*(a.x-x)+(a.y-y)*(a.y-y) == r*r) {
+            draw a
+        }
+        else {}
+        a.y = a.y + 1
+    }
+    a.x = a.x + 1
+}
+
+b = circle(100, 150, 20, color(0,0,0))
+draw b
+
+b.x = 200
+draw b
+
+draw line(100,150,200,150,color(0,0,0))
+
+
+
+
+===============================================
+#draw a ppt background#
+
+a = circle(50, 50, 5, red)
+red = color(255, 0, 0)
+a.r = 10
+dd = 30
+while (a.x < 200) {
+    a.y = 50
+    red.B = a.x + 55
+    red.G = a.x + 55
+
+    while (a.y < 200) {
+        if (a.x + a.y < 200){
+            draw a          
+        }else{}
+
+        a.y = a.y + dd
+    }
+    a.x = a.x + dd
+}
+
+b = circle(65, 75, 4, blue)
+blue = color(255,200,250)
+b.r = 5
+while (b.x < 195) {
+    b.y = 66
+    blue.B = b.x + 10
+    while (b.y < 195) {
+        if (b.x + b.y < 200) {
+            draw b          
+        }else {}
+
+        b.y = b.y + dd
+        b.color = blue
+    }
+    b.x = b.x + dd
+}
+
+ll = line(200,50,900,50,blue)
+draw ll
+ll.y = 55
+ll.y1 = 55
+draw ll
+ly = line(50,200, 50, 600, blue)
+draw ly
+
+ll = line(100,50,900,50,blue)
+#draw ll#
+ll.y = 400
+ll.y1 = 400
+draw ll
+ly = line(50,200, 50, 600, blue)
+#draw ly#
 

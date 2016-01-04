@@ -68,15 +68,16 @@
      AND = 284,
      EQU = 285,
      DOT = 286,
-     EE = 287,
-     LE = 288,
-     LT = 289,
-     GE = 290,
-     GT = 291,
-     MINUS = 292,
-     PLUS = 293,
-     DIVIDE = 294,
-     TIMES = 295
+     others = 287,
+     EE = 288,
+     LE = 289,
+     LT = 290,
+     GE = 291,
+     GT = 292,
+     MINUS = 293,
+     PLUS = 294,
+     DIVIDE = 295,
+     TIMES = 296
    };
 #endif
 /* Tokens.  */
@@ -109,15 +110,16 @@
 #define AND 284
 #define EQU 285
 #define DOT 286
-#define EE 287
-#define LE 288
-#define LT 289
-#define GE 290
-#define GT 291
-#define MINUS 292
-#define PLUS 293
-#define DIVIDE 294
-#define TIMES 295
+#define others 287
+#define EE 288
+#define LE 289
+#define LT 290
+#define GE 291
+#define GT 292
+#define MINUS 293
+#define PLUS 294
+#define DIVIDE 295
+#define TIMES 296
 
 
 
@@ -142,7 +144,7 @@ typedef union YYSTYPE
 	std::string *astring;
 }
 /* Line 1529 of yacc.c.  */
-#line 146 "pixel.tab.h"
+#line 148 "pixel.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

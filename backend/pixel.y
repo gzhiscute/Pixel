@@ -87,6 +87,7 @@
 %token draw func background	/* for the functions */
 %token leftsma rightsma leftbig rightbig comma newline /* useful things... */
 %token OR AND EQU DOT	/* some operations */
+%token others			/* other strings illegal strings */
 
 /* right and left control the priority */
 %right GT GE LT LE EE /* > >= < <= == the relation operations */
@@ -112,11 +113,21 @@
 %%
 
 /* input - the start point, and collect all the program codes */
-input : lines { 
+input : others {
+			printf("something strange!\n");
+			char *tmp;
+			tmp = (char*)calloc(256, sizeof(char));
+			sprintf(tmp, "[ERROR] line %d: illegal characters\n", yylineno);
+			errors += tmp;
+			free(tmp);
+			$$ = NULL;
+		}
+	|	lines { 
 			$$ = $1; 
 			root = $$;
 			printf("input\n. root is 0x%x \n", root);
 		}
+
 	;
  
 /* lines - transfer code into trees vector and skip the comment */
@@ -138,6 +149,7 @@ lines : line lines {
 line : newline {
 			/* do nothing */
 			printf("newline\n"); 
+			$$ = NULL;
 		}
 	| allname EQU TRUE { 
 			/* Bool type define, and value is TRUE. eg. a = true */
@@ -597,7 +609,7 @@ void yyerror(/*void *a, */const char *msg)
 {
 	char *tmp;
 	tmp = (char*)calloc(256, sizeof(char));
-	sprintf(tmp, "[ERROR] line %d: %s\n", yylineno-1, msg);
+	sprintf(tmp, "[ERROR] line %d: %s\n", yylineno, msg);
 	errors += tmp;
 	free(tmp);
 	//fprintf(stderr, "Error at line %d, %s\n", yylineno, msg);

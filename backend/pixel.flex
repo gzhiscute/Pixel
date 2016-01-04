@@ -22,6 +22,7 @@ digit	[0-9]
 number  {digit}+
 allname	({letter}|_)({digit}|{letter}|_)* 
 cmt 	"#"[^#]*"#" 
+others	([.\n]*)
 
 %%
 {ws}	{/* no action and no return */}
@@ -64,5 +65,6 @@ background {return background;}
 "."		{return DOT;}
 {number}	{yylval.num = atoi(yytext); return number;}
 {allname}		{yylval.str = (char *)yytext; return allname;}
+.|\n  	{return others;}
 
 %%

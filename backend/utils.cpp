@@ -964,6 +964,7 @@ call_node::call_node(int _pos, std::string _name,
 void call_node::evaluate() {
 	std::map<std::string, def_func *>::iterator p = funcs.find(node_name);
 	if (p == funcs.end()) return;
+	
 	def_func *func = p->second;
 
 	if (func->params.size() != params.size()) return;

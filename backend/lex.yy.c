@@ -376,8 +376,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 41
-#define YY_END_OF_BUFFER 42
+#define YY_NUM_RULES 42
+#define YY_END_OF_BUFFER 43
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -387,7 +387,7 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[110] =
     {   0,
-        0,    0,   42,   41,    1,   41,   41,   41,   13,   14,
+        0,    0,   43,   41,    1,   41,   41,   41,   13,   14,
         5,    3,   17,    4,   38,    6,   39,    7,   12,    8,
        40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
        40,   40,   15,   41,   16,    1,    0,    2,   20,    0,
@@ -521,11 +521,11 @@ static yyconst flex_int16_t yy_chk[168] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static yyconst flex_int32_t yy_rule_can_match_eol[42] =
+static yyconst flex_int32_t yy_rule_can_match_eol[43] =
     {   0,
 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-    0, 0,     };
+    0, 1, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -736,7 +736,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 26 "pixel.flex"
+#line 27 "pixel.flex"
 
 #line 742 "lex.yy.c"
 
@@ -834,212 +834,218 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 27 "pixel.flex"
+#line 28 "pixel.flex"
 {/* no action and no return */}
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 28 "pixel.flex"
+#line 29 "pixel.flex"
 {/* no action and no return */}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 29 "pixel.flex"
+#line 30 "pixel.flex"
 {return PLUS;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 30 "pixel.flex"
+#line 31 "pixel.flex"
 {return MINUS;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 31 "pixel.flex"
+#line 32 "pixel.flex"
 {return TIMES;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 32 "pixel.flex"
+#line 33 "pixel.flex"
 {return DIVIDE;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 33 "pixel.flex"
+#line 34 "pixel.flex"
 {return LT;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 34 "pixel.flex"
+#line 35 "pixel.flex"
 {return GT;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 35 "pixel.flex"
+#line 36 "pixel.flex"
 {return LE;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 36 "pixel.flex"
+#line 37 "pixel.flex"
 {return GE;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 37 "pixel.flex"
+#line 38 "pixel.flex"
 {return EE;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 38 "pixel.flex"
+#line 39 "pixel.flex"
 {return EQU;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 39 "pixel.flex"
+#line 40 "pixel.flex"
 {return leftsma;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 40 "pixel.flex"
+#line 41 "pixel.flex"
 {return rightsma;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 41 "pixel.flex"
+#line 42 "pixel.flex"
 {return leftbig;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 42 "pixel.flex"
+#line 43 "pixel.flex"
 {return rightbig;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 43 "pixel.flex"
+#line 44 "pixel.flex"
 {return comma;}
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 44 "pixel.flex"
+#line 45 "pixel.flex"
 {return newline;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 45 "pixel.flex"
+#line 46 "pixel.flex"
 {return OR;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 46 "pixel.flex"
+#line 47 "pixel.flex"
 {return AND;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 47 "pixel.flex"
+#line 48 "pixel.flex"
 {return INT;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 48 "pixel.flex"
+#line 49 "pixel.flex"
 {return BOOL;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 49 "pixel.flex"
+#line 50 "pixel.flex"
 {return IF;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 50 "pixel.flex"
+#line 51 "pixel.flex"
 {return ELSE;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 51 "pixel.flex"
+#line 52 "pixel.flex"
 {return WHILE;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 52 "pixel.flex"
+#line 53 "pixel.flex"
 {return TRUE;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 53 "pixel.flex"
+#line 54 "pixel.flex"
 {return FALSE;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 54 "pixel.flex"
+#line 55 "pixel.flex"
 {return LINE;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 55 "pixel.flex"
+#line 56 "pixel.flex"
 {return POINT;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 56 "pixel.flex"
+#line 57 "pixel.flex"
 {return circle;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 57 "pixel.flex"
+#line 58 "pixel.flex"
 {return rect;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 58 "pixel.flex"
+#line 59 "pixel.flex"
 {return color;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 59 "pixel.flex"
+#line 60 "pixel.flex"
 {return draw;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 60 "pixel.flex"
+#line 61 "pixel.flex"
 {return func;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 61 "pixel.flex"
+#line 62 "pixel.flex"
 {return tree;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 62 "pixel.flex"
+#line 63 "pixel.flex"
 {return polygon;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 63 "pixel.flex"
+#line 64 "pixel.flex"
 {return background;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 64 "pixel.flex"
+#line 65 "pixel.flex"
 {return DOT;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 65 "pixel.flex"
+#line 66 "pixel.flex"
 {yylval.num = atoi(yytext); return number;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 66 "pixel.flex"
+#line 67 "pixel.flex"
 {yylval.str = (char *)yytext; return allname;}
 	YY_BREAK
 case 41:
+/* rule 41 can match eol */
 YY_RULE_SETUP
 #line 68 "pixel.flex"
+{return others;}
+	YY_BREAK
+case 42:
+YY_RULE_SETUP
+#line 70 "pixel.flex"
 ECHO;
 	YY_BREAK
-#line 1043 "lex.yy.c"
+#line 1049 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2048,7 +2054,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 68 "pixel.flex"
+#line 70 "pixel.flex"
 
 
 
