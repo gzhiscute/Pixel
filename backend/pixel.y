@@ -86,13 +86,16 @@
 %token IF ELSE WHILE 	/* for branch*/
 %token draw func background	/* for the functions */
 %token leftsma rightsma leftbig rightbig comma newline /* useful things... */
-%token OR AND EQU DOT	/* some operations */
-%token others			/* other strings illegal strings */
+%token EQU DOT	/* some operations */
 
 /* right and left control the priority */
-%right GT GE LT LE EE /* > >= < <= == the relation operations */
+%left EE
+%left OR 
+%left AND 		  /* || && */
+%left GT GE LT LE /* > >= < <= == the relation operations */
 %left PLUS MINUS 	  /* + - */
 %left TIMES DIVIDE 	  /* * / */
+
 
 /* the non-terminate token */
 %type <lnode> line 				/* one single line */
@@ -113,21 +116,11 @@
 %%
 
 /* input - the start point, and collect all the program codes */
-input : others {
-			printf("something strange!\n");
-			char *tmp;
-			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "[ERROR] line %d: illegal characters\n", yylineno);
-			errors += tmp;
-			free(tmp);
-			$$ = NULL;
-		}
-	|	lines { 
+input :	lines { 
 			$$ = $1; 
 			root = $$;
 			printf("input\n. root is 0x%x \n", root);
 		}
-
 	;
  
 /* lines - transfer code into trees vector and skip the comment */
@@ -534,7 +527,7 @@ supernum : allname DOT allname {
 /* expr - the expression define 
 * now we support + - * / > >= < <= == operatiions
 */
-expr : expr PLUS expr {
+expr :  expr PLUS expr {
  				$$ = new plus_node(yylineno, $1, $3);
  			}
  		| expr MINUS expr {
@@ -545,6 +538,9 @@ expr : expr PLUS expr {
  			}
  		| expr DIVIDE expr {
  				$$ = new divide_node(yylineno, $1, $3);
+ 			}
+ 		| expr EE expr {
+ 				$$ = new ee_node(yylineno, $1, $3);
  			}
  		| expr GT expr {
  				$$ = new gt_node(yylineno, $1, $3);
@@ -558,9 +554,12 @@ expr : expr PLUS expr {
  		| expr LE expr {
  				$$ = new le_node(yylineno, $1, $3);
  			}
- 		| expr EE expr {
- 				$$ = new ee_node(yylineno, $1, $3);
- 			}
+		| expr AND expr {
+				$$ = new and_node(yylineno, $1, $3);
+			} 			
+ 		| expr OR expr {
+				$$ = new or_node(yylineno, $1, $3);
+			}
  		| leftsma expr rightsma {
  				$$ = $2;
  			}

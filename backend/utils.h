@@ -259,6 +259,18 @@ class int_node : public exp_node {
 		int evaluate();
 };
 
+class and_node : public operator_node {
+	public:
+		and_node(int _pos, exp_node *L, exp_node *R);
+		int evaluate();
+};
+
+class or_node : public operator_node {
+	public:
+		or_node(int _pos, exp_node *L, exp_node *R);
+		int evaluate();
+};
+
 class plus_node : public operator_node {
 	public:
 		plus_node(int _pos, exp_node *L, exp_node *R);

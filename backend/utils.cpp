@@ -85,8 +85,13 @@ int StringToInt(std::string s) {
 void DeletMulDef(std::string node_name)
 {
 	std::map<std::string, BaseType *>::iterator p = vars.find(node_name);
-	if (p != vars.end()) 
-		vars.erase(p);
+	if (p != vars.end()) {
+		if (p->second)
+			delete p->second;
+		printf("deleting %s\n", p->first.c_str());
+		p->second = NULL;
+		vars.erase(p);		
+	}
 }
 
 // Delete multiple definitions in funcs.
@@ -115,7 +120,7 @@ void BaseType::ChangeField(std::string var_name, int right, int _pos) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", _pos, 
+			sprintf(tmp, "[ERROR] line %d: type %s %s is invalid.\n", _pos, type.c_str(),
 					var_name.c_str());
 			errors += tmp;
 			free(tmp);
@@ -141,7 +146,7 @@ void iINT::ChangeField(std::string var_name, int right, int _pos) {
 		default : 
 			char *tmp;
 			tmp = (char*)calloc(256, sizeof(char));
-			sprintf(tmp, "[ERROR] line %d: %s is invalid.\n", _pos,
+			sprintf(tmp, "[ERROR] line %d: type %s %s is invalid.\n", _pos, type.c_str(),
 					var_name.c_str());
 			errors += tmp;
 			free(tmp);
@@ -183,8 +188,15 @@ iPOINT::iPOINT(const std::string& _type, int _x, int _y, char *_color) {
 void iPOINT::drawsvg(int _pos) {
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, BaseType::r, BaseType::g, BaseType::b);
-	ans += tmp;
+	if (x < 0 || y < 0) {
+		sprintf(tmp, "[ERROR] line %d: invalid. Cannot draw negative number\n", _pos);
+		errors += tmp;
+	}
+	else {
+		sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"2\" style=\"fill:rgb(%d,%d,%d)\"/>", x, y, BaseType::r, BaseType::g, BaseType::b);
+		ans += tmp;		
+	}
+
 	free(tmp);
 }
 
@@ -233,9 +245,17 @@ iLINE::iLINE(const std::string& _type, int _x, int _y, int _x1, int _y1,
 void iLINE::drawsvg(int _pos) {
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp,"<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>", x, y, x1, y1, 
-			BaseType::r, BaseType::g, BaseType::b);
-	ans += tmp;
+
+	if (x < 0 || y < 0 || x1 < 0 || y1 < 0) {
+		sprintf(tmp, "[ERROR] line %d: invalid. Cannot draw negative number\n", _pos);
+		errors += tmp;
+	}
+	else {
+		sprintf(tmp,"<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" style=\"stroke:rgb(%d,%d,%d);stroke-width:2\"/>", x, y, x1, y1, 
+				BaseType::r, BaseType::g, BaseType::b);
+		ans += tmp;		
+	}
+
 	free(tmp);
 }
 
@@ -287,8 +307,15 @@ iCIRCLE::iCIRCLE(const std::string& _type, int _x, int _y, int _r,
 void iCIRCLE::drawsvg(int _pos) {
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>",x, y, r, BaseType::r, BaseType::g, BaseType::b);
-	ans += tmp;
+	if (x < 0 || y < 0 || r < 0) {
+		sprintf(tmp, "[ERROR] line %d: invalid. Cannot draw negative number\n", _pos);
+		errors += tmp;
+	}
+	else {
+		sprintf(tmp, "<circle cx=\"%d\" cy=\"%d\" r=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>",x, y, r, BaseType::r, BaseType::g, BaseType::b);
+		ans += tmp;		
+	}
+
 	free(tmp);
 }
 
@@ -339,8 +366,15 @@ iRECT::iRECT(const std::string& _type, int _x, int _y, int _w, int _h,
 void iRECT::drawsvg(int _pos) {
 	char *tmp;
 	tmp = (char *)calloc(256, sizeof(char));
-	sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x-w/2, y-h/2, w, h, BaseType::r, BaseType::g, BaseType::b);
-	ans += tmp;
+	if (x < 0 || y < 0) {
+		sprintf(tmp, "[ERROR] line %d: invalid. Cannot draw negative number\n", _pos);
+		errors += tmp;
+	}
+	else {
+		sprintf(tmp, "<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" style=\"fill:rgb(%d,%d,%d)\"/>", x-w/2, y-h/2, w, h, BaseType::r, BaseType::g, BaseType::b);
+		ans += tmp;		
+	}
+
 	free(tmp);
 }
 
@@ -772,6 +806,27 @@ int int_node::evaluate() {
 		return -1;
 	}
 	return var->second->GetVal();
+}
+and_node::and_node(int _pos, exp_node *L, exp_node *R) 
+	: operator_node(_pos, L,R) {}
+
+int and_node::evaluate() {
+	int leftnum, rightnum;
+	leftnum = left->evaluate();
+	rightnum = right->evaluate();
+	num = leftnum && rightnum;
+	return num;
+}
+
+or_node::or_node(int _pos, exp_node *L, exp_node *R) 
+	: operator_node(_pos, L,R) {}
+
+int or_node::evaluate() {
+	int leftnum, rightnum;
+	leftnum = left->evaluate();
+	rightnum = right->evaluate();
+	num = leftnum || rightnum;
+	return num;
 }
 
 plus_node::plus_node(int _pos, exp_node *L, exp_node *R) 

@@ -64,20 +64,19 @@
      rightbig = 280,
      comma = 281,
      newline = 282,
-     OR = 283,
-     AND = 284,
-     EQU = 285,
-     DOT = 286,
-     others = 287,
-     EE = 288,
-     LE = 289,
-     LT = 290,
-     GE = 291,
-     GT = 292,
-     MINUS = 293,
-     PLUS = 294,
-     DIVIDE = 295,
-     TIMES = 296
+     EQU = 283,
+     DOT = 284,
+     EE = 285,
+     OR = 286,
+     AND = 287,
+     LE = 288,
+     LT = 289,
+     GE = 290,
+     GT = 291,
+     MINUS = 292,
+     PLUS = 293,
+     DIVIDE = 294,
+     TIMES = 295
    };
 #endif
 /* Tokens.  */
@@ -106,20 +105,19 @@
 #define rightbig 280
 #define comma 281
 #define newline 282
-#define OR 283
-#define AND 284
-#define EQU 285
-#define DOT 286
-#define others 287
-#define EE 288
-#define LE 289
-#define LT 290
-#define GE 291
-#define GT 292
-#define MINUS 293
-#define PLUS 294
-#define DIVIDE 295
-#define TIMES 296
+#define EQU 283
+#define DOT 284
+#define EE 285
+#define OR 286
+#define AND 287
+#define LE 288
+#define LT 289
+#define GE 290
+#define GT 291
+#define MINUS 292
+#define PLUS 293
+#define DIVIDE 294
+#define TIMES 295
 
 
 
@@ -144,7 +142,7 @@ typedef union YYSTYPE
 	std::string *astring;
 }
 /* Line 1529 of yacc.c.  */
-#line 148 "pixel.tab.h"
+#line 146 "pixel.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
