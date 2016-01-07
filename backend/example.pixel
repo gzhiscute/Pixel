@@ -1,144 +1,4 @@
-a = circle(50, 50, 5, red)
-red = color(255, 0, 0)
-
-dd = 20
-while (a.x < 250) {
-    a.y = 50
-    while (a.y < 200) {
-        draw a
-        a.y = a.y + dd
-    }
-    a.x = a.x + dd
-}
-
-b = circle(60, 60, 4, blue)
-blue = color(200,200,200)
-
-while (b.x < 245) {
-    b.y = 55
-    while (b.y < 195) {
-        draw b
-        b.y = b.y + dd
-        b.color = blue
-    }
-    b.x = b.x + dd
-}
-
-b.y = 10
-b.x = 10
-while (b.x < 400) {
-    blue.G = b.y
-    blue.B = b.x
-    b.x = b.x + 3
-    b.y = b.x * b.x / 100
-    draw b
-
-}
-
-===================================================
-#this is comment#
-
-#
-this is our comment
-hahahahah
-#
-
-a = circle(50, 50, 5, red)
-red = color(255, 0, 0)
-
-dd = 20
-while (a.x < 250) {
-    a.y = 50
-    red.B = a.x
-    red.G = a.x
-    while (a.y < 200) {
-        draw a
-        a.y = a.y + dd
-    }
-    a.x = a.x + dd
-}
-
-b = circle(60, 60, 4, blue)
-blue = color(200,200,200)
-
-while (b.x < 245) {
-    b.y = 55
-    blue.B = b.x
-    while (b.y < 195) {
-        draw b
-        b.y = b.y + dd
-        b.color = blue
-    }
-    b.x = b.x + dd
-}
-
-c = tree(0,(0,1,2))
-draw c
-
-
-
-
 =================================================
-
-
-
-c = circle(100, 100, 40, red)
-red = color(255, 0, 0)
-draw c    
-haha = func(int xx, int yy, int rr) {
-
-    c.x = xx
-    c.y = yy
-    c.r = rr
-    draw c
-    
-    blue = color(0, 0, 255)
-    
-    foo = func(int aa, int bb) {
-        cir = point(1,1,blue)
-        cir.x = aa
-        cir.y = bb
-        draw cir
-    }
-
-ax = 100
-bx = 300
-foo(ax, bx)
-
-
-}
-
-a = 200
-b = 100
-d = 50
-
-haha(a, b, d)
-
-
-=============================
-#a wheel#
-
-a = circle(0, 0, 10, red)
-red = color(255, 0, 100)
-
-x = 150
-y = 150
-r = 50
-
-while (a.x < 400) {
-    
-    a.y = 0
-    while (a.y < 400) {
-        if ((a.x-x)*(a.x-x)+(a.y-y)*(a.y-y) == r*r) {
-            draw a
-        }
-        else {}
-        a.y = a.y + 1
-    }
-    a.x = a.x + 1
-}
-
-==============================
 #call function#
 c = circle(100, 100, 40, red)
 red = color(255, 0, 0)
@@ -163,75 +23,62 @@ haha = func(int xx, int yy, int rr) {
         cir.y = bb
         draw cir
     }
-
-    ax = 150
-    bx = 200
-    foo(ax, bx)
-
+    foo(150, 200)
 }
-
-a = 200
-b = 100
-d = 50
-
-haha(a, b, d)
-
-a.val = a - 130
+haha(200, 100, 50)
 e = 20
-haha(a, b, e)
+haha(70, 100, e)
 
 
 
-=================================
+=================================================
 # a beautiful curve #
-b = circle(60, 60, 4, blue)
 blue = color(200,200,200)
-
-b.y = 10
-b.x = 10
 while (b.x < 400) {
-    blue.R = b.y
-    blue.G = b.x
-    b.x = b.x + 3
-    b.y = b.x * b.x / 100
-    draw b
-
+   blue.R = b.y
+   blue.G = b.x
+   b.x = b.x + 3
+   b.y = b.x * b.x / 100
+   draw b
 }
 
 
-=====================================
+
+=================================================
 # rect and circle matrix #
 a = rect(50, 50, 20, 20, red)
 red = color(255, 0, 0)
 
 dd = 30
 while (a.x < 400) {
-    a.y = 50
-    red.R = a.x
-    red.G = a.x / 255
-    while (a.y < 300) {
-        draw a
-        a.y = a.y + dd
-    }
-    a.x = a.x + dd
+   a.y = 50
+   red.R = a.x
+   red.G = a.x / 255
+   while (a.y < 300) {
+       draw a
+       a.y = a.y + dd
+   }
+   a.x = a.x + dd
 }
 
 b = circle(65, 75, 4, blue)
 blue = color(200,200,200)
 b.r = 5
 while (b.x < 395) {
-    b.y = 66
-    blue.B = b.x / 255
-    blue.G = b.x
-    while (b.y < 295) {
-        draw b
-        b.y = b.y + dd
-        b.color = blue
-    }
-    b.x = b.x + dd
+   b.y = 66
+   blue.B = b.x / 255
+   blue.G = b.x
+   while (b.y < 295) {
+       draw b
+       b.y = b.y + dd
+       b.color = blue
+   }
+   b.x = b.x + dd
 }
 
-=====================================
+
+
+=================================================
 # circle matrix #
 
 a = circle(50, 50, 5, red)
@@ -263,44 +110,17 @@ while (b.x < 395) {
     b.x = b.x + dd
 }
 
-====================================
+
+=================================================
 # a large binary tree #
 c = tree(0,(0,1,2)(1,3,4)(3,5,6)(6,7,8)(8,9,10)
     (4,11,12)(11,13,14)(2,15,16)(15,17,18)
     (18,19,20))
 draw c
 
-========================================
 
-# call func 2#
-c = circle(100, 100, 40, color(0,0,255))
-red = color(255, 0, 0)
-blue = color(0, 200, 200)
-draw c
 
-haha = func(int xx, int yy, int rr) {
-    c.x = xx
-    c.y = yy
-    c.r = rr
-    
-    if (xx == 30){
-        c.color = red
-    }
-    else{
-        c.color = blue
-    }
-    draw c
-}
-
-haha(200, 200, 40)
-pic = func(circle da) {
-    draw da
-}
-c.x = 120
-pic(c)
-pic(circle(200, 200, 10, color(0,255,0)))
-
-=======================================
+=================================================
 #so many stars~#
 star = func (int xx, int yy) {
     hehe = polygon(100,100,color(240, 0,0),(100,10)(10,78)(40,198)(160,198)(190,78))
@@ -317,14 +137,15 @@ star = func (int xx, int yy) {
     draw cyc
 }
 
-
 star(120,10)
 star(300,10)
 star(120,200)
 star(300,200)
 
-==========================================
-#cute baymax!! #
+
+
+=================================================
+#cute baymax!! our logo #
 
 a = circle(0, 0, 20, red)
 red = color(255, 0, 100)
@@ -411,4 +232,3 @@ ll.y1 = 400
 draw ll
 ly = line(50,200, 50, 600, blue)
 #draw ly#
-

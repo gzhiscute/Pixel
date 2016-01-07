@@ -41,7 +41,8 @@ cmt 	"#"[^#]*"#"
 "{"	{return leftbig;}
 "}"	{return rightbig;}
 ","	{return comma;}
-'\r\n'	{return newline;}
+"\r\n"	{return newline;}
+"\n"	{return newline;}
 "||"	{return OR;}
 "&&"	{return AND;}
 int	{return INT;}
