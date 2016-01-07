@@ -9,25 +9,9 @@ You can use our Pixel language interpreter by running the server and open the we
 
 Good luck!
 
-### TODO List:
-* 添加源代码说明文档readme.txt
-* 准备最后展示
 
-* 后端要做的事：
-  * hhhh后端基本做完了！持续debug
-
-
-* 前端要做的事：
-  * hhhh前端基本做完了！持续debug
-
-
-#### 语法参考
-##### 关键字&保留字：
-* 常量：
-  TRUE, FALSE, 数字
-* 类型名：
-  point, line, circle, rect, color, tree, polygon
-* 类型内部变量名：
-  x, y, x1, y1, r
-* 其它：
-  draw, while, if, else, func, background
+### 使用方法
+* 下载backend中的server_static.exe 和整个前端www文件夹
+* 点击运行server_static.exe
+* 打开www文件夹中的index.html
+* 示例代码在example1.example文件中
